@@ -9,21 +9,29 @@ def asegurar_directorio():
 # DIMENSIÓN FECHA
 # ---------------------------------------------------------
 def generar_dim_fecha(df):
-    df_fecha = df.copy()
+    print(">>> Generando dimensión FECHA...")
 
-    df_fecha["Fecha de la actividad"] = pd.to_datetime(df_fecha["Fecha de la actividad"], errors="coerce")
-    
-    df_fecha["anio"] = df_fecha["Fecha de la actividad"].dt.year
-    df_fecha["mes"] = df_fecha["Fecha de la actividad"].dt.month
-    df_fecha["dia"] = df_fecha["Fecha de la actividad"].dt.day
-    df_fecha["mes_texto"] = df_fecha["Fecha de la actividad"].dt.strftime("%B")
-    df_fecha["dia_semana"] = df_fecha["Fecha de la actividad"].dt.day_name()
+    # Usamos la columna correcta del archivo ya limpio
+    if "Fecha_Actividad" not in df.columns:
+        raise KeyError("❌ La columna 'Fecha_Actividad' no existe en el dataframe")
 
-    df_dim = df_fecha[["Fecha de la actividad", "anio", "mes", "dia", "mes_texto", "dia_semana"]].drop_duplicates()
-    df_dim = df_dim.rename(columns={"Fecha de la actividad": "id_fecha"})
+    df_fecha = df[["Fecha_Actividad"]].drop_duplicates().copy()
 
-    df_dim.to_csv("dimensiones/dim_fecha.csv", index=False, encoding="utf-8-sig")
-    print("✓ dim_fecha generada")
+    # Convertimos a datetime
+    df_fecha["Fecha_Actividad"] = pd.to_datetime(df_fecha["Fecha_Actividad"], errors="coerce")
+
+    # Extraemos atributos
+    df_fecha["Año"] = df_fecha["Fecha_Actividad"].dt.year
+    df_fecha["Mes"] = df_fecha["Fecha_Actividad"].dt.month
+    df_fecha["Dia"] = df_fecha["Fecha_Actividad"].dt.day
+    df_fecha["Dia_Semana"] = df_fecha["Fecha_Actividad"].dt.day_name(locale="es_ES")
+
+    # Creamos ID si no existe
+    df_fecha["ID_Fecha_Inicio"] = df_fecha["Fecha_Actividad"].dt.strftime("%Y%m%d")
+
+    df_fecha.to_csv("dim_fecha.csv", index=False, encoding="utf-8-sig")
+    print("✓ dim_fecha.csv generada correctamente")
+
 
 # ---------------------------------------------------------
 # DIMENSIÓN LUGAR

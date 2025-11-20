@@ -72,6 +72,55 @@ def procesar_archivo():
     else:
         df["Zonas_Asignadas"] = "SIN ZONA"
 
+    # -------------------------------------------------------
+    # VALIDACIÓN: detectar errores de UPZ
+    # -------------------------------------------------------
+    print("🔍 Validando UPZ...")
+
+    errores = []
+
+    upz_validas = set(dicc_upz_zonas.keys())  # códigos válidos
+
+    for i, row in df.iterrows():
+
+        codigo = str(row.get("Codigo_UPZ", "")).strip()
+        nombre = str(row.get("Nombre_UPZ", "")).strip()
+
+        # Error 1: UPZ vacía
+        if codigo == "" or codigo.lower() == "nan":
+            errores.append({
+                "Fila": i + 1,
+                "Codigo_UPZ": codigo,
+                "Nombre_UPZ": nombre,
+                "Error": "UPZ vacía o nula"
+            })
+            continue
+
+        # Error 2: Código no está en diccionario
+        if codigo not in upz_validas:
+            errores.append({
+                "Fila": i + 1,
+                "Codigo_UPZ": codigo,
+                "Nombre_UPZ": nombre,
+                "Error": "Código de UPZ NO existe en el diccionario"
+            })
+            continue
+
+        # Error 3: Nombre UPZ no coincide con el catálogo
+        # (opcional si quieres más precisión)
+        # ejemplo: nombre escrito distinto
+        # — solo si quieres activar esta parte
+        # if nombre != catalogo_oficial[codigo]:
+        #     errores.append(...)
+
+    # Exportamos errores si existen
+    if len(errores) > 0:
+        df_err = pd.DataFrame(errores)
+        df_err.to_csv("errores_upz.csv", index=False, encoding="utf-8-sig")
+        print(f"⚠ Se detectaron {len(errores)} errores de UPZ. Archivo generado: errores_upz.csv")
+    else:
+        print("✓ No se encontraron errores de UPZ")
+
     # 5. Exportar archivo limpio
     df.to_csv("fact_actividades_limpio.csv", index=False, encoding="utf-8-sig")
 

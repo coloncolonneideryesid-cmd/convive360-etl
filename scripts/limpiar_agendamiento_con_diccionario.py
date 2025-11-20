@@ -17,7 +17,6 @@ def limpiar_nombre_upz(upz, correcciones):
     if pd.isna(upz):
         return None
 
-    original = upz
     upz = upz.strip().upper()
 
     # Aplicar correcciones exactas
@@ -31,7 +30,6 @@ def limpiar_nombre_upz(upz, correcciones):
 
     return upz
 
-
 # -------------------------------------------------------
 # 3) Asignar zonas según el diccionario
 # -------------------------------------------------------
@@ -43,7 +41,6 @@ def asignar_zonas(codigo_upz, diccionario):
 
     return "SIN ZONA"
 
-
 # -------------------------------------------------------
 # 4) PROCESO PRINCIPAL
 # -------------------------------------------------------
@@ -51,20 +48,48 @@ def procesar_archivo():
     print(">>> Iniciando limpieza del archivo de actividades...")
 
     # 1. Cargar diccionario
-    dicc = cargar_diccionario()
-
-    dicc_upz_zonas = dicc  # Diccionario del archivo JSON
+    dicc_upz_zonas = cargar_diccionario()
 
     # 2. Cargar archivo original (Google Sheets exportado)
     df = pd.read_csv("fact_actividades.csv")
+    print(f"📥 Archivo cargado: {df.shape[0]} registros")
 
+    # -------------------------------------------------------
+    # 🔥 2.1 DEDUPLICACIÓN
+    # -------------------------------------------------------
+    columnas_clave = ["Nombre de la actividad", "Fecha de la actividad", "Hora de inicio"]
+
+    print("🧹 Verificando duplicados...")
+
+    if all(col in df.columns for col in columnas_clave):
+        antes = df.shape[0]
+        df = df.drop_duplicates(subset=columnas_clave, keep="first")
+        despues = df.shape[0]
+        eliminados = antes - despues
+
+        print(f"✓ Deduplicación aplicada: {eliminados} duplicados eliminados")
+
+        # Guardar duplicados eliminados (auditoría)
+        if eliminados > 0:
+            df_duplicados = df[df.duplicated(subset=columnas_clave, keep=False)]
+            df_duplicados.to_csv("duplicados_detectados.csv", index=False, encoding="utf-8-sig")
+            print("⚠ Archivo duplicados_detectados.csv generado (auditoría)")
+
+    else:
+        print("⚠ No fue posible aplicar deduplicación: faltan columnas clave")
+
+    # -------------------------------------------------------
     # 3. Limpiar UPZ
+    # -------------------------------------------------------
     print("✓ Corrigiendo nombres de UPZ...")
+
     if "Nombre_UPZ" in df.columns:
         correcciones = {}
         df["Nombre_UPZ"] = df["Nombre_UPZ"].apply(lambda x: limpiar_nombre_upz(x, correcciones))
 
-    # 4. Asignar zonas basado en Código_UPZ
+    # -------------------------------------------------------
+    # 4. Asignar zonas
+    # -------------------------------------------------------
     print("✓ Asignando zonas desde diccionario oficial...")
 
     if "Codigo_UPZ" in df.columns:
@@ -73,20 +98,17 @@ def procesar_archivo():
         df["Zonas_Asignadas"] = "SIN ZONA"
 
     # -------------------------------------------------------
-    # VALIDACIÓN: detectar errores de UPZ
+    # VALIDACIÓN UPZ
     # -------------------------------------------------------
     print("🔍 Validando UPZ...")
 
     errores = []
-
-    upz_validas = set(dicc_upz_zonas.keys())  # códigos válidos
+    upz_validas = set(dicc_upz_zonas.keys())
 
     for i, row in df.iterrows():
-
         codigo = str(row.get("Codigo_UPZ", "")).strip()
         nombre = str(row.get("Nombre_UPZ", "")).strip()
 
-        # Error 1: UPZ vacía
         if codigo == "" or codigo.lower() == "nan":
             errores.append({
                 "Fila": i + 1,
@@ -96,7 +118,6 @@ def procesar_archivo():
             })
             continue
 
-        # Error 2: Código no está en diccionario
         if codigo not in upz_validas:
             errores.append({
                 "Fila": i + 1,
@@ -106,14 +127,7 @@ def procesar_archivo():
             })
             continue
 
-        # Error 3: Nombre UPZ no coincide con el catálogo
-        # (opcional si quieres más precisión)
-        # ejemplo: nombre escrito distinto
-        # — solo si quieres activar esta parte
-        # if nombre != catalogo_oficial[codigo]:
-        #     errores.append(...)
-
-    # Exportamos errores si existen
+    # Export errores
     if len(errores) > 0:
         df_err = pd.DataFrame(errores)
         df_err.to_csv("errores_upz.csv", index=False, encoding="utf-8-sig")
@@ -121,7 +135,9 @@ def procesar_archivo():
     else:
         print("✓ No se encontraron errores de UPZ")
 
-    # 5. Exportar archivo limpio
+    # -------------------------------------------------------
+    # EXPORT FINAL
+    # -------------------------------------------------------
     df.to_csv("fact_actividades_limpio.csv", index=False, encoding="utf-8-sig")
 
     print("🎉 Archivo fact_actividades_limpio.csv generado correctamente")

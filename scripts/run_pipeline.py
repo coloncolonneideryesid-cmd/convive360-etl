@@ -5,6 +5,10 @@ import os
 import json
 from datetime import datetime
 
+# Importamos la función moderna directamente
+from scripts.generar_dimensiones import generar_todas_las_dimensiones
+
+
 # ---------------------------------------------------------
 # 1. Cargar configuración
 # ---------------------------------------------------------
@@ -55,9 +59,9 @@ if __name__ == "__main__":
     # 3. Ejecutar limpieza principal
     ejecutar_limpieza(diccionario)
 
-    # 4. Generar dimensiones
+    # 4. Generar dimensiones — ahora con import directo
     print(">>> Generando dimensiones...")
-    os.system("python scripts/generar_dimensiones.py")
+    generar_todas_las_dimensiones()
     print("✓ Dimensiones generadas")
 
     # 5. Registrar log

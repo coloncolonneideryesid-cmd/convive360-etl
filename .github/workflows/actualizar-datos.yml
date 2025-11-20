@@ -1,0 +1,35 @@
+name: Actualizar Datos Limpios
+
+on:
+  schedule:
+    - cron: '0 11,17,23 * * *'  # 6 AM, 12 PM, 6 PM Colombia
+  workflow_dispatch:
+
+jobs:
+  limpiar-datos:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Instalar dependencias
+        run: npm install googleapis
+      
+      - name: Crear credenciales Google
+        run: echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credenciales.json
+      
+      - name: Ejecutar limpieza de datos
+        run: node limpieza-datos.js
+        
+      - name: Subir JSON limpio
+        run: |
+          git config user.name "Bot"
+          git config user.email "bot@example.com"
+          git add datos-limpios.json
+          git commit -m "Datos actualizados $(date)"
+          git push

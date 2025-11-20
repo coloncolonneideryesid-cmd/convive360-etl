@@ -119,7 +119,7 @@ def generar_todas_las_dimensiones():
 
     df = pd.read_csv("fact_actividades_limpio.csv")
 
-    generar_dim_fecha(df)
+    generar_dim_fecha(df.rename(columns={"Fecha_Actividad": "Fecha_Actividad"}))
     generar_dim_lugar(df)
     generar_dim_responsable(df)
     generar_dim_upz(df)

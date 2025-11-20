@@ -11,7 +11,7 @@ def asegurar_directorio():
 def generar_dim_fecha(df):
     print(">>> Generando Dimensión FECHA...")
 
-    # La columna real en el CSV es Fecha_Actividad
+    # Verificamos la columna correcta
     if "Fecha_Actividad" not in df.columns:
         raise KeyError("❌ No se encontró la columna 'Fecha_Actividad' en fact_actividades_limpio.csv")
 
@@ -34,9 +34,8 @@ def generar_dim_fecha(df):
 
     dim_fecha = dim_fecha.drop_duplicates()
 
-    dim_fecha.to_csv("dim_fecha.csv", index=False, encoding="utf-8")
+    dim_fecha.to_csv("dimensiones/dim_fecha.csv", index=False, encoding="utf-8-sig")
     print("✓ Dimensión FECHA generada correctamente")
-
 
 # ---------------------------------------------------------
 # DIMENSIÓN LUGAR

@@ -9,28 +9,33 @@ def asegurar_directorio():
 # DIMENSIÓN FECHA
 # ---------------------------------------------------------
 def generar_dim_fecha(df):
-    print(">>> Generando dimensión FECHA...")
+    print(">>> Generando Dimensión FECHA...")
 
-    # Usamos la columna correcta del archivo ya limpio
+    # La columna real en el CSV es Fecha_Actividad
     if "Fecha_Actividad" not in df.columns:
-        raise KeyError("❌ La columna 'Fecha_Actividad' no existe en el dataframe")
+        raise KeyError("❌ No se encontró la columna 'Fecha_Actividad' en fact_actividades_limpio.csv")
 
-    df_fecha = df[["Fecha_Actividad"]].drop_duplicates().copy()
+    df_fecha = df.copy()
 
     # Convertimos a datetime
     df_fecha["Fecha_Actividad"] = pd.to_datetime(df_fecha["Fecha_Actividad"], errors="coerce")
 
-    # Extraemos atributos
-    df_fecha["Año"] = df_fecha["Fecha_Actividad"].dt.year
-    df_fecha["Mes"] = df_fecha["Fecha_Actividad"].dt.month
-    df_fecha["Dia"] = df_fecha["Fecha_Actividad"].dt.day
-    df_fecha["Dia_Semana"] = df_fecha["Fecha_Actividad"].dt.day_name(locale="es_ES")
+    # Eliminamos nulos
+    df_fecha = df_fecha.dropna(subset=["Fecha_Actividad"])
 
-    # Creamos ID si no existe
-    df_fecha["ID_Fecha_Inicio"] = df_fecha["Fecha_Actividad"].dt.strftime("%Y%m%d")
+    # Creamos la dimensión fecha
+    dim_fecha = pd.DataFrame()
+    dim_fecha["ID_Fecha"] = df_fecha["Fecha_Actividad"].dt.strftime("%Y%m%d").astype(int)
+    dim_fecha["Fecha"] = df_fecha["Fecha_Actividad"]
+    dim_fecha["Año"] = df_fecha["Fecha_Actividad"].dt.year
+    dim_fecha["Mes"] = df_fecha["Fecha_Actividad"].dt.month
+    dim_fecha["Día"] = df_fecha["Fecha_Actividad"].dt.day
+    dim_fecha["Día_Semana"] = df_fecha["Fecha_Actividad"].dt.day_name(locale="es_ES")
 
-    df_fecha.to_csv("dim_fecha.csv", index=False, encoding="utf-8-sig")
-    print("✓ dim_fecha.csv generada correctamente")
+    dim_fecha = dim_fecha.drop_duplicates()
+
+    dim_fecha.to_csv("dim_fecha.csv", index=False, encoding="utf-8")
+    print("✓ Dimensión FECHA generada correctamente")
 
 
 # ---------------------------------------------------------

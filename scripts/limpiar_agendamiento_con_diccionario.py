@@ -2,130 +2,84 @@ import pandas as pd
 import json
 import os
 
-# ---------------------------------------------------------
-# 1. Cargar diccionarios oficiales
-# ---------------------------------------------------------
-
-RUTA_DICC = "diccionarios/"
-
-def cargar_diccionario(nombre):
-    ruta = os.path.join(RUTA_DICC, nombre)
+# -------------------------------------------------------
+# 1) Cargar diccionario UPZ ↔ ZONAS
+# -------------------------------------------------------
+def cargar_diccionario():
+    ruta = os.path.join("scripts", "diccionario_upz_zonas.json")
     with open(ruta, "r", encoding="utf-8") as f:
         return json.load(f)
 
-upz_to_zona = cargar_diccionario("upz_to_zona.json")
-zona_to_upz = cargar_diccionario("zona_to_upz.json")
+# -------------------------------------------------------
+# 2) Función para normalizar UPZ (corrige texto)
+# -------------------------------------------------------
+def limpiar_nombre_upz(upz, correcciones):
+    if pd.isna(upz):
+        return None
 
-print("Diccionarios cargados correctamente ✔")
+    original = upz
+    upz = upz.strip().upper()
 
+    # Aplicar correcciones exactas
+    if upz in correcciones:
+        return correcciones[upz]
 
-# ---------------------------------------------------------
-# 2. Funciones de corrección inteligente UPZ ↔ Zona
-# ---------------------------------------------------------
+    # Correcciones “suaves”
+    for incorrecto, correcto in correcciones.items():
+        if upz.replace(" ", "") == incorrecto.replace(" ", ""):
+            return correcto
 
-def corregir_upz_zona(upz, zona):
-    """
-    Corrige UPZ y Zona incluso si una de las dos está mal.
-    Retorna: (upz_corregida, zona_corregida, estado)
-    estados posibles:
-      - OK_AMBAS
-      - OK_UPZ_CORRIGE_ZONA
-      - OK_ZONA_CORRIGE_UPZ
-      - ERROR_AMBAS
-    """
-
-    upz_orig = upz
-    zona_orig = zona
-
-    upz_cor = upz
-    zona_cor = zona
-
-    # Caso 1 – UPZ es válida → corregimos zona
-    if upz in upz_to_zona:
-        zona_cor = upz_to_zona[upz]
-        if zona not in zona_to_upz or zona_to_upz[zona] != upz:
-            return upz_cor, zona_cor, "OK_UPZ_CORRIGE_ZONA"
-        else:
-            return upz_cor, zona_cor, "OK_AMBAS"
-
-    # Caso 2 – Zona es válida → corregimos UPZ
-    if zona in zona_to_upz:
-        upz_cor = zona_to_upz[zona]
-        return upz_cor, zona_cor, "OK_ZONA_CORRIGE_UPZ"
-
-    # Caso 3 – Ambas inválidas
-    return upz_orig, zona_orig, "ERROR_AMBAS"
+    return upz
 
 
-# ---------------------------------------------------------
-# 3. Cargar archivo de agendamiento
-# ---------------------------------------------------------
+# -------------------------------------------------------
+# 3) Asignar zonas según el diccionario
+# -------------------------------------------------------
+def asignar_zonas(codigo_upz, diccionario):
+    codigo_upz = str(codigo_upz).strip()
 
-def cargar_archivo_agendamiento(ruta):
-    df = pd.read_excel(ruta, dtype=str)
-    print(f"Archivo cargado: {ruta}")
-    return df
+    if codigo_upz in diccionario:
+        return ", ".join(diccionario[codigo_upz])
 
-
-# ---------------------------------------------------------
-# 4. Aplicar correcciones fila por fila
-# ---------------------------------------------------------
-
-def limpiar_dataframe(df):
-    registros_error = []
-
-    df["UPZ_Corregida"] = ""
-    df["Zona_Corregida"] = ""
-    df["Estado_Corrección"] = ""
-
-    for idx, row in df.iterrows():
-        upz = (row.get("UPZ", "") or "").strip()
-        zona = (row.get("Zona a la Que Pertenece la Actividad", "") or "").strip()
-
-        upz_new, zona_new, estado = corregir_upz_zona(upz, zona)
-
-        df.at[idx, "UPZ_Corregida"] = upz_new
-        df.at[idx, "Zona_Corregida"] = zona_new
-        df.at[idx, "Estado_Corrección"] = estado
-
-        if estado == "ERROR_AMBAS":
-            registros_error.append({
-                "fila": idx+1,
-                "upz_original": upz,
-                "zona_original": zona
-            })
-
-    return df, registros_error
+    return "SIN ZONA"
 
 
-# ---------------------------------------------------------
-# 5. Guardar resultados
-# ---------------------------------------------------------
+# -------------------------------------------------------
+# 4) PROCESO PRINCIPAL
+# -------------------------------------------------------
+def procesar_archivo():
+    print(">>> Iniciando limpieza del archivo de actividades...")
 
-def guardar_resultados(df, errores):
-    os.makedirs("salidas", exist_ok=True)
+    # 1. Cargar diccionario
+    dicc = cargar_diccionario()
 
-    ruta_salida = "salidas/agendamiento_limpio.csv"
-    df.to_csv(ruta_salida, index=False, encoding="utf-8-sig")
+    dicc_upz_zonas = dicc  # Diccionario del archivo JSON
 
-    ruta_incons = "salidas/agendamiento_inconsistencias.csv"
-    pd.DataFrame(errores).to_csv(ruta_incons, index=False, encoding="utf-8-sig")
+    # 2. Cargar archivo original (Google Sheets exportado)
+    df = pd.read_csv("fact_actividades.csv")
 
-    print("✔ Archivo limpio generado:", ruta_salida)
-    print("✔ Archivo de inconsistencias:", ruta_incons)
+    # 3. Limpiar UPZ
+    print("✓ Corrigiendo nombres de UPZ...")
+    if "Nombre_UPZ" in df.columns:
+        correcciones = {}
+        df["Nombre_UPZ"] = df["Nombre_UPZ"].apply(lambda x: limpiar_nombre_upz(x, correcciones))
+
+    # 4. Asignar zonas basado en Código_UPZ
+    print("✓ Asignando zonas desde diccionario oficial...")
+
+    if "Codigo_UPZ" in df.columns:
+        df["Zonas_Asignadas"] = df["Codigo_UPZ"].apply(lambda x: asignar_zonas(x, dicc_upz_zonas))
+    else:
+        df["Zonas_Asignadas"] = "SIN ZONA"
+
+    # 5. Exportar archivo limpio
+    df.to_csv("fact_actividades_limpio.csv", index=False, encoding="utf-8-sig")
+
+    print("🎉 Archivo fact_actividades_limpio.csv generado correctamente")
 
 
-# ---------------------------------------------------------
-# 6. Ejecución principal
-# ---------------------------------------------------------
-
+# -------------------------------------------------------
+# EJECUCIÓN DIRECTA
+# -------------------------------------------------------
 if __name__ == "__main__":
-
-    # 👉 Cambia esto por el nombre de tu archivo
-    ARCHIVO = "Agendamiento_Actividades.xlsx"
-
-    df = cargar_archivo_agendamiento(ARCHIVO)
-    df_limpio, inconsistencias = limpiar_dataframe(df)
-    guardar_resultados(df_limpio, inconsistencias)
-
-    print("\n🔥 Proceso completado con éxito.")
+    procesar_archivo()

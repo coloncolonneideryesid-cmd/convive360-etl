@@ -1,5 +1,5 @@
 # run_pipeline.py
-# Orquestador principal de todo el ETL Convive360°
+# Orquestador principal del ETL Convive360°
 
 import os
 import json
@@ -10,32 +10,46 @@ def cargar_config():
     with open("config.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
-# 2. Ejecutar limpieza principal
-def ejecutar_limpieza():
-    print(">>> Ejecutando limpieza con diccionario...")
-    os.system("python limpiar_agendamiento_con_diccionario.py")
+# 2. Cargar diccionario UPZ → ZONA
+def cargar_diccionario_upz_zonas():
+    ruta = os.path.join("scripts", "diccionario_upz_zonas.json")
+    if not os.path.exists(ruta):
+        raise FileNotFoundError(f"❌ No se encontró el archivo {ruta}")
+    with open(ruta, "r", encoding="utf-8") as f:
+        print("✓ Diccionario UPZ-ZONA cargado correctamente")
+        return json.load(f)
 
-# 3. Guardar resumen de ejecución
-def guardar_resumen():
-    resumen = {
-        "ejecutado_en": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "estado": "OK",
-        "mensaje": "Pipeline ejecutado correctamente."
-    }
-    with open("resumen_pipeline.json", "w", encoding="utf-8") as f:
-        json.dump(resumen, f, indent=4, ensure_ascii=False)
+# 3. Ejecutar limpieza principal
+def ejecutar_limpieza(diccionario):
+    print(">>> Ejecutando limpieza con diccionario UPZ-ZONA...")
+    os.system("python scripts/limpiar_agendamiento_con_diccionario.py")
+    print("✓ Limpieza completada")
 
-# 4. Orquestación
-def main():
-    print("=== Iniciando pipeline Convive360° ===")
+# 4. Registrar ejecución del pipeline
+def registrar_log():
+    fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open("pipeline_log.txt", "a", encoding="utf-8") as f:
+        f.write(f"Pipeline ejecutado: {fecha}\n")
+    print(f"✓ Pipeline registrado en log ({fecha})")
 
-    config = cargar_config()
-    print("Configuración cargada:", config)
-
-    ejecutar_limpieza()
-    guardar_resumen()
-
-    print("=== Pipeline completado exitosamente ===")
+# ------------------------------
+#        EJECUCIÓN PRINCIPAL
+# ------------------------------
 
 if __name__ == "__main__":
-    main()
+    print("\n🚀 Iniciando ETL Convive360°...\n")
+
+    # Cargar config general
+    config = cargar_config()
+
+    # Cargar diccionario UPZ-ZONA
+    diccionario = cargar_diccionario_upz_zonas()
+
+    # Ejecutar limpieza principal
+    ejecutar_limpieza(diccionario)
+
+    # Registrar log final
+    registrar_log()
+
+    print("\n🎉 Pipeline completado exitosamente\n")
+

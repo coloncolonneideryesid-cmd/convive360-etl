@@ -5,12 +5,16 @@ import os
 import json
 from datetime import datetime
 
+# ---------------------------------------------------------
 # 1. Cargar configuración
+# ---------------------------------------------------------
 def cargar_config():
     with open("config.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
+# ---------------------------------------------------------
 # 2. Cargar diccionario UPZ → ZONA
+# ---------------------------------------------------------
 def cargar_diccionario_upz_zonas():
     ruta = os.path.join("scripts", "diccionario_upz_zonas.json")
     if not os.path.exists(ruta):
@@ -19,37 +23,44 @@ def cargar_diccionario_upz_zonas():
         print("✓ Diccionario UPZ-ZONA cargado correctamente")
         return json.load(f)
 
+# ---------------------------------------------------------
 # 3. Ejecutar limpieza principal
+# ---------------------------------------------------------
 def ejecutar_limpieza(diccionario):
     print(">>> Ejecutando limpieza con diccionario UPZ-ZONA...")
     os.system("python scripts/limpiar_agendamiento_con_diccionario.py")
     print("✓ Limpieza completada")
 
+# ---------------------------------------------------------
 # 4. Registrar ejecución del pipeline
+# ---------------------------------------------------------
 def registrar_log():
     fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open("pipeline_log.txt", "a", encoding="utf-8") as f:
         f.write(f"Pipeline ejecutado: {fecha}\n")
     print(f"✓ Pipeline registrado en log ({fecha})")
 
-# ------------------------------
+# ---------------------------------------------------------
 #        EJECUCIÓN PRINCIPAL
-# ------------------------------
-
+# ---------------------------------------------------------
 if __name__ == "__main__":
     print("\n🚀 Iniciando ETL Convive360°...\n")
 
-    # Cargar config general
+    # 1. Cargar config general
     config = cargar_config()
 
-    # Cargar diccionario UPZ-ZONA
+    # 2. Cargar diccionario UPZ-ZONA
     diccionario = cargar_diccionario_upz_zonas()
 
-    # Ejecutar limpieza principal
+    # 3. Ejecutar limpieza principal
     ejecutar_limpieza(diccionario)
 
-    # Registrar log final
+    # 4. Generar dimensiones
+    print(">>> Generando dimensiones...")
+    os.system("python scripts/generar_dimensiones.py")
+    print("✓ Dimensiones generadas")
+
+    # 5. Registrar log
     registrar_log()
 
     print("\n🎉 Pipeline completado exitosamente\n")
-

@@ -1,7 +1,26 @@
 {
   "32": ["Zona 1", "Zona 2"],
+  "32 - San Blas": ["Zona 1", "Zona 2"],
+  "32 - SAN BLAS": ["Zona 1", "Zona 2"],
+  "San Blas": ["Zona 1", "Zona 2"],
+  
   "33": ["Zona 6"],
+  "33 - Sosiego": ["Zona 6"],
+  "33 - SOSIEGO": ["Zona 6"],
+  "Sosiego": ["Zona 6"],
+  
   "34": ["Zona 4"],
+  "34 - 20 de Julio": ["Zona 4"],
+  "34 - 20 DE JULIO": ["Zona 4"],
+  "20 de Julio": ["Zona 4"],
+  
   "50": ["Zona 3", "Zona 8"],
-  "51": ["Zona 5", "Zona 7"]
+  "50 - La Gloria": ["Zona 3", "Zona 8"],
+  "50 - LA GLORIA": ["Zona 3", "Zona 8"],
+  "La Gloria": ["Zona 3", "Zona 8"],
+  
+  "51": ["Zona 5", "Zona 7"],
+  "51 - Los Libertadores": ["Zona 5", "Zona 7"],
+  "51 - LOS LIBERTADORES": ["Zona 5", "Zona 7"],
+  "Los Libertadores": ["Zona 5", "Zona 7"]
 }

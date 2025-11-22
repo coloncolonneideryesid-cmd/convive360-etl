@@ -1,35 +1,61 @@
-name: Actualizar Datos Limpios
+name: Actualizar ETL Convive360
 
 on:
   schedule:
-    - cron: '0 11,17,23 * * *'  # 6 AM, 12 PM, 6 PM Colombia
-  workflow_dispatch:
+    # Ejecutar 3 veces al día: 6 AM, 12 PM, 6 PM (hora Colombia UTC-5)
+    # En UTC sería: 11:00, 17:00, 23:00
+    - cron: '0 11,17,23 * * *'
+  
+  workflow_dispatch:  # Permite ejecución manual desde GitHub
 
 jobs:
-  limpiar-datos:
+  ejecutar-pipeline:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v3
+      # 1. Clonar el repositorio
+      - name: Checkout código
+        uses: actions/checkout@v4
       
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      # 2. Configurar Python 3.12
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          node-version: '18'
+          python-version: '3.12'
+          cache: 'pip'
       
+      # 3. Instalar dependencias
       - name: Instalar dependencias
-        run: npm install googleapis
-      
-      - name: Crear credenciales Google
-        run: echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credenciales.json
-      
-      - name: Ejecutar limpieza de datos
-        run: node limpieza-datos.js
-        
-      - name: Subir JSON limpio
         run: |
-          git config user.name "Bot"
-          git config user.email "bot@example.com"
-          git add datos-limpios.json
-          git commit -m "Datos actualizados $(date)"
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      # 4. Crear archivo de credenciales desde Secret
+      - name: Crear credenciales Google
+        run: |
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > google_credentials.json
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      
+      # 5. Ejecutar pipeline ETL
+      - name: Ejecutar pipeline ETL
+        run: python run_pipeline.py
+      
+      # 6. Subir archivos generados al repositorio
+      - name: Commit y push de archivos generados
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add dimensiones/*.csv
+          git add fact_actividades_limpio.csv
+          git add pipeline_log.txt
+          git add errores_upz.csv || true
+          git add duplicados_detectados.csv || true
+          git add conflictos_upz_zona.csv || true
+          git diff-index --quiet HEAD || git commit -m "🤖 Datos actualizados automáticamente - $(date +'%Y-%m-%d %H:%M:%S')"
           git push
+      
+      # 7. Limpiar credenciales (seguridad)
+      - name: Limpiar credenciales
+        if: always()
+        run: rm -f google_credentials.json

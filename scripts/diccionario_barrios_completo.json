@@ -1,0 +1,1148 @@
+{
+  "barrios_por_upz": {
+    "32 - SAN BLAS": [
+      "AGUAS CLARAS",
+      "ALTOS DEL ZIPA",
+      "AMAPOLAS",
+      "AMAPOLAS II",
+      "BALCON DE LA CASTANA",
+      "BELLA VISTA SECTOR LUCERO",
+      "BELLAVISTA PARTE BAJA",
+      "BELLAVISTA SUR",
+      "BOSQUE DE LOS ALPES",
+      "BUENAVISTA SURORIENTAL",
+      "CAMINO VIEJO SAN CRISTOBAL",
+      "CERROS DE SAN VICENTE",
+      "CIUDAD DE LONDRES",
+      "CORINTO",
+      "EL BALCON DE LA CASTANA",
+      "EL FUTURO",
+      "EL RAMAJAL",
+      "EL RAMAJAL SAN PEDRO",
+      "GRAN COLOMBIA",
+      "HORACIO ORJUELA",
+      "LA CASTANA",
+      "LA CECILIA",
+      "LA GRAN COLOMBIA",
+      "LA HERRADURA",
+      "LA JOYITA CENTRO",
+      "LA PLAYA",
+      "LA ROCA",
+      "LA SAGRADA FAMILIA",
+      "LAS ACACIAS",
+      "LAS MERCEDES",
+      "LAURELES SUR ORIENTAL II SECTOR",
+      "LOS ALPES",
+      "LOS ALPES FUTURO",
+      "LOS ARRAYANES SECTOR SANTA INES",
+      "LOS LAURELES SUR ORIENTAL I SECTOR",
+      "MACARENA DE LOS ALPES",
+      "MANANTIAL",
+      "MANILA",
+      "MIRAFLORES",
+      "MOLINOS DE ORIENTE",
+      "MONTECARLO",
+      "NUEVA ESPANA",
+      "NUEVA ESPANA PARTE ALTA",
+      "RAMAJAL",
+      "RINCON DE LA VICTORIA BELLAVISTA",
+      "SAGRADA FAMILIA",
+      "SAN BLAS",
+      "SAN BLAS PARCELAS",
+      "SAN BLAS II SECTOR",
+      "SAN CRISTOBAL ALTO",
+      "SAN CRISTOBAL VIEJO",
+      "SAN PEDRO",
+      "SAN VICENTE",
+      "SAN VICENTE ALTO",
+      "SAN VICENTE BAJO",
+      "SAN VICENTE SUR ORIENTAL",
+      "SANTA INES",
+      "SANTA INES SUR",
+      "TERRAZAS DE ORIENTE",
+      "TRIANGULO",
+      "TRIANGULO ALTO",
+      "TRIANGULO BAJO",
+      "VEREDA ALTOS DE SAN BLAS",
+      "VITELMA"
+    ],
+    "33 - SOSIEGO": [
+      "GOLCONDA",
+      "PRIMERO DE MAYO",
+      "BUENOS AIRES",
+      "CALVO SUR",
+      "CAMINO VIEJO DE SAN CRISTOBAL",
+      "LA MARIA",
+      "LAS BRISAS",
+      "LOS DOS LEONES",
+      "MODELO SUR",
+      "NARINO SUR",
+      "QUINTA RAMOS",
+      "REPUBLICA DE VENEZUELA",
+      "SAN CRISTOBAL SUR",
+      "SAN JAVIER",
+      "SANTA ANA",
+      "SANTA ANA SUR",
+      "SOSIEGO",
+      "VELODROMO",
+      "VILLA ALBANIA",
+      "VILLA JAVIER"
+    ],
+    "34 - 20 DE JULIO": [
+      "ATENAS",
+      "20 DE JULIO",
+      "ATENAS I",
+      "AYACUCHO",
+      "BARCELONA",
+      "BARCELONA SUR",
+      "BARCELONA SUR ORIENTAL",
+      "BELLO HORIZONTE",
+      "BELLO HORIZONTE III SECTOR",
+      "CORDOBA",
+      "EL ANGULO",
+      "EL ENCANTO",
+      "GRANADA SUR",
+      "GRANADA SUR III SECTOR",
+      "LA JOYITA",
+      "LA SERAFINA",
+      "LAS LOMAS",
+      "MANAGUA",
+      "MONTEBELLO",
+      "SAN ISIDRO",
+      "SAN ISIDRO I Y II",
+      "SAN ISIDRO SUR"
+    ],
+    "50 - LA GLORIA": [
+      "ALTAMIRA",
+      "ALTAMIRA CHIQUITA",
+      "ALTOS DEL POBLADO",
+      "ALTOS DEL VIRREY",
+      "ALTOS DEL ZUQUE",
+      "BELLAVISTA PARTE ALTA",
+      "BELLAVISTA SUR ORIENTAL",
+      "BUENOS AIRES",
+      "CIUDADELA SANTA ROSA",
+      "EL QUINDIO",
+      "EL RECODO REPUBLICA DE CANADA",
+      "EL RODEO",
+      "LA COLMENA",
+      "LA GLORIA",
+      "LA GLORIA BAJA",
+      "LA GLORIA MZ 11",
+      "LA GLORIA OCCIDENTAL",
+      "LA GLORIA ORIENTAL",
+      "LA GLORIA SAN MIGUEL",
+      "LA GROVANA",
+      "LA VICTORIA",
+      "LA VICTORIA II SECTOR",
+      "LA VICTORIA III SECTOR",
+      "LAS GAVIOTAS",
+      "LAS GUACAMAYAS",
+      "LAS GUACAMAYAS I II Y III",
+      "LAS LOMAS",
+      "LOS PUENTES",
+      "MALVINAS",
+      "MIRAFLORES",
+      "MORALVA",
+      "PANORAMA",
+      "PASEITO III",
+      "PUENTE COLORADO",
+      "QUINDIO",
+      "QUINDIO I Y II",
+      "QUINDIO II",
+      "SAN JOSE",
+      "SAN JOSE ORIENTAL",
+      "SAN JOSE SUR ORIENTAL",
+      "SAN MARTIN DE LOBA I Y II",
+      "SAN MARTIN SUR"
+    ],
+    "51 - LOS LIBERTADORES": [
+      "ANTIOQUIA",
+      "CANADA LA GUIRA",
+      "CANADA LA GUIRA II SECTOR",
+      "CANADA SAN LUIS",
+      "CHIGUAZA",
+      "CIUDAD DE LONDRES",
+      "EL PARAISO",
+      "EL PINAR",
+      "EL TRIUNFO",
+      "JUAN REY",
+      "LA BELLEZA",
+      "LA NUEVA GLORIA",
+      "LA NUEVA GLORIA II SECTOR",
+      "LA PENINSULA",
+      "LA SIERRA",
+      "LAS GAVIOTAS",
+      "LOS LIBERTADORES",
+      "LOS LIBERTADORES SECTOR EL TESORO",
+      "LOS LIBERTADORES SECTOR LA COLINA",
+      "LOS LIBERTADORES SECTOR SAN IGNACIO",
+      "LOS LIBERTADORES SECTOR SAN ISIDRO",
+      "LOS LIBERTADORES SECTOR SAN JOSE",
+      "LOS LIBERTADORES SECTOR SAN LUIS",
+      "LOS LIBERTADORES SECTOR SAN MIGUEL",
+      "LOS LIBERTADORES BOSQUE DIAMANTE TRIANGULO",
+      "LOS PINARES",
+      "LOS PINOS",
+      "LOS PUENTES",
+      "NUEVA DELLY",
+      "NUEVA GLORIA",
+      "NUEVA ROMA",
+      "NUEVAS MALVINAS",
+      "REPUBLICA DEL CANADA",
+      "REPUBLICA DEL CANADA EL PINAR",
+      "SAN JACINTO",
+      "SAN MANUEL",
+      "SAN RAFAEL SUR ORIENTAL",
+      "SAN RAFAEL USME",
+      "SANTA RITA I II Y III",
+      "SANTA RITA SUR ORIENTAL",
+      "VALPARAISO",
+      "VILLA ANGELICA",
+      "VILLA AURORA",
+      "VILLA DEL CERRO",
+      "VILLABELL",
+      "YOMASA",
+      "EL PARAISO SUR ORIENTAL I SECTOR",
+      "JUAN REY I Y II",
+      "VILLA BEGONIA"
+    ]
+  },
+  "barrios_por_zona": {
+    "ZONA 1": [
+      "AGUAS CLARAS",
+      "AMAPOLAS",
+      "AMAPOLAS II SECTOR",
+      "ARBOLEDA DE LOS ALPES",
+      "BALCONES DE SAN PEDRO III",
+      "BUENAVISTA II SECTOR",
+      "BUENAVISTA SURORIENTAL",
+      "CORINTO",
+      "EL BALCON DE LA CASTANA",
+      "EL FUTURO",
+      "EL MANANTIAL",
+      "EL RAMAJAL",
+      "EL RAMAJAL SAN PEDRO",
+      "EL TRIANGULO",
+      "GRANJAS Y HUERTAS EL RAMAJAL",
+      "LA CASTANA",
+      "LA CECILIA",
+      "LA GRAN COLOMBIA",
+      "LA SAGRADA FAMILIA",
+      "LAS ACACIAS",
+      "LAS MERCEDES",
+      "LOS ALPES",
+      "LOS ALPES DEL ZIPA",
+      "LOS LAURELES SUR ORIENTAL I SECTOR",
+      "LOS LAURELES SUR ORIENTAL II SECTOR",
+      "MACARENA DE LOS ALPES",
+      "MANILA",
+      "MANILA 2",
+      "MONTECARLO",
+      "NUEVA ESPANA",
+      "NUEVA ESPANA PARTE ALTA",
+      "RAMAJAL",
+      "SAN BLAS",
+      "SAN BLAS II SECTOR",
+      "SAN CRISTOBAL ALTO",
+      "SAN CRISTOBAL SUR VIEJO",
+      "SAN JERONIMO DEL YUSTE",
+      "TORRES DE GRATAMIRA",
+      "TRIANGULO ALTO",
+      "VITELMA"
+    ],
+    "ZONA 2": [
+      "ALTOS DE LA MARIA",
+      "ALTOS DEL SOL",
+      "BALKANES",
+      "BELLAVISTA SECTOR LUCERO",
+      "BELLAVISTA SUR ORIENTAL",
+      "BUENOS AIRES II SECTOR",
+      "BUENOS AIRES III SECTOR",
+      "CAMINO VIEJO",
+      "CASAPANDA",
+      "CIUDAD MARBELLA SECTOR II",
+      "EL RINCON DE LA VICTORIA BELLAVISTA",
+      "LA PLAYA",
+      "LOS ARRAYANES SANTA INES",
+      "LOS BALCANES VITELMA",
+      "LOS DOS LEONES",
+      "LOS FAROLES DE SANTA INES",
+      "MEDIA LUNA",
+      "SAN BLAS",
+      "SAN BLAS II SECTOR",
+      "SAN CRISTOBAL SUR VIEJO",
+      "SAN VICENTE",
+      "SAN VICENTE SUR ORIENTAL",
+      "SANTA INES",
+      "SANTA INES SUR",
+      "SANTA SOFIA DE VITELMA",
+      "SIDEL TERRAZAS DE ORIENTE",
+      "TORRES DE BUENOS AIRES",
+      "VITELMA",
+      "VITELMA CIUDADELA PARQUE DE LA ROCA"
+    ],
+    "ZONA 3": [
+      "ALTAMIRA CHIQUITA",
+      "ALTAMIRA SECTOR SAN JOSE",
+      "BELLAVISTA SUR ORIENTAL",
+      "EL POBLADO",
+      "LA ARBOLEDA",
+      "LA GLORIA",
+      "LA GROVANA",
+      "LA NUEVA GLORIA",
+      "LOS ALPES DEL ZIPA",
+      "LOS ALTOS DEL ZUQUE",
+      "LOS PUENTES",
+      "MIRAFLORES",
+      "MORALVA",
+      "PANORAMA",
+      "PUENTE COLORADO",
+      "QUINDIO",
+      "QUINDIO II SECTOR",
+      "SAN JOSE ORIENTAL",
+      "VILLA ANITA SUR ORIENTAL"
+    ],
+    "ZONA 4": [
+      "ATENAS",
+      "ATENAS I",
+      "BARCELONA SUR ORIENTAL",
+      "BELLO HORIZONTE",
+      "BELLO HORIZONTE II SECTOR",
+      "BELLO HORIZONTE III SECTOR",
+      "CIUDADELA MARIA MICAELA",
+      "CORDOBA",
+      "EL ANGULO",
+      "EL REFUGIO SUR",
+      "EL SOSIEGO",
+      "GRANADA SUR",
+      "GRANADA SUR III SECTOR",
+      "LA JOYITA BELLO HORIZONTE",
+      "MANAGUA",
+      "SAN ISIDRO",
+      "SURAMERICA",
+      "UNIFAMILIARES AVENIDA DECIMA",
+      "VILLA DE LOS ALPES",
+      "VILLA DE LOS ALPES II SECTOR",
+      "VILLA NATALY 20 DE JULIO"
+    ],
+    "ZONA 5": [
+      "BOSQUE DE SAN JOSE",
+      "CIUDAD DE LONDRES",
+      "EL PINAR REPUBLICA DE CANADA II SECTOR",
+      "EL RECODO REPUBLICA DE CANADA",
+      "JUAN REY",
+      "JUAN REY II",
+      "LA ARBOLEDA",
+      "LA BELLEZA",
+      "LA NUEVA GLORIA",
+      "LA NUEVA GLORIA II SECTOR",
+      "LOS LIBERTADORES",
+      "LOS LIBERTADORES BOSQUE DIAMANTE TRIANGULO",
+      "LOS LIBERTADORES SECTOR EL TESORO",
+      "LOS LIBERTADORES SECTOR LA COLINA",
+      "LOS LIBERTADORES SECTOR SAN IGNACIO",
+      "LOS LIBERTADORES SECTOR SAN ISIDRO",
+      "LOS LIBERTADORES SECTOR SAN JOSE",
+      "LOS LIBERTADORES SECTOR SAN LUIS",
+      "LOS LIBERTADORES SECTOR SAN MIGUEL",
+      "LOS PINOS",
+      "NUEVA DELLY",
+      "NUEVA DELLY PARTE ALTA",
+      "REPUBLICA DEL CANADA EL PINAR",
+      "SAN MANUEL",
+      "SAN RAFAEL SUR ORIENTAL",
+      "SIERRAS DEL SUR ORIENTE",
+      "VALPARAISO",
+      "VILLA AURORA",
+      "VILLA BEGONIA"
+    ],
+    "ZONA 6": [
+      "CAJA DE VIVIENDA POPULAR",
+      "CAMINO VIEJO DE SAN CRISTOBAL",
+      "CIUDAD MARBELLA SECTOR I",
+      "CIUDAD MARBELLA SECTOR II",
+      "EL ALTO DE LAS BRISAS",
+      "EL ALTO DE LAS BRISAS II",
+      "EL DIAMANTE BOSQUE DE SAN CRISTOBAL",
+      "EL PARQUE ETAPA I",
+      "EL SOSIEGO",
+      "NARINO SUR",
+      "PRIMERO DE MAYO",
+      "QUINTA RAMOS",
+      "SAN BERNARDO DEL VIENTO",
+      "SAN CRISTOBAL SUR VIEJO",
+      "SANTA ANA",
+      "SANTA ANA SUR",
+      "SANTA ANITA",
+      "TAPAS LA LIBERTAD",
+      "VELODROMO",
+      "VILLA ALBANIA",
+      "VILLA JAVIER"
+    ],
+    "ZONA 7": [
+      "CANADA LA GUIRA II SECTOR",
+      "CANADA SAN LUIS",
+      "EL OASIS DEL SUR",
+      "EL PARAISO SUR ORIENTAL I SECTOR",
+      "EL PARAISO URB ANTIOQUIA",
+      "LA BELLEZA",
+      "LA NUEVA GLORIA",
+      "LA NUEVA GLORIA II SECTOR",
+      "LA PENINSULA",
+      "LA SIERRA",
+      "LOS LIBERTADORES",
+      "NUEVAS MALVINAS EL TRIUNFO",
+      "SAN JACINTO",
+      "SANTA RITA SUR ORIENTAL",
+      "SANTA RITA SUR ORIENTAL II ETAPA",
+      "VILLA ANGELICA",
+      "VILLABEL"
+    ],
+    "ZONA 8": [
+      "GUACAMAYAS III SECTOR",
+      "LA COLMENA",
+      "LA GLORIA",
+      "LA GLORIA BAJA",
+      "LA VICTORIA",
+      "LA VICTORIA II SECTOR",
+      "LA VICTORIA III SECTOR",
+      "LAS GUACAMAYAS",
+      "MALVINAS",
+      "SAN JOSE ORIENTAL",
+      "SAN JOSE SUR ORIENTAL",
+      "SAN MARTIN DE LOBA"
+    ]
+  },
+  "barrio_a_upz": {
+    "aguas claras": "32 - SAN BLAS",
+    "altos del zipa": "32 - SAN BLAS",
+    "amapolas": "32 - SAN BLAS",
+    "amapolas ii": "32 - SAN BLAS",
+    "balcon de la castana": "32 - SAN BLAS",
+    "bella vista sector lucero": "32 - SAN BLAS",
+    "bellavista parte baja": "32 - SAN BLAS",
+    "bellavista sur": "32 - SAN BLAS",
+    "bosque de los alpes": "32 - SAN BLAS",
+    "buenavista suroriental": "32 - SAN BLAS",
+    "camino viejo san cristobal": "32 - SAN BLAS",
+    "cerros de san vicente": "32 - SAN BLAS",
+    "ciudad de londres": "51 - LOS LIBERTADORES",
+    "corinto": "32 - SAN BLAS",
+    "el balcon de la castana": "32 - SAN BLAS",
+    "el futuro": "32 - SAN BLAS",
+    "el ramajal": "32 - SAN BLAS",
+    "el ramajal san pedro": "32 - SAN BLAS",
+    "gran colombia": "32 - SAN BLAS",
+    "horacio orjuela": "32 - SAN BLAS",
+    "la castana": "32 - SAN BLAS",
+    "la cecilia": "32 - SAN BLAS",
+    "la gran colombia": "32 - SAN BLAS",
+    "la herradura": "32 - SAN BLAS",
+    "la joyita centro": "32 - SAN BLAS",
+    "la playa": "32 - SAN BLAS",
+    "la roca": "32 - SAN BLAS",
+    "la sagrada familia": "32 - SAN BLAS",
+    "las acacias": "32 - SAN BLAS",
+    "las mercedes": "32 - SAN BLAS",
+    "laureles sur oriental ii sector": "32 - SAN BLAS",
+    "los alpes": "32 - SAN BLAS",
+    "los alpes futuro": "32 - SAN BLAS",
+    "los arrayanes sector santa ines": "32 - SAN BLAS",
+    "los laureles sur oriental i sector": "32 - SAN BLAS",
+    "macarena de los alpes": "32 - SAN BLAS",
+    "manantial": "32 - SAN BLAS",
+    "manila": "32 - SAN BLAS",
+    "miraflores": "50 - LA GLORIA",
+    "molinos de oriente": "32 - SAN BLAS",
+    "montecarlo": "32 - SAN BLAS",
+    "nueva espana": "32 - SAN BLAS",
+    "nueva espana parte alta": "32 - SAN BLAS",
+    "ramajal": "32 - SAN BLAS",
+    "rincon de la victoria bellavista": "32 - SAN BLAS",
+    "sagrada familia": "32 - SAN BLAS",
+    "san blas": "32 - SAN BLAS",
+    "san blas parcelas": "32 - SAN BLAS",
+    "san blas ii sector": "32 - SAN BLAS",
+    "san cristobal alto": "32 - SAN BLAS",
+    "san cristobal viejo": "32 - SAN BLAS",
+    "san pedro": "32 - SAN BLAS",
+    "san vicente": "32 - SAN BLAS",
+    "san vicente alto": "32 - SAN BLAS",
+    "san vicente bajo": "32 - SAN BLAS",
+    "san vicente sur oriental": "32 - SAN BLAS",
+    "santa ines": "32 - SAN BLAS",
+    "santa ines sur": "32 - SAN BLAS",
+    "terrazas de oriente": "32 - SAN BLAS",
+    "triangulo": "32 - SAN BLAS",
+    "triangulo alto": "32 - SAN BLAS",
+    "triangulo bajo": "32 - SAN BLAS",
+    "vereda altos de san blas": "32 - SAN BLAS",
+    "vitelma": "32 - SAN BLAS",
+    "golconda": "33 - SOSIEGO",
+    "primero de mayo": "33 - SOSIEGO",
+    "buenos aires": "50 - LA GLORIA",
+    "calvo sur": "33 - SOSIEGO",
+    "camino viejo de san cristobal": "33 - SOSIEGO",
+    "la maria": "33 - SOSIEGO",
+    "las brisas": "33 - SOSIEGO",
+    "los dos leones": "33 - SOSIEGO",
+    "modelo sur": "33 - SOSIEGO",
+    "narino sur": "33 - SOSIEGO",
+    "quinta ramos": "33 - SOSIEGO",
+    "republica de venezuela": "33 - SOSIEGO",
+    "san cristobal sur": "33 - SOSIEGO",
+    "san javier": "33 - SOSIEGO",
+    "santa ana": "33 - SOSIEGO",
+    "santa ana sur": "33 - SOSIEGO",
+    "sosiego": "33 - SOSIEGO",
+    "velodromo": "33 - SOSIEGO",
+    "villa albania": "33 - SOSIEGO",
+    "villa javier": "33 - SOSIEGO",
+    "atenas": "34 - 20 DE JULIO",
+    "20 de julio": "34 - 20 DE JULIO",
+    "atenas i": "34 - 20 DE JULIO",
+    "ayacucho": "34 - 20 DE JULIO",
+    "barcelona": "34 - 20 DE JULIO",
+    "barcelona sur": "34 - 20 DE JULIO",
+    "barcelona sur oriental": "34 - 20 DE JULIO",
+    "bello horizonte": "34 - 20 DE JULIO",
+    "bello horizonte iii sector": "34 - 20 DE JULIO",
+    "cordoba": "34 - 20 DE JULIO",
+    "el angulo": "34 - 20 DE JULIO",
+    "el encanto": "34 - 20 DE JULIO",
+    "granada sur": "34 - 20 DE JULIO",
+    "granada sur iii sector": "34 - 20 DE JULIO",
+    "la joyita": "34 - 20 DE JULIO",
+    "la serafina": "34 - 20 DE JULIO",
+    "las lomas": "50 - LA GLORIA",
+    "managua": "34 - 20 DE JULIO",
+    "montebello": "34 - 20 DE JULIO",
+    "san isidro": "34 - 20 DE JULIO",
+    "san isidro i y ii": "34 - 20 DE JULIO",
+    "san isidro sur": "34 - 20 DE JULIO",
+    "altamira": "50 - LA GLORIA",
+    "altamira chiquita": "50 - LA GLORIA",
+    "altos del poblado": "50 - LA GLORIA",
+    "altos del virrey": "50 - LA GLORIA",
+    "altos del zuque": "50 - LA GLORIA",
+    "bellavista parte alta": "50 - LA GLORIA",
+    "bellavista sur oriental": "50 - LA GLORIA",
+    "ciudadela santa rosa": "50 - LA GLORIA",
+    "el quindio": "50 - LA GLORIA",
+    "el recodo republica de canada": "50 - LA GLORIA",
+    "el rodeo": "50 - LA GLORIA",
+    "la colmena": "50 - LA GLORIA",
+    "la gloria": "50 - LA GLORIA",
+    "la gloria baja": "50 - LA GLORIA",
+    "la gloria mz 11": "50 - LA GLORIA",
+    "la gloria occidental": "50 - LA GLORIA",
+    "la gloria oriental": "50 - LA GLORIA",
+    "la gloria san miguel": "50 - LA GLORIA",
+    "la grovana": "50 - LA GLORIA",
+    "la victoria": "50 - LA GLORIA",
+    "la victoria ii sector": "50 - LA GLORIA",
+    "la victoria iii sector": "50 - LA GLORIA",
+    "las gaviotas": "51 - LOS LIBERTADORES",
+    "las guacamayas": "50 - LA GLORIA",
+    "las guacamayas i ii y iii": "50 - LA GLORIA",
+    "los puentes": "51 - LOS LIBERTADORES",
+    "malvinas": "50 - LA GLORIA",
+    "moralva": "50 - LA GLORIA",
+    "panorama": "50 - LA GLORIA",
+    "paseito iii": "50 - LA GLORIA",
+    "puente colorado": "50 - LA GLORIA",
+    "quindio": "50 - LA GLORIA",
+    "quindio i y ii": "50 - LA GLORIA",
+    "quindio ii": "50 - LA GLORIA",
+    "san jose": "50 - LA GLORIA",
+    "san jose oriental": "50 - LA GLORIA",
+    "san jose sur oriental": "50 - LA GLORIA",
+    "san martin de loba i y ii": "50 - LA GLORIA",
+    "san martin sur": "50 - LA GLORIA",
+    "antioquia": "51 - LOS LIBERTADORES",
+    "canada la guira": "51 - LOS LIBERTADORES",
+    "canada la guira ii sector": "51 - LOS LIBERTADORES",
+    "canada san luis": "51 - LOS LIBERTADORES",
+    "chiguaza": "51 - LOS LIBERTADORES",
+    "el paraiso": "51 - LOS LIBERTADORES",
+    "el pinar": "51 - LOS LIBERTADORES",
+    "el triunfo": "51 - LOS LIBERTADORES",
+    "juan rey": "51 - LOS LIBERTADORES",
+    "la belleza": "51 - LOS LIBERTADORES",
+    "la nueva gloria": "51 - LOS LIBERTADORES",
+    "la nueva gloria ii sector": "51 - LOS LIBERTADORES",
+    "la peninsula": "51 - LOS LIBERTADORES",
+    "la sierra": "51 - LOS LIBERTADORES",
+    "los libertadores": "51 - LOS LIBERTADORES",
+    "los libertadores sector el tesoro": "51 - LOS LIBERTADORES",
+    "los libertadores sector la colina": "51 - LOS LIBERTADORES",
+    "los libertadores sector san ignacio": "51 - LOS LIBERTADORES",
+    "los libertadores sector san isidro": "51 - LOS LIBERTADORES",
+    "los libertadores sector san jose": "51 - LOS LIBERTADORES",
+    "los libertadores sector san luis": "51 - LOS LIBERTADORES",
+    "los libertadores sector san miguel": "51 - LOS LIBERTADORES",
+    "los libertadores bosque diamante triangulo": "51 - LOS LIBERTADORES",
+    "los pinares": "51 - LOS LIBERTADORES",
+    "los pinos": "51 - LOS LIBERTADORES",
+    "nueva delly": "51 - LOS LIBERTADORES",
+    "nueva gloria": "51 - LOS LIBERTADORES",
+    "nueva roma": "51 - LOS LIBERTADORES",
+    "nuevas malvinas": "51 - LOS LIBERTADORES",
+    "republica del canada": "51 - LOS LIBERTADORES",
+    "republica del canada el pinar": "51 - LOS LIBERTADORES",
+    "san jacinto": "51 - LOS LIBERTADORES",
+    "san manuel": "51 - LOS LIBERTADORES",
+    "san rafael sur oriental": "51 - LOS LIBERTADORES",
+    "san rafael usme": "51 - LOS LIBERTADORES",
+    "santa rita i ii y iii": "51 - LOS LIBERTADORES",
+    "santa rita sur oriental": "51 - LOS LIBERTADORES",
+    "valparaiso": "51 - LOS LIBERTADORES",
+    "villa angelica": "51 - LOS LIBERTADORES",
+    "villa aurora": "51 - LOS LIBERTADORES",
+    "villa del cerro": "51 - LOS LIBERTADORES",
+    "villabell": "51 - LOS LIBERTADORES",
+    "yomasa": "51 - LOS LIBERTADORES",
+    "el paraiso sur oriental i sector": "51 - LOS LIBERTADORES",
+    "juan rey i y ii": "51 - LOS LIBERTADORES",
+    "villa begonia": "51 - LOS LIBERTADORES"
+  },
+  "barrio_a_zonas": {
+    "aguas claras": [
+      "ZONA 1"
+    ],
+    "amapolas": [
+      "ZONA 1"
+    ],
+    "amapolas ii sector": [
+      "ZONA 1"
+    ],
+    "arboleda de los alpes": [
+      "ZONA 1"
+    ],
+    "balcones de san pedro iii": [
+      "ZONA 1"
+    ],
+    "buenavista ii sector": [
+      "ZONA 1"
+    ],
+    "buenavista suroriental": [
+      "ZONA 1"
+    ],
+    "corinto": [
+      "ZONA 1"
+    ],
+    "el balcon de la castana": [
+      "ZONA 1"
+    ],
+    "el futuro": [
+      "ZONA 1"
+    ],
+    "el manantial": [
+      "ZONA 1"
+    ],
+    "el ramajal": [
+      "ZONA 1"
+    ],
+    "el ramajal san pedro": [
+      "ZONA 1"
+    ],
+    "el triangulo": [
+      "ZONA 1"
+    ],
+    "granjas y huertas el ramajal": [
+      "ZONA 1"
+    ],
+    "la castana": [
+      "ZONA 1"
+    ],
+    "la cecilia": [
+      "ZONA 1"
+    ],
+    "la gran colombia": [
+      "ZONA 1"
+    ],
+    "la sagrada familia": [
+      "ZONA 1"
+    ],
+    "las acacias": [
+      "ZONA 1"
+    ],
+    "las mercedes": [
+      "ZONA 1"
+    ],
+    "los alpes": [
+      "ZONA 1"
+    ],
+    "los alpes del zipa": [
+      "ZONA 1",
+      "ZONA 3"
+    ],
+    "los laureles sur oriental i sector": [
+      "ZONA 1"
+    ],
+    "los laureles sur oriental ii sector": [
+      "ZONA 1"
+    ],
+    "macarena de los alpes": [
+      "ZONA 1"
+    ],
+    "manila": [
+      "ZONA 1"
+    ],
+    "manila 2": [
+      "ZONA 1"
+    ],
+    "montecarlo": [
+      "ZONA 1"
+    ],
+    "nueva espana": [
+      "ZONA 1"
+    ],
+    "nueva espana parte alta": [
+      "ZONA 1"
+    ],
+    "ramajal": [
+      "ZONA 1"
+    ],
+    "san blas": [
+      "ZONA 1",
+      "ZONA 2"
+    ],
+    "san blas ii sector": [
+      "ZONA 1",
+      "ZONA 2"
+    ],
+    "san cristobal alto": [
+      "ZONA 1"
+    ],
+    "san cristobal sur viejo": [
+      "ZONA 1",
+      "ZONA 2",
+      "ZONA 6"
+    ],
+    "san jeronimo del yuste": [
+      "ZONA 1"
+    ],
+    "torres de gratamira": [
+      "ZONA 1"
+    ],
+    "triangulo alto": [
+      "ZONA 1"
+    ],
+    "vitelma": [
+      "ZONA 1",
+      "ZONA 2"
+    ],
+    "altos de la maria": [
+      "ZONA 2"
+    ],
+    "altos del sol": [
+      "ZONA 2"
+    ],
+    "balkanes": [
+      "ZONA 2"
+    ],
+    "bellavista sector lucero": [
+      "ZONA 2"
+    ],
+    "bellavista sur oriental": [
+      "ZONA 2",
+      "ZONA 3"
+    ],
+    "buenos aires ii sector": [
+      "ZONA 2"
+    ],
+    "buenos aires iii sector": [
+      "ZONA 2"
+    ],
+    "camino viejo": [
+      "ZONA 2"
+    ],
+    "casapanda": [
+      "ZONA 2"
+    ],
+    "ciudad marbella sector ii": [
+      "ZONA 2",
+      "ZONA 6"
+    ],
+    "el rincon de la victoria bellavista": [
+      "ZONA 2"
+    ],
+    "la playa": [
+      "ZONA 2"
+    ],
+    "los arrayanes santa ines": [
+      "ZONA 2"
+    ],
+    "los balcanes vitelma": [
+      "ZONA 2"
+    ],
+    "los dos leones": [
+      "ZONA 2"
+    ],
+    "los faroles de santa ines": [
+      "ZONA 2"
+    ],
+    "media luna": [
+      "ZONA 2"
+    ],
+    "san vicente": [
+      "ZONA 2"
+    ],
+    "san vicente sur oriental": [
+      "ZONA 2"
+    ],
+    "santa ines": [
+      "ZONA 2"
+    ],
+    "santa ines sur": [
+      "ZONA 2"
+    ],
+    "santa sofia de vitelma": [
+      "ZONA 2"
+    ],
+    "sidel terrazas de oriente": [
+      "ZONA 2"
+    ],
+    "torres de buenos aires": [
+      "ZONA 2"
+    ],
+    "vitelma ciudadela parque de la roca": [
+      "ZONA 2"
+    ],
+    "altamira chiquita": [
+      "ZONA 3"
+    ],
+    "altamira sector san jose": [
+      "ZONA 3"
+    ],
+    "el poblado": [
+      "ZONA 3"
+    ],
+    "la arboleda": [
+      "ZONA 3",
+      "ZONA 5"
+    ],
+    "la gloria": [
+      "ZONA 3",
+      "ZONA 8"
+    ],
+    "la grovana": [
+      "ZONA 3"
+    ],
+    "la nueva gloria": [
+      "ZONA 3",
+      "ZONA 5",
+      "ZONA 7"
+    ],
+    "los altos del zuque": [
+      "ZONA 3"
+    ],
+    "los puentes": [
+      "ZONA 3"
+    ],
+    "miraflores": [
+      "ZONA 3"
+    ],
+    "moralva": [
+      "ZONA 3"
+    ],
+    "panorama": [
+      "ZONA 3"
+    ],
+    "puente colorado": [
+      "ZONA 3"
+    ],
+    "quindio": [
+      "ZONA 3"
+    ],
+    "quindio ii sector": [
+      "ZONA 3"
+    ],
+    "san jose oriental": [
+      "ZONA 3",
+      "ZONA 8"
+    ],
+    "villa anita sur oriental": [
+      "ZONA 3"
+    ],
+    "atenas": [
+      "ZONA 4"
+    ],
+    "atenas i": [
+      "ZONA 4"
+    ],
+    "barcelona sur oriental": [
+      "ZONA 4"
+    ],
+    "bello horizonte": [
+      "ZONA 4"
+    ],
+    "bello horizonte ii sector": [
+      "ZONA 4"
+    ],
+    "bello horizonte iii sector": [
+      "ZONA 4"
+    ],
+    "ciudadela maria micaela": [
+      "ZONA 4"
+    ],
+    "cordoba": [
+      "ZONA 4"
+    ],
+    "el angulo": [
+      "ZONA 4"
+    ],
+    "el refugio sur": [
+      "ZONA 4"
+    ],
+    "el sosiego": [
+      "ZONA 4",
+      "ZONA 6"
+    ],
+    "granada sur": [
+      "ZONA 4"
+    ],
+    "granada sur iii sector": [
+      "ZONA 4"
+    ],
+    "la joyita bello horizonte": [
+      "ZONA 4"
+    ],
+    "managua": [
+      "ZONA 4"
+    ],
+    "san isidro": [
+      "ZONA 4"
+    ],
+    "suramerica": [
+      "ZONA 4"
+    ],
+    "unifamiliares avenida decima": [
+      "ZONA 4"
+    ],
+    "villa de los alpes": [
+      "ZONA 4"
+    ],
+    "villa de los alpes ii sector": [
+      "ZONA 4"
+    ],
+    "villa nataly 20 de julio": [
+      "ZONA 4"
+    ],
+    "bosque de san jose": [
+      "ZONA 5"
+    ],
+    "ciudad de londres": [
+      "ZONA 5"
+    ],
+    "el pinar republica de canada ii sector": [
+      "ZONA 5"
+    ],
+    "el recodo republica de canada": [
+      "ZONA 5"
+    ],
+    "juan rey": [
+      "ZONA 5"
+    ],
+    "juan rey ii": [
+      "ZONA 5"
+    ],
+    "la belleza": [
+      "ZONA 5",
+      "ZONA 7"
+    ],
+    "la nueva gloria ii sector": [
+      "ZONA 5",
+      "ZONA 7"
+    ],
+    "los libertadores": [
+      "ZONA 5",
+      "ZONA 7"
+    ],
+    "los libertadores bosque diamante triangulo": [
+      "ZONA 5"
+    ],
+    "los libertadores sector el tesoro": [
+      "ZONA 5"
+    ],
+    "los libertadores sector la colina": [
+      "ZONA 5"
+    ],
+    "los libertadores sector san ignacio": [
+      "ZONA 5"
+    ],
+    "los libertadores sector san isidro": [
+      "ZONA 5"
+    ],
+    "los libertadores sector san jose": [
+      "ZONA 5"
+    ],
+    "los libertadores sector san luis": [
+      "ZONA 5"
+    ],
+    "los libertadores sector san miguel": [
+      "ZONA 5"
+    ],
+    "los pinos": [
+      "ZONA 5"
+    ],
+    "nueva delly": [
+      "ZONA 5"
+    ],
+    "nueva delly parte alta": [
+      "ZONA 5"
+    ],
+    "republica del canada el pinar": [
+      "ZONA 5"
+    ],
+    "san manuel": [
+      "ZONA 5"
+    ],
+    "san rafael sur oriental": [
+      "ZONA 5"
+    ],
+    "sierras del sur oriente": [
+      "ZONA 5"
+    ],
+    "valparaiso": [
+      "ZONA 5"
+    ],
+    "villa aurora": [
+      "ZONA 5"
+    ],
+    "villa begonia": [
+      "ZONA 5"
+    ],
+    "caja de vivienda popular": [
+      "ZONA 6"
+    ],
+    "camino viejo de san cristobal": [
+      "ZONA 6"
+    ],
+    "ciudad marbella sector i": [
+      "ZONA 6"
+    ],
+    "el alto de las brisas": [
+      "ZONA 6"
+    ],
+    "el alto de las brisas ii": [
+      "ZONA 6"
+    ],
+    "el diamante bosque de san cristobal": [
+      "ZONA 6"
+    ],
+    "el parque etapa i": [
+      "ZONA 6"
+    ],
+    "narino sur": [
+      "ZONA 6"
+    ],
+    "primero de mayo": [
+      "ZONA 6"
+    ],
+    "quinta ramos": [
+      "ZONA 6"
+    ],
+    "san bernardo del viento": [
+      "ZONA 6"
+    ],
+    "santa ana": [
+      "ZONA 6"
+    ],
+    "santa ana sur": [
+      "ZONA 6"
+    ],
+    "santa anita": [
+      "ZONA 6"
+    ],
+    "tapas la libertad": [
+      "ZONA 6"
+    ],
+    "velodromo": [
+      "ZONA 6"
+    ],
+    "villa albania": [
+      "ZONA 6"
+    ],
+    "villa javier": [
+      "ZONA 6"
+    ],
+    "canada la guira ii sector": [
+      "ZONA 7"
+    ],
+    "canada san luis": [
+      "ZONA 7"
+    ],
+    "el oasis del sur": [
+      "ZONA 7"
+    ],
+    "el paraiso sur oriental i sector": [
+      "ZONA 7"
+    ],
+    "el paraiso urb antioquia": [
+      "ZONA 7"
+    ],
+    "la peninsula": [
+      "ZONA 7"
+    ],
+    "la sierra": [
+      "ZONA 7"
+    ],
+    "nuevas malvinas el triunfo": [
+      "ZONA 7"
+    ],
+    "san jacinto": [
+      "ZONA 7"
+    ],
+    "santa rita sur oriental": [
+      "ZONA 7"
+    ],
+    "santa rita sur oriental ii etapa": [
+      "ZONA 7"
+    ],
+    "villa angelica": [
+      "ZONA 7"
+    ],
+    "villabel": [
+      "ZONA 7"
+    ],
+    "guacamayas iii sector": [
+      "ZONA 8"
+    ],
+    "la colmena": [
+      "ZONA 8"
+    ],
+    "la gloria baja": [
+      "ZONA 8"
+    ],
+    "la victoria": [
+      "ZONA 8"
+    ],
+    "la victoria ii sector": [
+      "ZONA 8"
+    ],
+    "la victoria iii sector": [
+      "ZONA 8"
+    ],
+    "las guacamayas": [
+      "ZONA 8"
+    ],
+    "malvinas": [
+      "ZONA 8"
+    ],
+    "san jose sur oriental": [
+      "ZONA 8"
+    ],
+    "san martin de loba": [
+      "ZONA 8"
+    ]
+  },
+  "metadata": {
+    "total_barrios": 197,
+    "total_upz": 5,
+    "total_zonas": 8,
+    "fecha_creacion": "2025-01-22"
+  }
+}

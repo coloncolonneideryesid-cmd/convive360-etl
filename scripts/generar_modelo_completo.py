@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 Script para generar TODAS las tablas dimensionales y de hechos faltantes
-VERSIÓN FINAL CORREGIDA - Usa fact_actividades_enriquecido.csv
+a partir de fact_actividades_enriquecido.csv y diccionarios
+VERSION CORREGIDA - Rutas y lógica actualizadas
 """
 
 import pandas as pd
@@ -10,7 +11,6 @@ import json
 import re
 from pathlib import Path
 from datetime import datetime
-import hashlib
 
 # =====================================================================
 # CONFIGURACIÓN DE RUTAS (CORREGIDAS)
@@ -22,8 +22,13 @@ SCRIPTS_DIR = BASE_DIR / "scripts"
 # Crear carpeta si no existe
 DIMENSIONES_DIR.mkdir(exist_ok=True)
 
-# ✅ ARCHIVOS DE ENTRADA CORREGIDOS
-FACT_ACTIVIDADES = BASE_DIR / "fact_actividades_enriquecido.csv"  # ✅ ENRIQUECIDO
+# Archivos de entrada (RUTAS CORREGIDAS Y FLEXIBLES)
+FACT_ENRIQUECIDO = BASE_DIR / "fact_actividades_enriquecido.csv"
+FACT_LIMPIO = BASE_DIR / "fact_actividades_limpio.csv"
+
+# Usar enriquecido si existe, sino limpio
+FACT_ACTIVIDADES = FACT_ENRIQUECIDO if FACT_ENRIQUECIDO.exists() else FACT_LIMPIO
+
 DICT_UPZ_ZONAS = SCRIPTS_DIR / "diccionario_upz_zonas.json"
 DICT_BARRIOS = SCRIPTS_DIR / "diccionario_barrios_completo.json"
 
@@ -40,18 +45,15 @@ print("\n📥 Cargando datos base...")
 if not FACT_ACTIVIDADES.exists():
     print(f"❌ Error: No se encuentra {FACT_ACTIVIDADES}")
     print("   Ejecuta primero: python scripts/enriquecer_con_barrios.py")
-    print("   Luego: python scripts/mejorar_extraccion_barrios.py")
     exit(1)
 
-df_actividades = pd.read_csv(FACT_ACTIVIDADES, encoding='utf-8')
+df_actividades = pd.read_csv(FACT_ACTIVIDADES, encoding='utf-8-sig')
 print(f"✅ fact_actividades_enriquecido.csv cargado: {len(df_actividades)} registros")
 
 # Verificar columna Barrio_Extraido
 if 'Barrio_Extraido' in df_actividades.columns:
     barrios_con_dato = df_actividades['Barrio_Extraido'].notna().sum()
-    print(f"   �� Barrios extraídos: {barrios_con_dato}/{len(df_actividades)} ({barrios_con_dato/len(df_actividades)*100:.1f}%)")
-else:
-    print("⚠️  Columna 'Barrio_Extraido' no encontrada")
+    print(f"   📍 Barrios extraídos: {barrios_con_dato}/{len(df_actividades)} ({barrios_con_dato/len(df_actividades)*100:.1f}%)")
 
 # Cargar diccionario UPZ-Zonas
 if DICT_UPZ_ZONAS.exists():
@@ -83,6 +85,7 @@ else:
 # =====================================================================
 if 'ID_Actividad' not in df_actividades.columns:
     print("\n⚠️  Generando ID_Actividad único...")
+    import hashlib
     
     def generar_id(row):
         # Crear ID único basado en campos clave
@@ -168,7 +171,7 @@ df_bridge_upz_zonas.to_csv(output_path, index=False, encoding='utf-8-sig')
 print(f"✅ bridge_upz_zonas.csv generado ({len(df_bridge_upz_zonas)} relaciones)")
 
 # =====================================================================
-# 6. GENERAR dim_barrios.csv (DESDE DICCIONARIO OFICIAL + EXTRAÍDOS)
+# 6. GENERAR dim_barrios.csv (DESDE DICCIONARIO OFICIAL)
 # =====================================================================
 print("\n" + "="*80)
 print("📊 GENERANDO dim_barrios.csv")
@@ -181,7 +184,6 @@ barrio_a_upz = dict_barrios['barrio_a_upz']
 barrios_data = []
 id_counter = 1
 
-print("   📋 Procesando barrios oficiales del diccionario...")
 for upz, barrios in barrios_por_upz.items():
     for barrio in barrios:
         barrios_data.append({
@@ -193,23 +195,19 @@ for upz, barrios in barrios_por_upz.items():
         })
         id_counter += 1
 
-print(f"   ✅ {id_counter - 1} barrios oficiales agregados")
-
 # AGREGAR barrios extraídos que no están en el diccionario oficial
 if 'Barrio_Extraido' in df_actividades.columns:
-    print("   📋 Buscando barrios adicionales en actividades...")
     barrios_extraidos = df_actividades['Barrio_Extraido'].dropna().unique()
     barrios_oficiales_norm = {b.lower().strip() for b in [item['Barrio'] for item in barrios_data]}
     
     nuevos_barrios = 0
     for barrio_ext in barrios_extraidos:
-        barrio_norm = str(barrio_ext).lower().strip()
-        if barrio_norm and barrio_norm not in barrios_oficiales_norm:
+        if barrio_ext.lower().strip() not in barrios_oficiales_norm:
             # Barrio encontrado en actividades pero no en diccionario oficial
             barrios_data.append({
                 'ID_Barrio': id_counter,
-                'Barrio': str(barrio_ext).title(),
-                'Barrio_Normalizado': barrio_norm,
+                'Barrio': barrio_ext,
+                'Barrio_Normalizado': barrio_ext.lower().strip(),
                 'UPZ': None,
                 'Fuente': 'Extraído de Actividades'
             })
@@ -217,12 +215,12 @@ if 'Barrio_Extraido' in df_actividades.columns:
             nuevos_barrios += 1
     
     if nuevos_barrios > 0:
-        print(f"   ✅ {nuevos_barrios} barrios adicionales encontrados en actividades")
+        print(f"   📍 {nuevos_barrios} barrios adicionales encontrados en actividades")
 
 df_dim_barrios = pd.DataFrame(barrios_data)
 output_path = DIMENSIONES_DIR / "dim_barrios.csv"
 df_dim_barrios.to_csv(output_path, index=False, encoding='utf-8-sig')
-print(f"\n✅ dim_barrios.csv generado ({len(df_dim_barrios)} barrios)")
+print(f"✅ dim_barrios.csv generado ({len(df_dim_barrios)} barrios)")
 print(f"   • Oficiales: {len([b for b in barrios_data if b['Fuente'] == 'Diccionario Oficial'])}")
 print(f"   • Extraídos: {len([b for b in barrios_data if b['Fuente'] == 'Extraído de Actividades'])}")
 
@@ -336,7 +334,6 @@ barrios_por_zona = dict_barrios['barrios_por_zona']
 
 bridge_barrios_zonas_rows = []
 
-print("   📋 Procesando barrios por zona del diccionario...")
 for zona, barrios in barrios_por_zona.items():
     for barrio in barrios:
         bridge_barrios_zonas_rows.append({
@@ -345,45 +342,32 @@ for zona, barrios in barrios_por_zona.items():
             'Fuente': 'Diccionario Oficial'
         })
 
-print(f"   ✅ {len(bridge_barrios_zonas_rows)} relaciones del diccionario")
-
 # Agregar relaciones de actividades enriquecidas
 if 'Barrio_Extraido' in df_actividades.columns and 'Zona_Enriquecida' in df_actividades.columns:
-    print("   📋 Agregando relaciones de actividades...")
     relaciones_actividades = df_actividades[['Barrio_Extraido', 'Zona_Enriquecida']].dropna().drop_duplicates()
     
-    agregadas = 0
     for _, row in relaciones_actividades.iterrows():
-        barrio = str(row['Barrio_Extraido']).strip()
-        zona = str(row['Zona_Enriquecida']).strip()
-        
-        # Normalizar zona
-        if 'zona' not in zona.lower():
-            zona = f"ZONA {zona.split()[-1]}"
-        else:
-            zona = zona.upper()
+        barrio = row['Barrio_Extraido']
+        zona = row['Zona_Enriquecida']
         
         # Verificar si ya existe
         existe = any(
             r['Barrio'].lower().strip() == barrio.lower().strip() and 
-            r['Zona'].upper().strip() == zona.upper().strip() 
+            r['Zona'].lower().strip() == zona.lower().strip() 
             for r in bridge_barrios_zonas_rows
         )
         
         if not existe:
             bridge_barrios_zonas_rows.append({
-                'Barrio': barrio.title(),
+                'Barrio': barrio,
                 'Zona': zona,
                 'Fuente': 'Actividades'
             })
-            agregadas += 1
-    
-    print(f"   ✅ {agregadas} relaciones adicionales de actividades")
 
 df_bridge_barrios_zonas = pd.DataFrame(bridge_barrios_zonas_rows)
 output_path = DIMENSIONES_DIR / "bridge_barrios_zonas.csv"
 df_bridge_barrios_zonas.to_csv(output_path, index=False, encoding='utf-8-sig')
-print(f"\n✅ bridge_barrios_zonas.csv generado ({len(df_bridge_barrios_zonas)} relaciones)")
+print(f"✅ bridge_barrios_zonas.csv generado ({len(df_bridge_barrios_zonas)} relaciones)")
 print(f"   • Del diccionario: {len([r for r in bridge_barrios_zonas_rows if r['Fuente'] == 'Diccionario Oficial'])}")
 print(f"   • De actividades: {len([r for r in bridge_barrios_zonas_rows if r['Fuente'] == 'Actividades'])}")
 
@@ -441,7 +425,7 @@ print("🎉 MODELO DIMENSIONAL COMPLETO GENERADO CON ÉXITO")
 print("="*80)
 print(f"\n📂 Ubicación: {DIMENSIONES_DIR}")
 print("\n🚀 Próximos pasos:")
-print("   1. Subir archivos a GitHub")
+print("   1. Revisar archivos en dimensiones/")
 print("   2. Actualizar GitHub Actions")
 print("   3. Importar en Power BI desde GitHub URLs")
 print("="*80)

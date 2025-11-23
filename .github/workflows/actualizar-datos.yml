@@ -11,10 +11,10 @@ jobs:
     
     steps:
       - name: Checkout repositorio
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Configurar Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       
@@ -79,6 +79,7 @@ jobs:
       
       - name: Generar reporte de actualización
         run: |
+          mkdir -p logs
           python scripts/generar_reporte.py > logs/reporte_$(date +'%Y%m%d_%H%M').txt
       
       # ===================================================================
@@ -93,7 +94,7 @@ jobs:
           (git commit -m "🤖 Actualización automática de datos - $(date +'%Y-%m-%d %H:%M')" && git push)
       
       - name: Subir logs como artefactos
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: logs-actualizacion
           path: logs/

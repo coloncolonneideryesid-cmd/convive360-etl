@@ -1,9 +1,33 @@
-﻿UPZ,Codigo_UPZ,Zona,Es_Zona_Principal
-32 - SAN BLAS,32,Zona 1,Sí
-32 - SAN BLAS,32,Zona 2,No
-33 - SOSIEGO,33,Zona 6,Sí
-34 - 20 DE JULIO,34,Zona 4,Sí
-50 - LA GLORIA,50,Zona 3,Sí
-50 - LA GLORIA,50,Zona 8,No
-51 - LOS LIBERTADORES,51,Zona 5,Sí
-51 - LOS LIBERTADORES,51,Zona 7,No
+﻿UPZ,Zona,Es_Zona_Principal
+32,Zona 1,No
+32,Zona 2,No
+32 - San Blas,Zona 1,Sí
+32 - San Blas,Zona 2,No
+32 - SAN BLAS,Zona 1,No
+32 - SAN BLAS,Zona 2,No
+San Blas,Zona 1,No
+San Blas,Zona 2,No
+33,Zona 6,No
+33 - Sosiego,Zona 6,Sí
+33 - SOSIEGO,Zona 6,No
+Sosiego,Zona 6,No
+34,Zona 4,No
+34 - 20 de Julio,Zona 4,Sí
+34 - 20 DE JULIO,Zona 4,No
+20 de Julio,Zona 4,No
+50,Zona 3,No
+50,Zona 8,No
+50 - La Gloria,Zona 3,Sí
+50 - La Gloria,Zona 8,No
+50 - LA GLORIA,Zona 3,No
+50 - LA GLORIA,Zona 8,No
+La Gloria,Zona 3,No
+La Gloria,Zona 8,No
+51,Zona 5,No
+51,Zona 7,No
+51 - Los Libertadores,Zona 5,Sí
+51 - Los Libertadores,Zona 7,No
+51 - LOS LIBERTADORES,Zona 5,No
+51 - LOS LIBERTADORES,Zona 7,No
+Los Libertadores,Zona 5,No
+Los Libertadores,Zona 7,No

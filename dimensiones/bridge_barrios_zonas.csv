@@ -1,11 +1,256 @@
-﻿Barrio,Zona
-Nueva,"Zona 3, Zona 8"
-Santa,Zona 6
-Santa,Zona 5
-Nueva,"Zona 5, Zona 7"
-Santa,"Zona 5, Zona 7"
-Atenas,Zona 4
-Altamira,Zona 7
-Santa,Zona 7
-Moralba,Zona 8
-Santa,"Zona 3, Zona 8"
+﻿Barrio,Zona,Fuente
+AGUAS CLARAS,ZONA 1,Diccionario Oficial
+AMAPOLAS,ZONA 1,Diccionario Oficial
+AMAPOLAS II SECTOR,ZONA 1,Diccionario Oficial
+ARBOLEDA DE LOS ALPES,ZONA 1,Diccionario Oficial
+BALCONES DE SAN PEDRO III,ZONA 1,Diccionario Oficial
+BUENAVISTA II SECTOR,ZONA 1,Diccionario Oficial
+BUENAVISTA SURORIENTAL,ZONA 1,Diccionario Oficial
+CORINTO,ZONA 1,Diccionario Oficial
+EL BALCON DE LA CASTANA,ZONA 1,Diccionario Oficial
+EL FUTURO,ZONA 1,Diccionario Oficial
+EL MANANTIAL,ZONA 1,Diccionario Oficial
+EL RAMAJAL,ZONA 1,Diccionario Oficial
+EL RAMAJAL SAN PEDRO,ZONA 1,Diccionario Oficial
+EL TRIANGULO,ZONA 1,Diccionario Oficial
+GRANJAS Y HUERTAS EL RAMAJAL,ZONA 1,Diccionario Oficial
+LA CASTANA,ZONA 1,Diccionario Oficial
+LA CECILIA,ZONA 1,Diccionario Oficial
+LA GRAN COLOMBIA,ZONA 1,Diccionario Oficial
+LA SAGRADA FAMILIA,ZONA 1,Diccionario Oficial
+LAS ACACIAS,ZONA 1,Diccionario Oficial
+LAS MERCEDES,ZONA 1,Diccionario Oficial
+LOS ALPES,ZONA 1,Diccionario Oficial
+LOS ALPES DEL ZIPA,ZONA 1,Diccionario Oficial
+LOS LAURELES SUR ORIENTAL I SECTOR,ZONA 1,Diccionario Oficial
+LOS LAURELES SUR ORIENTAL II SECTOR,ZONA 1,Diccionario Oficial
+MACARENA DE LOS ALPES,ZONA 1,Diccionario Oficial
+MANILA,ZONA 1,Diccionario Oficial
+MANILA 2,ZONA 1,Diccionario Oficial
+MONTECARLO,ZONA 1,Diccionario Oficial
+NUEVA ESPANA,ZONA 1,Diccionario Oficial
+NUEVA ESPANA PARTE ALTA,ZONA 1,Diccionario Oficial
+RAMAJAL,ZONA 1,Diccionario Oficial
+SAN BLAS,ZONA 1,Diccionario Oficial
+SAN BLAS II SECTOR,ZONA 1,Diccionario Oficial
+SAN CRISTOBAL ALTO,ZONA 1,Diccionario Oficial
+SAN CRISTOBAL SUR VIEJO,ZONA 1,Diccionario Oficial
+SAN JERONIMO DEL YUSTE,ZONA 1,Diccionario Oficial
+TORRES DE GRATAMIRA,ZONA 1,Diccionario Oficial
+TRIANGULO ALTO,ZONA 1,Diccionario Oficial
+VITELMA,ZONA 1,Diccionario Oficial
+ALTOS DE LA MARIA,ZONA 2,Diccionario Oficial
+ALTOS DEL SOL,ZONA 2,Diccionario Oficial
+BALKANES,ZONA 2,Diccionario Oficial
+BELLAVISTA SECTOR LUCERO,ZONA 2,Diccionario Oficial
+BELLAVISTA SUR ORIENTAL,ZONA 2,Diccionario Oficial
+BUENOS AIRES II SECTOR,ZONA 2,Diccionario Oficial
+BUENOS AIRES III SECTOR,ZONA 2,Diccionario Oficial
+CAMINO VIEJO,ZONA 2,Diccionario Oficial
+CASAPANDA,ZONA 2,Diccionario Oficial
+CIUDAD MARBELLA SECTOR II,ZONA 2,Diccionario Oficial
+EL RINCON DE LA VICTORIA BELLAVISTA,ZONA 2,Diccionario Oficial
+LA PLAYA,ZONA 2,Diccionario Oficial
+LOS ARRAYANES SANTA INES,ZONA 2,Diccionario Oficial
+LOS BALCANES VITELMA,ZONA 2,Diccionario Oficial
+LOS DOS LEONES,ZONA 2,Diccionario Oficial
+LOS FAROLES DE SANTA INES,ZONA 2,Diccionario Oficial
+MEDIA LUNA,ZONA 2,Diccionario Oficial
+SAN BLAS,ZONA 2,Diccionario Oficial
+SAN BLAS II SECTOR,ZONA 2,Diccionario Oficial
+SAN CRISTOBAL SUR VIEJO,ZONA 2,Diccionario Oficial
+SAN VICENTE,ZONA 2,Diccionario Oficial
+SAN VICENTE SUR ORIENTAL,ZONA 2,Diccionario Oficial
+SANTA INES,ZONA 2,Diccionario Oficial
+SANTA INES SUR,ZONA 2,Diccionario Oficial
+SANTA SOFIA DE VITELMA,ZONA 2,Diccionario Oficial
+SIDEL TERRAZAS DE ORIENTE,ZONA 2,Diccionario Oficial
+TORRES DE BUENOS AIRES,ZONA 2,Diccionario Oficial
+VITELMA,ZONA 2,Diccionario Oficial
+VITELMA CIUDADELA PARQUE DE LA ROCA,ZONA 2,Diccionario Oficial
+ALTAMIRA CHIQUITA,ZONA 3,Diccionario Oficial
+ALTAMIRA SECTOR SAN JOSE,ZONA 3,Diccionario Oficial
+BELLAVISTA SUR ORIENTAL,ZONA 3,Diccionario Oficial
+EL POBLADO,ZONA 3,Diccionario Oficial
+LA ARBOLEDA,ZONA 3,Diccionario Oficial
+LA GLORIA,ZONA 3,Diccionario Oficial
+LA GROVANA,ZONA 3,Diccionario Oficial
+LA NUEVA GLORIA,ZONA 3,Diccionario Oficial
+LOS ALPES DEL ZIPA,ZONA 3,Diccionario Oficial
+LOS ALTOS DEL ZUQUE,ZONA 3,Diccionario Oficial
+LOS PUENTES,ZONA 3,Diccionario Oficial
+MIRAFLORES,ZONA 3,Diccionario Oficial
+MORALVA,ZONA 3,Diccionario Oficial
+PANORAMA,ZONA 3,Diccionario Oficial
+PUENTE COLORADO,ZONA 3,Diccionario Oficial
+QUINDIO,ZONA 3,Diccionario Oficial
+QUINDIO II SECTOR,ZONA 3,Diccionario Oficial
+SAN JOSE ORIENTAL,ZONA 3,Diccionario Oficial
+VILLA ANITA SUR ORIENTAL,ZONA 3,Diccionario Oficial
+ATENAS,ZONA 4,Diccionario Oficial
+ATENAS I,ZONA 4,Diccionario Oficial
+BARCELONA SUR ORIENTAL,ZONA 4,Diccionario Oficial
+BELLO HORIZONTE,ZONA 4,Diccionario Oficial
+BELLO HORIZONTE II SECTOR,ZONA 4,Diccionario Oficial
+BELLO HORIZONTE III SECTOR,ZONA 4,Diccionario Oficial
+CIUDADELA MARIA MICAELA,ZONA 4,Diccionario Oficial
+CORDOBA,ZONA 4,Diccionario Oficial
+EL ANGULO,ZONA 4,Diccionario Oficial
+EL REFUGIO SUR,ZONA 4,Diccionario Oficial
+EL SOSIEGO,ZONA 4,Diccionario Oficial
+GRANADA SUR,ZONA 4,Diccionario Oficial
+GRANADA SUR III SECTOR,ZONA 4,Diccionario Oficial
+LA JOYITA BELLO HORIZONTE,ZONA 4,Diccionario Oficial
+MANAGUA,ZONA 4,Diccionario Oficial
+SAN ISIDRO,ZONA 4,Diccionario Oficial
+SURAMERICA,ZONA 4,Diccionario Oficial
+UNIFAMILIARES AVENIDA DECIMA,ZONA 4,Diccionario Oficial
+VILLA DE LOS ALPES,ZONA 4,Diccionario Oficial
+VILLA DE LOS ALPES II SECTOR,ZONA 4,Diccionario Oficial
+VILLA NATALY 20 DE JULIO,ZONA 4,Diccionario Oficial
+BOSQUE DE SAN JOSE,ZONA 5,Diccionario Oficial
+CIUDAD DE LONDRES,ZONA 5,Diccionario Oficial
+EL PINAR REPUBLICA DE CANADA II SECTOR,ZONA 5,Diccionario Oficial
+EL RECODO REPUBLICA DE CANADA,ZONA 5,Diccionario Oficial
+JUAN REY,ZONA 5,Diccionario Oficial
+JUAN REY II,ZONA 5,Diccionario Oficial
+LA ARBOLEDA,ZONA 5,Diccionario Oficial
+LA BELLEZA,ZONA 5,Diccionario Oficial
+LA NUEVA GLORIA,ZONA 5,Diccionario Oficial
+LA NUEVA GLORIA II SECTOR,ZONA 5,Diccionario Oficial
+LOS LIBERTADORES,ZONA 5,Diccionario Oficial
+LOS LIBERTADORES BOSQUE DIAMANTE TRIANGULO,ZONA 5,Diccionario Oficial
+LOS LIBERTADORES SECTOR EL TESORO,ZONA 5,Diccionario Oficial
+LOS LIBERTADORES SECTOR LA COLINA,ZONA 5,Diccionario Oficial
+LOS LIBERTADORES SECTOR SAN IGNACIO,ZONA 5,Diccionario Oficial
+LOS LIBERTADORES SECTOR SAN ISIDRO,ZONA 5,Diccionario Oficial
+LOS LIBERTADORES SECTOR SAN JOSE,ZONA 5,Diccionario Oficial
+LOS LIBERTADORES SECTOR SAN LUIS,ZONA 5,Diccionario Oficial
+LOS LIBERTADORES SECTOR SAN MIGUEL,ZONA 5,Diccionario Oficial
+LOS PINOS,ZONA 5,Diccionario Oficial
+NUEVA DELLY,ZONA 5,Diccionario Oficial
+NUEVA DELLY PARTE ALTA,ZONA 5,Diccionario Oficial
+REPUBLICA DEL CANADA EL PINAR,ZONA 5,Diccionario Oficial
+SAN MANUEL,ZONA 5,Diccionario Oficial
+SAN RAFAEL SUR ORIENTAL,ZONA 5,Diccionario Oficial
+SIERRAS DEL SUR ORIENTE,ZONA 5,Diccionario Oficial
+VALPARAISO,ZONA 5,Diccionario Oficial
+VILLA AURORA,ZONA 5,Diccionario Oficial
+VILLA BEGONIA,ZONA 5,Diccionario Oficial
+CAJA DE VIVIENDA POPULAR,ZONA 6,Diccionario Oficial
+CAMINO VIEJO DE SAN CRISTOBAL,ZONA 6,Diccionario Oficial
+CIUDAD MARBELLA SECTOR I,ZONA 6,Diccionario Oficial
+CIUDAD MARBELLA SECTOR II,ZONA 6,Diccionario Oficial
+EL ALTO DE LAS BRISAS,ZONA 6,Diccionario Oficial
+EL ALTO DE LAS BRISAS II,ZONA 6,Diccionario Oficial
+EL DIAMANTE BOSQUE DE SAN CRISTOBAL,ZONA 6,Diccionario Oficial
+EL PARQUE ETAPA I,ZONA 6,Diccionario Oficial
+EL SOSIEGO,ZONA 6,Diccionario Oficial
+NARINO SUR,ZONA 6,Diccionario Oficial
+PRIMERO DE MAYO,ZONA 6,Diccionario Oficial
+QUINTA RAMOS,ZONA 6,Diccionario Oficial
+SAN BERNARDO DEL VIENTO,ZONA 6,Diccionario Oficial
+SAN CRISTOBAL SUR VIEJO,ZONA 6,Diccionario Oficial
+SANTA ANA,ZONA 6,Diccionario Oficial
+SANTA ANA SUR,ZONA 6,Diccionario Oficial
+SANTA ANITA,ZONA 6,Diccionario Oficial
+TAPAS LA LIBERTAD,ZONA 6,Diccionario Oficial
+VELODROMO,ZONA 6,Diccionario Oficial
+VILLA ALBANIA,ZONA 6,Diccionario Oficial
+VILLA JAVIER,ZONA 6,Diccionario Oficial
+CANADA LA GUIRA II SECTOR,ZONA 7,Diccionario Oficial
+CANADA SAN LUIS,ZONA 7,Diccionario Oficial
+EL OASIS DEL SUR,ZONA 7,Diccionario Oficial
+EL PARAISO SUR ORIENTAL I SECTOR,ZONA 7,Diccionario Oficial
+EL PARAISO URB ANTIOQUIA,ZONA 7,Diccionario Oficial
+LA BELLEZA,ZONA 7,Diccionario Oficial
+LA NUEVA GLORIA,ZONA 7,Diccionario Oficial
+LA NUEVA GLORIA II SECTOR,ZONA 7,Diccionario Oficial
+LA PENINSULA,ZONA 7,Diccionario Oficial
+LA SIERRA,ZONA 7,Diccionario Oficial
+LOS LIBERTADORES,ZONA 7,Diccionario Oficial
+NUEVAS MALVINAS EL TRIUNFO,ZONA 7,Diccionario Oficial
+SAN JACINTO,ZONA 7,Diccionario Oficial
+SANTA RITA SUR ORIENTAL,ZONA 7,Diccionario Oficial
+SANTA RITA SUR ORIENTAL II ETAPA,ZONA 7,Diccionario Oficial
+VILLA ANGELICA,ZONA 7,Diccionario Oficial
+VILLABEL,ZONA 7,Diccionario Oficial
+GUACAMAYAS III SECTOR,ZONA 8,Diccionario Oficial
+LA COLMENA,ZONA 8,Diccionario Oficial
+LA GLORIA,ZONA 8,Diccionario Oficial
+LA GLORIA BAJA,ZONA 8,Diccionario Oficial
+LA VICTORIA,ZONA 8,Diccionario Oficial
+LA VICTORIA II SECTOR,ZONA 8,Diccionario Oficial
+LA VICTORIA III SECTOR,ZONA 8,Diccionario Oficial
+LAS GUACAMAYAS,ZONA 8,Diccionario Oficial
+MALVINAS,ZONA 8,Diccionario Oficial
+SAN JOSE ORIENTAL,ZONA 8,Diccionario Oficial
+SAN JOSE SUR ORIENTAL,ZONA 8,Diccionario Oficial
+SAN MARTIN DE LOBA,ZONA 8,Diccionario Oficial
+El Balcon De La Castana,"ZONA 5, ZONA 7",Actividades
+Los Laureles Sur Oriental I Sector,ZONA 6,Actividades
+Los Laureles Sur Oriental I Sector,ZONA 8,Actividades
+Montebello,ZONA 4,Actividades
+Los Laureles Sur Oriental I Sector,ZONA 4,Actividades
+El Balcon De La Castana,ZONA 5,Actividades
+San Martin De Loba I Y Ii,ZONA 4,Actividades
+El Balcon De La Castana,ZONA 6,Actividades
+Nueva Gloria,"ZONA 3, ZONA 8",Actividades
+Los Laureles Sur Oriental I Sector,ZONA 2,Actividades
+Nueva Roma,ZONA 7,Actividades
+San Isidro I Y Ii,ZONA 6,Actividades
+La Roca,ZONA 6,Actividades
+20 De Julio,ZONA 4,Actividades
+Los Laureles Sur Oriental I Sector,ZONA 5,Actividades
+Camino Viejo San Cristobal,"ZONA 1, ZONA 2",Actividades
+20 De Julio,ZONA 1,Actividades
+Los Laureles Sur Oriental I Sector,ZONA 3,Actividades
+Sosiego,ZONA 6,Actividades
+La Belleza,"ZONA 5, ZONA 7",Actividades
+Los Laureles Sur Oriental I Sector,"ZONA 3, ZONA 8",Actividades
+San Jose,ZONA 5,Actividades
+Gran Colombia,ZONA 2,Actividades
+Los Laureles Sur Oriental I Sector,ZONA 7,Actividades
+San Isidro I Y Ii,ZONA 5,Actividades
+La Peninsula,ZONA 5,Actividades
+La Victoria,ZONA 4,Actividades
+Balcon De La Castana,"ZONA 1, ZONA 2",Actividades
+Camino Viejo San Cristobal,ZONA 6,Actividades
+Balcon De La Castana,ZONA 1,Actividades
+San Isidro I Y Ii,ZONA 8,Actividades
+Ciudadela Santa Rosa,ZONA 3,Actividades
+El Paraiso Sur Oriental I Sector,ZONA 6,Actividades
+El Ramajal San Pedro,ZONA 6,Actividades
+Cerros De San Vicente,ZONA 3,Actividades
+Primero De Mayo,"ZONA 1, ZONA 2",Actividades
+Nueva Roma,"ZONA 5, ZONA 7",Actividades
+El Balcon De La Castana,ZONA 7,Actividades
+Nueva Roma,"ZONA 3, ZONA 8",Actividades
+Ciudadela Santa Rosa,"ZONA 5, ZONA 7",Actividades
+San Isidro I Y Ii,"ZONA 5, ZONA 7",Actividades
+San Isidro I Y Ii,ZONA 1,Actividades
+San Blas,ZONA 6,Actividades
+Ciudadela Santa Rosa,ZONA 7,Actividades
+Las Brisas,"ZONA 1, ZONA 2",Actividades
+San Martin De Loba I Y Ii,"ZONA 1, ZONA 2",Actividades
+La Castana,ZONA 2,Actividades
+Bello Horizonte,"ZONA 1, ZONA 2",Actividades
+La Sagrada Familia,ZONA 4,Actividades
+La Roca,ZONA 2,Actividades
+Altamira,ZONA 7,Actividades
+San Martin De Loba I Y Ii,ZONA 2,Actividades
+Cerros De San Vicente,ZONA 8,Actividades
+San Isidro I Y Ii,ZONA 7,Actividades
+Moralva,ZONA 8,Actividades
+Altamira,ZONA 4,Actividades
+San Isidro I Y Ii,"ZONA 3, ZONA 8",Actividades
+Los Laureles Sur Oriental I Sector,"ZONA 1, ZONA 2",Actividades
+Bosque De Los Alpes,ZONA 8,Actividades
+San Martin De Loba I Y Ii,"ZONA 3, ZONA 8",Actividades
+Camino Viejo San Cristobal,ZONA 4,Actividades
+Balcon De La Castana,ZONA 4,Actividades
+Los Alpes,ZONA 4,Actividades
+San Isidro I Y Ii,"ZONA 1, ZONA 2",Actividades
+San Martin De Loba I Y Ii,ZONA 1,Actividades
+San Isidro I Y Ii,ZONA 4,Actividades
+Los Laureles Sur Oriental I Sector,"ZONA 5, ZONA 7",Actividades

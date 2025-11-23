@@ -2,29 +2,30 @@
 # -*- coding: utf-8 -*-
 """
 Script para generar TODAS las tablas dimensionales y de hechos faltantes
-a partir de fact_actividades_limpio.csv y diccionarios
+VERSIÓN FINAL CORREGIDA - Usa fact_actividades_enriquecido.csv
 """
 
 import pandas as pd
 import json
 import re
-import hashlib
 from pathlib import Path
 from datetime import datetime
+import hashlib
 
 # =====================================================================
-# CONFIGURACIÓN DE RUTAS (CORREGIDO)
+# CONFIGURACIÓN DE RUTAS (CORREGIDAS)
 # =====================================================================
-BASE_DIR = Path(__file__).resolve().parent.parent  # Raíz del proyecto
+BASE_DIR = Path(__file__).resolve().parents[1]
 DIMENSIONES_DIR = BASE_DIR / "dimensiones"
 SCRIPTS_DIR = BASE_DIR / "scripts"
 
 # Crear carpeta si no existe
 DIMENSIONES_DIR.mkdir(exist_ok=True)
 
-# Archivos de entrada
-FACT_ACTIVIDADES = BASE_DIR / "fact_actividades_limpio.csv"
+# ✅ ARCHIVOS DE ENTRADA CORREGIDOS
+FACT_ACTIVIDADES = BASE_DIR / "fact_actividades_enriquecido.csv"  # ✅ ENRIQUECIDO
 DICT_UPZ_ZONAS = SCRIPTS_DIR / "diccionario_upz_zonas.json"
+DICT_BARRIOS = SCRIPTS_DIR / "diccionario_barrios_completo.json"
 
 print("\n" + "="*80)
 print("🚀 GENERANDO MODELO DIMENSIONAL COMPLETO PARA POWER BI")
@@ -35,32 +36,64 @@ print("="*80)
 # =====================================================================
 print("\n📥 Cargando datos base...")
 
+# Verificar que existe el archivo enriquecido
 if not FACT_ACTIVIDADES.exists():
-    print(f"❌ ERROR: No se encontró {FACT_ACTIVIDADES}")
+    print(f"❌ Error: No se encuentra {FACT_ACTIVIDADES}")
+    print("   Ejecuta primero: python scripts/enriquecer_con_barrios.py")
+    print("   Luego: python scripts/mejorar_extraccion_barrios.py")
     exit(1)
 
-df_actividades = pd.read_csv(FACT_ACTIVIDADES, encoding='utf-8-sig')
-print(f"✅ fact_actividades_limpio.csv cargado: {len(df_actividades)} registros")
+df_actividades = pd.read_csv(FACT_ACTIVIDADES, encoding='utf-8')
+print(f"✅ fact_actividades_enriquecido.csv cargado: {len(df_actividades)} registros")
 
-with open(DICT_UPZ_ZONAS, 'r', encoding='utf-8') as f:
-    upz_zonas = json.load(f)
-print(f"✅ Diccionario UPZ-Zonas cargado: {len(upz_zonas)} UPZ")
+# Verificar columna Barrio_Extraido
+if 'Barrio_Extraido' in df_actividades.columns:
+    barrios_con_dato = df_actividades['Barrio_Extraido'].notna().sum()
+    print(f"   �� Barrios extraídos: {barrios_con_dato}/{len(df_actividades)} ({barrios_con_dato/len(df_actividades)*100:.1f}%)")
+else:
+    print("⚠️  Columna 'Barrio_Extraido' no encontrada")
 
-# Agregar ID_Actividad único si no existe
+# Cargar diccionario UPZ-Zonas
+if DICT_UPZ_ZONAS.exists():
+    with open(DICT_UPZ_ZONAS, 'r', encoding='utf-8') as f:
+        upz_zonas = json.load(f)
+    print(f"✅ Diccionario UPZ-Zonas cargado: {len(upz_zonas)} UPZ")
+else:
+    print("⚠️  Diccionario UPZ-Zonas no encontrado, creando versión básica...")
+    upz_zonas = {
+        "32 - San Blas": ["Zona 1", "Zona 2"],
+        "33 - Sosiego": ["Zona 6"],
+        "34 - 20 de Julio": ["Zona 4"],
+        "50 - La Gloria": ["Zona 3", "Zona 8"],
+        "51 - Los Libertadores": ["Zona 5", "Zona 7"]
+    }
+
+# Cargar diccionario completo de barrios
+if DICT_BARRIOS.exists():
+    with open(DICT_BARRIOS, 'r', encoding='utf-8') as f:
+        dict_barrios = json.load(f)
+    print(f"✅ Diccionario de barrios cargado: {dict_barrios['metadata']['total_barrios']} barrios oficiales")
+else:
+    print("❌ Diccionario de barrios no encontrado")
+    print("   Ejecuta primero: python scripts/crear_diccionario_barrios.py")
+    exit(1)
+
+# =====================================================================
+# 2. GENERAR ID_ACTIVIDAD si no existe
+# =====================================================================
 if 'ID_Actividad' not in df_actividades.columns:
-    print("⚠️  Generando ID_Actividad único...")
-    df_actividades['ID_Actividad'] = df_actividades.apply(
-        lambda row: hashlib.md5(
-            f"{row['Nombre_Actividad']}{row['Fecha_Actividad']}{row['Hora_Inicio']}{row['Responsable_Principal']}".encode()
-        ).hexdigest()[:12].upper(),
-        axis=1
-    )
-    # Guardar fact_actividades con ID
-    df_actividades.to_csv(FACT_ACTIVIDADES, index=False, encoding='utf-8-sig')
+    print("\n⚠️  Generando ID_Actividad único...")
+    
+    def generar_id(row):
+        # Crear ID único basado en campos clave
+        campos = f"{row.get('Nombre_Actividad', '')}{row.get('Fecha_Actividad', '')}{row.get('Hora_Inicio', '')}{row.get('Direccion_Actividad', '')}"
+        return hashlib.md5(campos.encode()).hexdigest()[:12].upper()
+    
+    df_actividades['ID_Actividad'] = df_actividades.apply(generar_id, axis=1)
     print(f"✅ ID_Actividad generado para {len(df_actividades)} registros")
 
 # =====================================================================
-# 2. GENERAR DIM_ZONAS
+# 3. GENERAR dim_zonas.csv
 # =====================================================================
 print("\n" + "="*80)
 print("📊 GENERANDO dim_zonas.csv")
@@ -81,7 +114,7 @@ df_dim_zonas.to_csv(output_path, index=False, encoding='utf-8-sig')
 print(f"✅ dim_zonas.csv generado ({len(df_dim_zonas)} zonas)")
 
 # =====================================================================
-# 3. GENERAR DIM_UPZ
+# 4. GENERAR dim_upz.csv
 # =====================================================================
 print("\n" + "="*80)
 print("📊 GENERANDO dim_upz.csv")
@@ -89,28 +122,22 @@ print("="*80)
 
 upz_data = []
 upz_info = {
-    "32 - SAN BLAS": {"codigo": 32, "nombre": "San Blas", "zona_principal": "Zona 1"},
-    "33 - SOSIEGO": {"codigo": 33, "nombre": "Sosiego", "zona_principal": "Zona 6"},
-    "34 - 20 DE JULIO": {"codigo": 34, "nombre": "20 de Julio", "zona_principal": "Zona 4"},
-    "50 - LA GLORIA": {"codigo": 50, "nombre": "La Gloria", "zona_principal": "Zona 3"},
-    "51 - LOS LIBERTADORES": {"codigo": 51, "nombre": "Los Libertadores", "zona_principal": "Zona 5"}
+    "32 - San Blas": {"codigo": 32, "nombre": "San Blas", "zona_principal": "Zona 1"},
+    "33 - Sosiego": {"codigo": 33, "nombre": "Sosiego", "zona_principal": "Zona 6"},
+    "34 - 20 de Julio": {"codigo": 34, "nombre": "20 de Julio", "zona_principal": "Zona 4"},
+    "50 - La Gloria": {"codigo": 50, "nombre": "La Gloria", "zona_principal": "Zona 3"},
+    "51 - Los Libertadores": {"codigo": 51, "nombre": "Los Libertadores", "zona_principal": "Zona 5"}
 }
 
 for upz_key, info in upz_info.items():
-    # Buscar en diccionario (mayúsculas y minúsculas)
-    zonas_asoc = []
-    for key in upz_zonas.keys():
-        if str(info['codigo']) in key or info['nombre'].upper() in key.upper():
-            zonas_asoc = upz_zonas[key]
-            break
-    
+    zonas_asoc = upz_zonas.get(upz_key, [])
     upz_data.append({
         'ID_UPZ': info['codigo'],
         'UPZ': upz_key,
         'Codigo_UPZ': info['codigo'],
         'Nombre_UPZ': info['nombre'],
         'Zona_Principal': info['zona_principal'],
-        'Zonas_Asociadas': ', '.join(zonas_asoc) if zonas_asoc else ''
+        'Zonas_Asociadas': ', '.join(zonas_asoc)
     })
 
 df_dim_upz = pd.DataFrame(upz_data)
@@ -119,27 +146,20 @@ df_dim_upz.to_csv(output_path, index=False, encoding='utf-8-sig')
 print(f"✅ dim_upz.csv generado ({len(df_dim_upz)} UPZ)")
 
 # =====================================================================
-# 4. GENERAR BRIDGE_UPZ_ZONAS
+# 5. GENERAR bridge_upz_zonas.csv
 # =====================================================================
 print("\n" + "="*80)
 print("📊 GENERANDO bridge_upz_zonas.csv")
 print("="*80)
 
 bridge_upz_zonas_data = []
-for upz_key, info in upz_info.items():
-    # Buscar zonas asociadas
-    zonas_asoc = []
-    for key in upz_zonas.keys():
-        if str(info['codigo']) in key:
-            zonas_asoc = upz_zonas[key]
-            break
-    
-    for zona in zonas_asoc:
+for upz, zonas in upz_zonas.items():
+    zona_principal = upz_info.get(upz, {}).get('zona_principal', '')
+    for zona in zonas:
         bridge_upz_zonas_data.append({
-            'UPZ': upz_key,
-            'Codigo_UPZ': info['codigo'],
+            'UPZ': upz,
             'Zona': zona,
-            'Es_Zona_Principal': 'Sí' if zona == info['zona_principal'] else 'No'
+            'Es_Zona_Principal': 'Sí' if zona == zona_principal else 'No'
         })
 
 df_bridge_upz_zonas = pd.DataFrame(bridge_upz_zonas_data)
@@ -148,62 +168,66 @@ df_bridge_upz_zonas.to_csv(output_path, index=False, encoding='utf-8-sig')
 print(f"✅ bridge_upz_zonas.csv generado ({len(df_bridge_upz_zonas)} relaciones)")
 
 # =====================================================================
-# 5. GENERAR DIM_BARRIOS (desde fact_actividades)
+# 6. GENERAR dim_barrios.csv (DESDE DICCIONARIO OFICIAL + EXTRAÍDOS)
 # =====================================================================
 print("\n" + "="*80)
 print("📊 GENERANDO dim_barrios.csv")
 print("="*80)
 
-def extraer_barrio_mejorado(direccion):
-    """Extrae posible nombre de barrio de dirección"""
-    if pd.isna(direccion):
-        return None
-    direccion = str(direccion).upper()
-    
-    # Patrones de búsqueda
-    patrones = [
-        r'BARRIO\s+([A-ZÁÉÍÓÚÑ\s]+?)(?:\s+|$|,)',
-        r'BRR\.?\s+([A-ZÁÉÍÓÚÑ\s]+?)(?:\s+|$|,)',
-        r'B\.?\s+([A-ZÁÉÍÓÚÑ\s]+?)(?:\s+|$|,)',
-    ]
-    
-    for patron in patrones:
-        match = re.search(patron, direccion)
-        if match:
-            barrio = match.group(1).strip()
-            # Limpiar palabras comunes que no son barrios
-            if len(barrio) > 3 and barrio not in ['SUR', 'ESTE', 'OESTE', 'NORTE']:
-                return barrio
-    
-    return None
+barrios_por_upz = dict_barrios['barrios_por_upz']
+barrio_a_upz = dict_barrios['barrio_a_upz']
 
-# Extraer barrios únicos
-barrios_encontrados = set()
-for _, row in df_actividades.iterrows():
-    barrio = extraer_barrio_mejorado(row.get('Direccion_Actividad', ''))
-    if barrio:
-        barrios_encontrados.add(barrio)
-
-# Agregar barrios desde otras fuentes si existen
-if 'Barrio' in df_actividades.columns:
-    barrios_adicionales = df_actividades['Barrio'].dropna().unique()
-    barrios_encontrados.update(barrios_adicionales)
-
+# Crear dim_barrios desde diccionario oficial (197 barrios)
 barrios_data = []
-for i, barrio in enumerate(sorted(barrios_encontrados), start=1):
-    barrios_data.append({
-        'ID_Barrio': i,
-        'Barrio': barrio.title(),
-        'Barrio_Normalizado': barrio.lower().strip()
-    })
+id_counter = 1
 
-df_dim_barrios = pd.DataFrame(barrios_data) if barrios_data else pd.DataFrame(columns=['ID_Barrio', 'Barrio', 'Barrio_Normalizado'])
+print("   📋 Procesando barrios oficiales del diccionario...")
+for upz, barrios in barrios_por_upz.items():
+    for barrio in barrios:
+        barrios_data.append({
+            'ID_Barrio': id_counter,
+            'Barrio': barrio,
+            'Barrio_Normalizado': barrio.lower().strip(),
+            'UPZ': upz,
+            'Fuente': 'Diccionario Oficial'
+        })
+        id_counter += 1
+
+print(f"   ✅ {id_counter - 1} barrios oficiales agregados")
+
+# AGREGAR barrios extraídos que no están en el diccionario oficial
+if 'Barrio_Extraido' in df_actividades.columns:
+    print("   📋 Buscando barrios adicionales en actividades...")
+    barrios_extraidos = df_actividades['Barrio_Extraido'].dropna().unique()
+    barrios_oficiales_norm = {b.lower().strip() for b in [item['Barrio'] for item in barrios_data]}
+    
+    nuevos_barrios = 0
+    for barrio_ext in barrios_extraidos:
+        barrio_norm = str(barrio_ext).lower().strip()
+        if barrio_norm and barrio_norm not in barrios_oficiales_norm:
+            # Barrio encontrado en actividades pero no en diccionario oficial
+            barrios_data.append({
+                'ID_Barrio': id_counter,
+                'Barrio': str(barrio_ext).title(),
+                'Barrio_Normalizado': barrio_norm,
+                'UPZ': None,
+                'Fuente': 'Extraído de Actividades'
+            })
+            id_counter += 1
+            nuevos_barrios += 1
+    
+    if nuevos_barrios > 0:
+        print(f"   ✅ {nuevos_barrios} barrios adicionales encontrados en actividades")
+
+df_dim_barrios = pd.DataFrame(barrios_data)
 output_path = DIMENSIONES_DIR / "dim_barrios.csv"
 df_dim_barrios.to_csv(output_path, index=False, encoding='utf-8-sig')
-print(f"✅ dim_barrios.csv generado ({len(df_dim_barrios)} barrios)")
+print(f"\n✅ dim_barrios.csv generado ({len(df_dim_barrios)} barrios)")
+print(f"   • Oficiales: {len([b for b in barrios_data if b['Fuente'] == 'Diccionario Oficial'])}")
+print(f"   • Extraídos: {len([b for b in barrios_data if b['Fuente'] == 'Extraído de Actividades'])}")
 
 # =====================================================================
-# 6. GENERAR DIM_ESTRATEGIAS
+# 7. GENERAR dim_estrategias.csv
 # =====================================================================
 print("\n" + "="*80)
 print("📊 GENERANDO dim_estrategias.csv")
@@ -221,7 +245,7 @@ df_dim_estrategias.to_csv(output_path, index=False, encoding='utf-8-sig')
 print(f"✅ dim_estrategias.csv generado ({len(df_dim_estrategias)} estrategias)")
 
 # =====================================================================
-# 7. GENERAR FACT_ESTRATEGIAS (desde columna Estrategia_Impactar)
+# 8. GENERAR fact_estrategias.csv
 # =====================================================================
 print("\n" + "="*80)
 print("📊 GENERANDO fact_estrategias.csv")
@@ -229,28 +253,30 @@ print("="*80)
 
 fact_estrategias_rows = []
 
-for _, row in df_actividades.iterrows():
-    id_actividad = row['ID_Actividad']
-    estrategias_str = row.get('Estrategia_Impactar', '')
-    
-    if pd.notna(estrategias_str) and estrategias_str.strip():
-        # Normalizar y obtener ID
-        estrategia_norm = estrategias_str.strip().title()
+# Columna de estrategias
+col_estrategias = 'Estrategia_Impactar'
+
+if col_estrategias in df_actividades.columns:
+    for idx, row in df_actividades.iterrows():
+        id_actividad = row['ID_Actividad']
+        estrategias_str = row.get(col_estrategias, '')
         
-        id_estrategia = None
-        if 'seguridad' in estrategia_norm.lower():
-            id_estrategia = 1
-        elif 'convivencia' in estrategia_norm.lower():
-            id_estrategia = 2
-        elif 'justicia' in estrategia_norm.lower():
-            id_estrategia = 3
-        
-        if id_estrategia:
-            fact_estrategias_rows.append({
-                'ID_Actividad': id_actividad,
-                'ID_Estrategia': id_estrategia,
-                'Estrategia': estrategia_norm
-            })
+        if pd.notna(estrategias_str) and str(estrategias_str).strip():
+            # Separar por comas
+            estrategias_lista = [e.strip() for e in str(estrategias_str).split(',')]
+            
+            for estrategia in estrategias_lista:
+                if estrategia:
+                    # Normalizar nombre
+                    estrategia_norm = estrategia.title()
+                    
+                    fact_estrategias_rows.append({
+                        'ID_Actividad': id_actividad,
+                        'Estrategia': estrategia_norm,
+                        'ID_Estrategia': 1 if 'seguridad' in estrategia.lower() else 
+                                       2 if 'convivencia' in estrategia.lower() else 
+                                       3 if 'justicia' in estrategia.lower() else None
+                    })
 
 df_fact_estrategias = pd.DataFrame(fact_estrategias_rows)
 output_path = DIMENSIONES_DIR / "fact_estrategias.csv"
@@ -258,7 +284,7 @@ df_fact_estrategias.to_csv(output_path, index=False, encoding='utf-8-sig')
 print(f"✅ fact_estrategias.csv generado ({len(df_fact_estrategias)} relaciones)")
 
 # =====================================================================
-# 8. GENERAR FACT_LINEAS (desde Linea_Seguridad, Linea_Convivencia, Linea_Justicia)
+# 9. GENERAR fact_lineas.csv
 # =====================================================================
 print("\n" + "="*80)
 print("📊 GENERANDO fact_lineas.csv")
@@ -266,28 +292,31 @@ print("="*80)
 
 fact_lineas_rows = []
 
+# Columnas de líneas estratégicas
 columnas_lineas = {
-    1: 'Linea_Seguridad',
-    2: 'Linea_Convivencia',
-    3: 'Linea_Justicia'
+    'Seguridad': 'Linea_Seguridad',
+    'Convivencia': 'Linea_Convivencia',
+    'Justicia': 'Linea_Justicia'
 }
 
-for id_estrategia, col_linea in columnas_lineas.items():
+for tipo_estrategia, col_linea in columnas_lineas.items():
     if col_linea in df_actividades.columns:
-        for _, row in df_actividades.iterrows():
+        for idx, row in df_actividades.iterrows():
             id_actividad = row['ID_Actividad']
             lineas_str = row.get(col_linea, '')
             
-            if pd.notna(lineas_str) and lineas_str.strip() and lineas_str.strip().upper() != 'N/A':
-                # Separar por coma si hay múltiples
-                lineas_lista = [l.strip() for l in str(lineas_str).split(',') if l.strip()]
+            if pd.notna(lineas_str) and str(lineas_str).strip() and str(lineas_str) != 'N/A':
+                # Separar por comas
+                lineas_lista = [l.strip() for l in str(lineas_str).split(',')]
                 
                 for linea in lineas_lista:
-                    if linea and linea.upper() != 'N/A':
+                    if linea and linea != 'N/A':
                         fact_lineas_rows.append({
                             'ID_Actividad': id_actividad,
-                            'ID_Estrategia': id_estrategia,
-                            'Linea_Estrategica': linea.strip()
+                            'Tipo_Estrategia': tipo_estrategia,
+                            'Linea_Estrategica': linea,
+                            'ID_Estrategia': 1 if tipo_estrategia == 'Seguridad' else 
+                                           2 if tipo_estrategia == 'Convivencia' else 3
                         })
 
 df_fact_lineas = pd.DataFrame(fact_lineas_rows)
@@ -296,33 +325,97 @@ df_fact_lineas.to_csv(output_path, index=False, encoding='utf-8-sig')
 print(f"✅ fact_lineas.csv generado ({len(df_fact_lineas)} líneas)")
 
 # =====================================================================
-# 9. GENERAR BRIDGE_BARRIOS_ZONAS (desde fact_actividades)
+# 10. GENERAR bridge_barrios_zonas.csv
 # =====================================================================
 print("\n" + "="*80)
 print("📊 GENERANDO bridge_barrios_zonas.csv")
 print("="*80)
 
+# Usar diccionario oficial
+barrios_por_zona = dict_barrios['barrios_por_zona']
+
 bridge_barrios_zonas_rows = []
 
-# Extraer relaciones barrio-zona desde direcciones y zonas asignadas
-for _, row in df_actividades.iterrows():
-    barrio = extraer_barrio_mejorado(row.get('Direccion_Actividad', ''))
-    zona = row.get('Zona', '')
-    
-    if barrio and pd.notna(zona) and zona.strip():
+print("   📋 Procesando barrios por zona del diccionario...")
+for zona, barrios in barrios_por_zona.items():
+    for barrio in barrios:
         bridge_barrios_zonas_rows.append({
-            'Barrio': barrio.title(),
-            'Zona': zona.strip()
+            'Barrio': barrio,
+            'Zona': zona,
+            'Fuente': 'Diccionario Oficial'
         })
 
-# Eliminar duplicados
-df_bridge_barrios_zonas = pd.DataFrame(bridge_barrios_zonas_rows).drop_duplicates()
+print(f"   ✅ {len(bridge_barrios_zonas_rows)} relaciones del diccionario")
+
+# Agregar relaciones de actividades enriquecidas
+if 'Barrio_Extraido' in df_actividades.columns and 'Zona_Enriquecida' in df_actividades.columns:
+    print("   📋 Agregando relaciones de actividades...")
+    relaciones_actividades = df_actividades[['Barrio_Extraido', 'Zona_Enriquecida']].dropna().drop_duplicates()
+    
+    agregadas = 0
+    for _, row in relaciones_actividades.iterrows():
+        barrio = str(row['Barrio_Extraido']).strip()
+        zona = str(row['Zona_Enriquecida']).strip()
+        
+        # Normalizar zona
+        if 'zona' not in zona.lower():
+            zona = f"ZONA {zona.split()[-1]}"
+        else:
+            zona = zona.upper()
+        
+        # Verificar si ya existe
+        existe = any(
+            r['Barrio'].lower().strip() == barrio.lower().strip() and 
+            r['Zona'].upper().strip() == zona.upper().strip() 
+            for r in bridge_barrios_zonas_rows
+        )
+        
+        if not existe:
+            bridge_barrios_zonas_rows.append({
+                'Barrio': barrio.title(),
+                'Zona': zona,
+                'Fuente': 'Actividades'
+            })
+            agregadas += 1
+    
+    print(f"   ✅ {agregadas} relaciones adicionales de actividades")
+
+df_bridge_barrios_zonas = pd.DataFrame(bridge_barrios_zonas_rows)
 output_path = DIMENSIONES_DIR / "bridge_barrios_zonas.csv"
 df_bridge_barrios_zonas.to_csv(output_path, index=False, encoding='utf-8-sig')
-print(f"✅ bridge_barrios_zonas.csv generado ({len(df_bridge_barrios_zonas)} relaciones)")
+print(f"\n✅ bridge_barrios_zonas.csv generado ({len(df_bridge_barrios_zonas)} relaciones)")
+print(f"   • Del diccionario: {len([r for r in bridge_barrios_zonas_rows if r['Fuente'] == 'Diccionario Oficial'])}")
+print(f"   • De actividades: {len([r for r in bridge_barrios_zonas_rows if r['Fuente'] == 'Actividades'])}")
 
 # =====================================================================
-# 10. RESUMEN FINAL
+# 11. ACTUALIZAR fact_actividades con ID_Barrio
+# =====================================================================
+print("\n" + "="*80)
+print("📊 ACTUALIZANDO fact_actividades con ID_Barrio")
+print("="*80)
+
+# Crear mapeo barrio → ID_Barrio
+barrio_to_id = dict(zip(
+    df_dim_barrios['Barrio_Normalizado'],
+    df_dim_barrios['ID_Barrio']
+))
+
+# Agregar columna ID_Barrio
+if 'Barrio_Extraido' in df_actividades.columns:
+    df_actividades['ID_Barrio'] = df_actividades['Barrio_Extraido'].apply(
+        lambda x: barrio_to_id.get(str(x).lower().strip()) if pd.notna(x) else None
+    )
+    
+    barrios_mapeados = df_actividades['ID_Barrio'].notna().sum()
+    print(f"✅ ID_Barrio asignado a {barrios_mapeados}/{len(df_actividades)} actividades ({barrios_mapeados/len(df_actividades)*100:.1f}%)")
+    
+    # Guardar fact_actividades actualizado
+    output_path = BASE_DIR / "fact_actividades_enriquecido.csv"
+    df_actividades.to_csv(output_path, index=False, encoding='utf-8-sig')
+    print(f"💾 fact_actividades_enriquecido.csv actualizado con ID_Barrio")
+
+# =====================================================================
+# 12. RESUMEN FINAL
 # =====================================================================
 print("\n" + "="*80)
 print("📊 RESUMEN DE TABLAS GENERADAS")
@@ -348,7 +441,7 @@ print("🎉 MODELO DIMENSIONAL COMPLETO GENERADO CON ÉXITO")
 print("="*80)
 print(f"\n📂 Ubicación: {DIMENSIONES_DIR}")
 print("\n🚀 Próximos pasos:")
-print("   1. Revisar archivos en dimensiones/")
-print("   2. Agregar al run_pipeline.py")
-print("   3. Configurar GitHub Actions")
-print("   4. Importar en Power BI")
+print("   1. Subir archivos a GitHub")
+print("   2. Actualizar GitHub Actions")
+print("   3. Importar en Power BI desde GitHub URLs")
+print("="*80)

@@ -1,61 +1,100 @@
-name: Actualizar ETL Convive360
+name: Actualizar Datos Power BI
 
 on:
   schedule:
-    # Ejecutar 3 veces al día: 6 AM, 12 PM, 6 PM (hora Colombia UTC-5)
-    # En UTC sería: 11:00, 17:00, 23:00
-    - cron: '0 11,17,23 * * *'
-  
-  workflow_dispatch:  # Permite ejecución manual desde GitHub
+    - cron: '0 6,12,18 * * *'  # 6 AM, 12 PM, 6 PM (Colombia UTC-5)
+  workflow_dispatch:
 
 jobs:
-  ejecutar-pipeline:
+  actualizar-datos:
     runs-on: ubuntu-latest
     
     steps:
-      # 1. Clonar el repositorio
-      - name: Checkout código
-        uses: actions/checkout@v4
+      - name: Checkout repositorio
+        uses: actions/checkout@v3
       
-      # 2. Configurar Python 3.12
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Configurar Python
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
-          cache: 'pip'
+          python-version: '3.11'
       
-      # 3. Instalar dependencias
       - name: Instalar dependencias
         run: |
-          pip install --upgrade pip
           pip install -r requirements.txt
       
-      # 4. Crear archivo de credenciales desde Secret
-      - name: Crear credenciales Google
-        run: |
-          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > google_credentials.json
+      - name: Crear credenciales de Google
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-      
-      # 5. Ejecutar pipeline ETL
-      - name: Ejecutar pipeline ETL
-        run: python run_pipeline.py
-      
-      # 6. Subir archivos generados al repositorio
-      - name: Commit y push de archivos generados
         run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
-          git add dimensiones/*.csv
-          git add fact_actividades_limpio.csv
-          git add pipeline_log.txt
-          git add errores_upz.csv || true
-          git add duplicados_detectados.csv || true
-          git add conflictos_upz_zona.csv || true
-          git diff-index --quiet HEAD || git commit -m "🤖 Datos actualizados automáticamente - $(date +'%Y-%m-%d %H:%M:%S')"
-          git push
+          mkdir -p config
+          echo "$GOOGLE_CREDENTIALS" > config/credentials.json
       
-      # 7. Limpiar credenciales (seguridad)
-      - name: Limpiar credenciales
-        if: always()
-        run: rm -f google_credentials.json
+      # ===================================================================
+      # FASE 1: DESCARGA Y LIMPIEZA
+      # ===================================================================
+      - name: Descargar datos de Google Sheets
+        run: python scripts/descargar_google_sheets.py
+      
+      - name: Limpiar y procesar datos
+        run: python scripts/limpiar_datos.py
+      
+      - name: Validar UPZ y Zonas
+        run: python scripts/validar_upz_zonas.py
+      
+      - name: Deduplicar actividades
+        run: python scripts/deduplicar_actividades.py
+      
+      # ===================================================================
+      # FASE 2: ENRIQUECIMIENTO CON BARRIOS
+      # ===================================================================
+      - name: Crear diccionario de barrios (si no existe)
+        run: |
+          if [ ! -f scripts/diccionario_barrios_completo.json ]; then
+            python scripts/crear_diccionario_barrios.py
+          fi
+      
+      - name: Enriquecer con barrios
+        run: python scripts/enriquecer_con_barrios.py
+      
+      - name: Mejorar extracción de barrios
+        run: python scripts/mejorar_extraccion_barrios.py
+      
+      # ===================================================================
+      # FASE 3: GENERACIÓN DE DIMENSIONES
+      # ===================================================================
+      - name: Generar dim_fecha
+        run: python scripts/generar_dim_fecha.py
+      
+      - name: Generar dimensiones restantes
+        run: python scripts/generar_dimensiones.py
+      
+      - name: Generar modelo dimensional completo
+        run: python scripts/generar_modelo_completo.py
+      
+      # ===================================================================
+      # FASE 4: VERIFICACIÓN Y REPORTE
+      # ===================================================================
+      - name: Verificar integridad de datos
+        run: python scripts/verificar_datos.py
+      
+      - name: Generar reporte de actualización
+        run: |
+          python scripts/generar_reporte.py > logs/reporte_$(date +'%Y%m%d_%H%M').txt
+      
+      # ===================================================================
+      # FASE 5: COMMIT Y PUSH
+      # ===================================================================
+      - name: Commit y push de cambios
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/*.csv dimensiones/*.csv fact_actividades_*.csv
+          git diff --quiet && git diff --staged --quiet || \
+          (git commit -m "🤖 Actualización automática de datos - $(date +'%Y-%m-%d %H:%M')" && git push)
+      
+      - name: Subir logs como artefactos
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs-actualizacion
+          path: logs/
+          retention-days: 30

@@ -206,7 +206,7 @@ for idx, row in df.iterrows():
         df.at[idx, 'Validacion_Zona_UPZ'] = 'Válido'
 
 # =====================================================================
-# ESTADÍSTICAS Y GUARDADO
+# ESTADÍSTICAS
 # =====================================================================
 print("\n" + "="*80)
 print("📊 RESULTADOS DE EXTRACCIÓN")
@@ -224,7 +224,16 @@ if 'Metodo_Extraccion' in df.columns:
     for metodo, count in metodos.items():
         print(f"   {metodo}: {count} ({count/len(df)*100:.1f}%)")
 
-# Guardar
+# =====================================================================
+# AGREGAR ID_ACTIVIDAD
+# =====================================================================
+print("\n🔢 Agregando ID_Actividad...")
+df.insert(0, 'ID_Actividad', range(1, len(df) + 1))
+print(f"✅ ID_Actividad agregado: 1 a {len(df)}")
+
+# =====================================================================
+# GUARDAR
+# =====================================================================
 df.to_csv(OUTPUT_FILE, index=False, encoding='utf-8')
 print(f"\n💾 Guardado: {OUTPUT_FILE}")
 

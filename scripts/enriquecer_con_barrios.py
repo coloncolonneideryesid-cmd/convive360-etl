@@ -225,11 +225,40 @@ if 'Metodo_Extraccion' in df.columns:
         print(f"   {metodo}: {count} ({count/len(df)*100:.1f}%)")
 
 # =====================================================================
-# AGREGAR ID_ACTIVIDAD
+# AGREGAR ID_ACTIVIDAD CON PREFIJO DE HOJA
 # =====================================================================
-print("\n🔢 Agregando ID_Actividad...")
-df.insert(0, 'ID_Actividad', range(1, len(df) + 1))
-print(f"✅ ID_Actividad agregado: 1 a {len(df)}")
+print("\n🔢 Agregando ID_Actividad con prefijo de hoja...")
+
+# Crear ID basado en Hoja_Origen y número de fila
+def generar_id(row, idx_por_hoja):
+    hoja = row.get('Hoja_Origen', 'Hoja 1')
+    
+    # Determinar prefijo
+    if 'formulario 1' in hoja.lower() or hoja == 'Hoja 1':
+        prefijo = 'H1'
+    elif 'formulario 2' in hoja.lower() or hoja == 'Hoja 2':
+        prefijo = 'H2'
+    else:
+        prefijo = 'H1'  # Default
+    
+    # Obtener número de fila para esta hoja
+    numero = idx_por_hoja[hoja]
+    idx_por_hoja[hoja] += 1
+    
+    return f"{prefijo}_{numero}"
+
+# Contador por hoja
+idx_por_hoja = {}
+for hoja in df['Hoja_Origen'].unique():
+    idx_por_hoja[hoja] = 1
+
+# Generar IDs
+df.insert(0, 'ID_Actividad', df.apply(lambda row: generar_id(row, idx_por_hoja), axis=1))
+
+print(f"✅ ID_Actividad agregado con prefijos H1_ y H2_")
+print(f"   Hoja 1: {(df['ID_Actividad'].str.startswith('H1_')).sum()} registros")
+print(f"   Hoja 2: {(df['ID_Actividad'].str.startswith('H2_')).sum()} registros")
+
 
 # =====================================================================
 # GUARDAR

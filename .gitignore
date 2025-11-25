@@ -217,3 +217,5 @@ config/*.json
 config.json
 config/credentials.json
 config/*.json
+google_credentials.json
+config/credentials.json

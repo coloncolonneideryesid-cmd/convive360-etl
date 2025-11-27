@@ -47,7 +47,7 @@ if not FACT_ACTIVIDADES.exists():
     print("   Ejecuta primero: python scripts/enriquecer_con_barrios.py")
     exit(1)
 
-df_actividades = pd.read_csv(FACT_ACTIVIDADES, encoding='utf-8-sig')
+df_actividades = pd.read_csv(FACT_ACTIVIDADES, encoding='utf-8-sig', sep=';')
 print(f"✅ fact_actividades_enriquecido.csv cargado: {len(df_actividades)} registros")
 
 # Verificar columna Barrio_Extraido

@@ -17,7 +17,7 @@ print("🔧 MEJORANDO EXTRACCIÓN DE BARRIOS USANDO UPZ/ZONA")
 print("="*80)
 
 # Cargar datos
-df = pd.read_csv(FACT_FILE, encoding='utf-8')
+df = pd.read_csv(FACT_FILE, encoding='utf-8', sep=';')
 print(f"✅ Cargadas {len(df)} actividades")
 
 with open(DICT_BARRIOS, 'r', encoding='utf-8') as f:

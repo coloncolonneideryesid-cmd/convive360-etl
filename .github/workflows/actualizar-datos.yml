@@ -30,12 +30,13 @@ jobs:
           echo "$GOOGLE_CREDENTIALS" > config/credentials.json
       
       # ===================================================================
-      # FASE 1: IMPORTAR Y LIMPIAR DATOS
-      # ===================================================================
       - name: 📥 Importar datos desde Google Sheets
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: |
           echo "=== Importando datos desde Google Sheets ==="
           python scripts/importar_desde_sheets.py
+        python scripts/importar_desde_sheets.py
       
       - name: 🗺️ Mapear columnas
         run: |

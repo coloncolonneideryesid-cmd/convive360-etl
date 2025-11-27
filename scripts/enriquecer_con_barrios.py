@@ -15,7 +15,7 @@ from difflib import get_close_matches
 # Rutas
 BASE_DIR = Path(__file__).resolve().parents[1]
 DICT_FILE = BASE_DIR / "scripts" / "diccionario_barrios_completo.json"
-FACT_FILE = BASE_DIR / "fact_actividades_limpio.csv"
+FACT_FILE = BASE_DIR / "fact_actividades_limpio_fixed.csv"
 OUTPUT_FILE = BASE_DIR / "dimensiones" / "fact_actividades_enriquecido.csv"
 
 print("\n" + "="*80)
@@ -29,12 +29,20 @@ print("\n📥 Cargando datos...")
 
 # Cargar fact_actividades con manejo robusto de comillas y delimitadores
 try:
-    df = pd.read_csv(FACT_FILE, encoding='utf-8', quotechar='"', escapechar='\\', on_bad_lines='warn')
+    df = pd.read_csv(
+        FACT_FILE, 
+        encoding='utf-8',
+        sep=';',
+        quotechar='"',
+        escapechar='\\',
+        on_bad_lines='warn',
+        low_memory=False
+    )
     print(f"✅ Actividades cargadas: {len(df)} registros")
 except Exception as e:
     print(f"⚠️  Error al cargar CSV: {e}")
     print("🔧 Intentando con parámetros alternativos...")
-    df = pd.read_csv(FACT_FILE, encoding='utf-8', sep=',', engine='python')
+    df = pd.read_csv(FACT_FILE, encoding='utf-8', sep=';', engine='python')
     print(f"✅ Actividades cargadas: {len(df)} registros")
 
 # Cargar diccionario

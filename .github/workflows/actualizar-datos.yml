@@ -36,7 +36,6 @@ jobs:
         run: |
           echo "=== Importando datos desde Google Sheets ==="
           python scripts/importar_desde_sheets.py
-        python scripts/importar_desde_sheets.py
       
       - name: 🗺️ Mapear columnas
         run: |

@@ -3,6 +3,7 @@
 """
 Enriquece fact_actividades con barrios extraídos desde direcciones
 Usa 4 métodos de extracción + validación Zona-UPZ
+VERSIÓN 2: Corrige TODAS las zonas duplicadas
 """
 
 import pandas as pd
@@ -15,20 +16,26 @@ from difflib import get_close_matches
 BASE_DIR = Path(__file__).resolve().parents[1]
 DICT_FILE = BASE_DIR / "scripts" / "diccionario_barrios_completo.json"
 FACT_FILE = BASE_DIR / "fact_actividades_limpio.csv"
-OUTPUT_FILE = BASE_DIR / "fact_actividades_enriquecido.csv"
+OUTPUT_FILE = BASE_DIR / "dimensiones" / "fact_actividades_enriquecido.csv"
 
 print("\n" + "="*80)
-print("🔍 ENRIQUECIENDO ACTIVIDADES CON BARRIOS")
+print("🔍 ENRIQUECIENDO ACTIVIDADES CON BARRIOS V2")
 print("="*80)
 
 # =====================================================================
-# CARGAR DATOS
+# CARGAR DATOS CON MANEJO ROBUSTO DE CSV
 # =====================================================================
 print("\n📥 Cargando datos...")
 
-# Cargar fact_actividades
-df = pd.read_csv(FACT_FILE, encoding='utf-8')
-print(f"✅ Actividades cargadas: {len(df)} registros")
+# Cargar fact_actividades con manejo robusto de comillas y delimitadores
+try:
+    df = pd.read_csv(FACT_FILE, encoding='utf-8', quotechar='"', escapechar='\\', on_bad_lines='warn')
+    print(f"✅ Actividades cargadas: {len(df)} registros")
+except Exception as e:
+    print(f"⚠️  Error al cargar CSV: {e}")
+    print("🔧 Intentando con parámetros alternativos...")
+    df = pd.read_csv(FACT_FILE, encoding='utf-8', sep=',', engine='python')
+    print(f"✅ Actividades cargadas: {len(df)} registros")
 
 # Cargar diccionario
 with open(DICT_FILE, 'r', encoding='utf-8') as f:
@@ -122,11 +129,16 @@ def seleccionar_zona_correcta(barrio, upz, zonas_posibles):
     Selecciona la zona correcta cuando un barrio está en múltiples zonas.
     Usa el UPZ y el nombre del barrio para determinar la zona precisa.
     """
-    if not barrio or not upz:
-        return zonas_posibles[0] if zonas_posibles else None
+    if not zonas_posibles:
+        return None
     
-    barrio_norm = normalizar(barrio)
-    upz_norm = normalizar(upz)
+    # Si solo hay una zona, devolver esa
+    if len(zonas_posibles) == 1:
+        return zonas_posibles[0].upper()
+    
+    # Normalizar UPZ
+    upz_norm = normalizar(upz) if upz else ""
+    barrio_norm = normalizar(barrio) if barrio else ""
     
     # Mapeo específico UPZ 32 (SAN BLAS) - Zona 1 vs Zona 2
     if "32" in upz_norm or "san blas" in upz_norm:
@@ -139,7 +151,10 @@ def seleccionar_zona_correcta(barrio, upz, zonas_posibles):
             'montecarlo', 'nueva espana', 'ramajal', 'san blas', 'san blas ii sector',
             'san cristobal alto', 'triangulo alto', 'vitelma'
         }
-        return "ZONA 1" if barrio_norm in barrios_zona1 else "ZONA 2"
+        if barrio_norm in barrios_zona1:
+            return "ZONA 1"
+        else:
+            return "ZONA 2"
     
     # Mapeo específico UPZ 50 (LA GLORIA) - Zona 3 vs Zona 8
     elif "50" in upz_norm or "la gloria" in upz_norm:
@@ -150,7 +165,10 @@ def seleccionar_zona_correcta(barrio, upz, zonas_posibles):
             'moralva', 'panorama', 'puente colorado', 'quindio', 'quindio ii sector',
             'san jose oriental', 'villa anita sur oriental'
         }
-        return "ZONA 3" if barrio_norm in barrios_zona3 else "ZONA 8"
+        if barrio_norm in barrios_zona3:
+            return "ZONA 3"
+        else:
+            return "ZONA 8"
     
     # Mapeo específico UPZ 51 (LOS LIBERTADORES) - Zona 5 vs Zona 7
     elif "51" in upz_norm or "los libertadores" in upz_norm:
@@ -166,7 +184,10 @@ def seleccionar_zona_correcta(barrio, upz, zonas_posibles):
             'san rafael sur oriental', 'sierras del sur oriente', 'valparaiso',
             'villa aurora', 'villa begonia'
         }
-        return "ZONA 5" if barrio_norm in barrios_zona5 else "ZONA 7"
+        if barrio_norm in barrios_zona5:
+            return "ZONA 5"
+        else:
+            return "ZONA 7"
     
     # UPZ sin ambigüedad
     elif "33" in upz_norm or "sosiego" in upz_norm:
@@ -175,7 +196,7 @@ def seleccionar_zona_correcta(barrio, upz, zonas_posibles):
         return "ZONA 4"
     
     # Por defecto, tomar la primera zona disponible
-    return zonas_posibles[0] if zonas_posibles else None
+    return zonas_posibles[0].upper() if zonas_posibles else None
 
 def validar_zona_upz(zona, upz):
     """Valida consistencia Zona-UPZ"""
@@ -219,7 +240,6 @@ df['Observaciones'] = None
 extracciones_exitosas = 0
 upz_completadas = 0
 zona_completadas = 0
-inconsistencias = 0
 
 for idx, row in df.iterrows():
     direccion = row['Direccion_Actividad']
@@ -241,21 +261,46 @@ for idx, row in df.iterrows():
         if pd.isna(upz_actual) or str(upz_actual).strip() == "":
             df.at[idx, 'UPZ_Enriquecida'] = upz_ext
             upz_completadas += 1
-        
-        # Completar Zona si está vacía
-        zona_actual = row['Zona']
-        if pd.isna(zona_actual) or str(zona_actual).strip() == "":
-            if zonas_ext and len(zonas_ext) > 0:
-                # Si hay múltiples zonas, elegir la correcta según UPZ + Barrio
-                if len(zonas_ext) > 1:
-                    zona_seleccionada = seleccionar_zona_correcta(barrio, upz_ext, zonas_ext)
-                    df.at[idx, 'Zona_Enriquecida'] = zona_seleccionada
-                    df.at[idx, 'Observaciones'] = f"Barrio en múltiples zonas, seleccionada: {zona_seleccionada}"
-                else:
-                    df.at[idx, 'Zona_Enriquecida'] = zonas_ext[0]
-                zona_completadas += 1
+
+# =====================================================================
+# CORRECCIÓN MASIVA DE ZONAS DUPLICADAS (TODOS LOS REGISTROS)
+# =====================================================================
+print("\n🔧 Corrigiendo todas las zonas duplicadas...")
+
+zonas_corregidas = 0
+
+for idx, row in df.iterrows():
+    zona_actual = row['Zona_Enriquecida']
+    upz_enriquecida = row['UPZ_Enriquecida']
+    barrio = row['Barrio_Extraido']
     
-    # Validar consistencia Zona-UPZ
+    # Si la zona tiene coma (duplicada)
+    if pd.notna(zona_actual) and ',' in str(zona_actual):
+        # Parsear las zonas
+        zonas_duplicadas = [z.strip() for z in str(zona_actual).split(',')]
+        
+        # Corregir usando UPZ + Barrio (si existe)
+        zona_corregida = seleccionar_zona_correcta(barrio, upz_enriquecida, zonas_duplicadas)
+        
+        if zona_corregida:
+            df.at[idx, 'Zona_Enriquecida'] = zona_corregida
+            if barrio:
+                df.at[idx, 'Observaciones'] = f"Zona duplicada corregida con barrio: {zona_actual} → {zona_corregida}"
+            else:
+                df.at[idx, 'Observaciones'] = f"Zona duplicada corregida con UPZ: {zona_actual} → {zona_corregida}"
+            zonas_corregidas += 1
+            zona_completadas += 1
+
+print(f"✅ Zonas duplicadas corregidas: {zonas_corregidas}")
+
+# =====================================================================
+# VALIDACIÓN ZONA-UPZ
+# =====================================================================
+print("\n🔍 Validando consistencia Zona-UPZ...")
+
+inconsistencias = 0
+
+for idx, row in df.iterrows():
     zona_final = df.at[idx, 'Zona_Enriquecida']
     upz_final = df.at[idx, 'UPZ_Enriquecida']
     
@@ -278,8 +323,8 @@ print("="*80)
 
 print(f"\n✅ Barrios extraídos: {extracciones_exitosas}/{len(df)} ({extracciones_exitosas/len(df)*100:.1f}%)")
 print(f"✅ UPZ completadas: {upz_completadas}")
-print(f"✅ Zonas completadas: {zona_completadas}")
-print(f"⚠️  Inconsistencias: {inconsistencias}")
+print(f"✅ Zonas completadas/corregidas: {zona_completadas}")
+print(f"⚠️  Inconsistencias finales: {inconsistencias}")
 
 # Desglose por método
 if 'Metodo_Extraccion' in df.columns:
@@ -298,9 +343,9 @@ def generar_id(row, idx_por_hoja):
     hoja = row.get('Hoja_Origen', 'Hoja 1')
     
     # Determinar prefijo
-    if 'formulario 1' in hoja.lower() or hoja == 'Hoja 1':
+    if 'formulario 1' in str(hoja).lower() or hoja == 'Hoja 1':
         prefijo = 'H1'
-    elif 'formulario 2' in hoja.lower() or hoja == 'Hoja 2':
+    elif 'formulario 2' in str(hoja).lower() or hoja == 'Hoja 2':
         prefijo = 'H2'
     else:
         prefijo = 'H1'  # Default
@@ -323,11 +368,10 @@ print(f"✅ ID_Actividad agregado con prefijos H1_ y H2_")
 print(f"   Hoja 1: {(df['ID_Actividad'].str.startswith('H1_')).sum()} registros")
 print(f"   Hoja 2: {(df['ID_Actividad'].str.startswith('H2_')).sum()} registros")
 
-
 # =====================================================================
-# GUARDAR
+# GUARDAR CON DELIMITADOR PUNTO Y COMA
 # =====================================================================
-df.to_csv(OUTPUT_FILE, index=False, encoding='utf-8', quoting=1)  # quoting=1 = QUOTE_MINIMAL
+df.to_csv(OUTPUT_FILE, index=False, encoding='utf-8', sep=';')
 print(f"\n💾 Guardado: {OUTPUT_FILE}")
 
 # Calidad de datos

@@ -69,11 +69,11 @@ jobs:
           echo "=== Enriqueciendo datos con barrios ==="
           python scripts/enriquecer_con_barrios.py
       
-      - name: 🔧 Mejorar extracción de barrios
-        run: |
-          echo "=== Mejorando extracción de barrios ==="
-          python scripts/mejorar_extraccion_barrios.py
-      
+      #       - name: 🔧 Mejorar extracción de barrios
+      #         run: |
+      #           echo "=== Mejorando extracción de barrios ==="
+      #           python scripts/mejorar_extraccion_barrios.py
+      #       
       # ===================================================================
       # FASE 3: GENERACIÓN DE DIMENSIONES
       # ===================================================================

@@ -116,6 +116,67 @@ def extraer_barrio(direccion):
     
     return None, None, None, None
 
+
+def seleccionar_zona_correcta(barrio, upz, zonas_posibles):
+    """
+    Selecciona la zona correcta cuando un barrio está en múltiples zonas.
+    Usa el UPZ y el nombre del barrio para determinar la zona precisa.
+    """
+    if not barrio or not upz:
+        return zonas_posibles[0] if zonas_posibles else None
+    
+    barrio_norm = normalizar(barrio)
+    upz_norm = normalizar(upz)
+    
+    # Mapeo específico UPZ 32 (SAN BLAS) - Zona 1 vs Zona 2
+    if "32" in upz_norm or "san blas" in upz_norm:
+        barrios_zona1 = {
+            'aguas claras', 'amapolas', 'amapolas ii sector', 'buenavista suroriental',
+            'corinto', 'el balcon de la castana', 'el futuro', 'el ramajal', 
+            'la castana', 'la cecilia', 'la gran colombia', 'la sagrada familia',
+            'las acacias', 'las mercedes', 'los alpes', 'los laureles sur oriental i sector',
+            'los laureles sur oriental ii sector', 'macarena de los alpes', 'manila',
+            'montecarlo', 'nueva espana', 'ramajal', 'san blas', 'san blas ii sector',
+            'san cristobal alto', 'triangulo alto', 'vitelma'
+        }
+        return "ZONA 1" if barrio_norm in barrios_zona1 else "ZONA 2"
+    
+    # Mapeo específico UPZ 50 (LA GLORIA) - Zona 3 vs Zona 8
+    elif "50" in upz_norm or "la gloria" in upz_norm:
+        barrios_zona3 = {
+            'altamira chiquita', 'altamira sector san jose', 'bellavista sur oriental',
+            'el poblado', 'la arboleda', 'la gloria', 'la grovana', 'la nueva gloria',
+            'los alpes del zipa', 'los altos del zuque', 'los puentes', 'miraflores',
+            'moralva', 'panorama', 'puente colorado', 'quindio', 'quindio ii sector',
+            'san jose oriental', 'villa anita sur oriental'
+        }
+        return "ZONA 3" if barrio_norm in barrios_zona3 else "ZONA 8"
+    
+    # Mapeo específico UPZ 51 (LOS LIBERTADORES) - Zona 5 vs Zona 7
+    elif "51" in upz_norm or "los libertadores" in upz_norm:
+        barrios_zona5 = {
+            'bosque de san jose', 'ciudad de londres', 'juan rey', 'juan rey ii',
+            'la arboleda', 'la belleza', 'la nueva gloria', 'la nueva gloria ii sector',
+            'los libertadores', 'los libertadores bosque diamante triangulo',
+            'los libertadores sector el tesoro', 'los libertadores sector la colina',
+            'los libertadores sector san ignacio', 'los libertadores sector san isidro',
+            'los libertadores sector san jose', 'los libertadores sector san luis',
+            'los libertadores sector san miguel', 'los pinos', 'nueva delly',
+            'nueva delly parte alta', 'republica del canada el pinar', 'san manuel',
+            'san rafael sur oriental', 'sierras del sur oriente', 'valparaiso',
+            'villa aurora', 'villa begonia'
+        }
+        return "ZONA 5" if barrio_norm in barrios_zona5 else "ZONA 7"
+    
+    # UPZ sin ambigüedad
+    elif "33" in upz_norm or "sosiego" in upz_norm:
+        return "ZONA 6"
+    elif "34" in upz_norm or "20 de julio" in upz_norm:
+        return "ZONA 4"
+    
+    # Por defecto, tomar la primera zona disponible
+    return zonas_posibles[0] if zonas_posibles else None
+
 def validar_zona_upz(zona, upz):
     """Valida consistencia Zona-UPZ"""
     upz_zonas_validas = {
@@ -185,11 +246,14 @@ for idx, row in df.iterrows():
         zona_actual = row['Zona']
         if pd.isna(zona_actual) or str(zona_actual).strip() == "":
             if zonas_ext and len(zonas_ext) > 0:
-                # Tomar primera zona si hay múltiples
-                df.at[idx, 'Zona_Enriquecida'] = zonas_ext[0]
-                zona_completadas += 1
+                # Si hay múltiples zonas, elegir la correcta según UPZ + Barrio
                 if len(zonas_ext) > 1:
-                    df.at[idx, 'Observaciones'] = f"Barrio en múltiples zonas: {', '.join(zonas_ext)}"
+                    zona_seleccionada = seleccionar_zona_correcta(barrio, upz_ext, zonas_ext)
+                    df.at[idx, 'Zona_Enriquecida'] = zona_seleccionada
+                    df.at[idx, 'Observaciones'] = f"Barrio en múltiples zonas, seleccionada: {zona_seleccionada}"
+                else:
+                    df.at[idx, 'Zona_Enriquecida'] = zonas_ext[0]
+                zona_completadas += 1
     
     # Validar consistencia Zona-UPZ
     zona_final = df.at[idx, 'Zona_Enriquecida']

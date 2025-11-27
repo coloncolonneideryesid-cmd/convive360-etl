@@ -327,7 +327,7 @@ print(f"   Hoja 2: {(df['ID_Actividad'].str.startswith('H2_')).sum()} registros"
 # =====================================================================
 # GUARDAR
 # =====================================================================
-df.to_csv(OUTPUT_FILE, index=False, encoding='utf-8')
+df.to_csv(OUTPUT_FILE, index=False, encoding='utf-8', quoting=1)  # quoting=1 = QUOTE_MINIMAL
 print(f"\n💾 Guardado: {OUTPUT_FILE}")
 
 # Calidad de datos

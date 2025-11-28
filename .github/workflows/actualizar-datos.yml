@@ -41,7 +41,7 @@ jobs:
         run: |
           python scripts/deduplicar_agendamiento.py
       
-      - name: �� Diccionario barrios
+      - name: 📚 Diccionario barrios
         run: |
           if [ ! -f scripts/diccionario_barrios_completo.json ]; then
             python scripts/crear_diccionario_barrios.py
@@ -55,7 +55,7 @@ jobs:
         run: |
           python scripts/generar_dimensiones.py
       
-      - name: 💾 Commit y push
+      - name: �� Commit y push
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"

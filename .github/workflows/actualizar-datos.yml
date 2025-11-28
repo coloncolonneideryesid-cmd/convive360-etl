@@ -31,20 +31,17 @@ jobs:
       
       - name: 🗺️ Mapear columnas
         run: |
-          echo "=== Mapeando columnas ==="
           python scripts/mapear_columnas.py
       
-      - name: 🧹 Limpiar datos con diccionario
+      - name: 🧹 Limpiar datos
         run: |
-          echo "=== Limpiando datos ==="
           python scripts/limpiar_agendamiento_con_diccionario.py
       
-      - name: 🔄 Deduplicar actividades
+      - name: 🔄 Deduplicar
         run: |
-          echo "=== Deduplicando actividades ==="
           python scripts/deduplicar_agendamiento.py
       
-      - name: 📚 Crear diccionario de barrios
+      - name: �� Diccionario barrios
         run: |
           if [ ! -f scripts/diccionario_barrios_completo.json ]; then
             python scripts/crear_diccionario_barrios.py
@@ -52,18 +49,11 @@ jobs:
       
       - name: 📍 Enriquecer con barrios
         run: |
-          echo "=== Enriqueciendo datos con barrios ==="
           python scripts/enriquecer_con_barrios.py
       
       - name: 📊 Generar dimensiones
         run: |
-          echo "=== Generando dimensiones ==="
           python scripts/generar_dimensiones.py
-      
-      - name: 🎯 Generar modelo completo
-        run: |
-          echo "=== Generando modelo completo ==="
-          python scripts/generar_modelo_completo.py
       
       - name: 💾 Commit y push
         run: |
@@ -72,8 +62,8 @@ jobs:
           git add -A
           
           if git diff --quiet && git diff --staged --quiet; then
-            echo "✅ No hay cambios"
+            echo "✅ Sin cambios"
           else
-            git commit -m "🤖 Actualización automática $(date +'%Y-%m-%d %H:%M')"
+            git commit -m "🤖 Datos actualizados $(date +'%Y-%m-%d %H:%M')"
             git push
           fi

@@ -2,7 +2,7 @@ name: Actualizar Datos Power BI
 
 on:
   schedule:
-    - cron: '0 6,12,18 * * *'  # 6 AM, 12 PM, 6 PM (Colombia UTC-5)
+    - cron: '0 6,12,18 * * *'
   workflow_dispatch:
 
 jobs:
@@ -22,14 +22,6 @@ jobs:
         run: |
           pip install -r requirements.txt
       
-      - name: Crear credenciales de Google
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
-        run: |
-          mkdir -p config
-          echo "$GOOGLE_CREDENTIALS" > config/credentials.json
-      
-      # ===================================================================
       - name: 📥 Importar datos desde Google Sheets
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
@@ -52,16 +44,10 @@ jobs:
           echo "=== Deduplicando actividades ==="
           python scripts/deduplicar_agendamiento.py
       
-      # ===================================================================
-      # FASE 2: ENRIQUECIMIENTO CON BARRIOS
-      # ===================================================================
-      - name: 📚 Crear diccionario de barrios (si no existe)
+      - name: 📚 Crear diccionario de barrios
         run: |
           if [ ! -f scripts/diccionario_barrios_completo.json ]; then
-            echo "=== Creando diccionario de barrios ==="
             python scripts/crear_diccionario_barrios.py
-          else
-            echo "✅ Diccionario ya existe, saltando creación"
           fi
       
       - name: 📍 Enriquecer con barrios
@@ -69,124 +55,25 @@ jobs:
           echo "=== Enriqueciendo datos con barrios ==="
           python scripts/enriquecer_con_barrios.py
       
-      #       - name: 🔧 Mejorar extracción de barrios
-      #         run: |
-      #           echo "=== Mejorando extracción de barrios ==="
-      #           python scripts/mejorar_extraccion_barrios.py
-      #       
-      # ===================================================================
-      # FASE 3: GENERACIÓN DE DIMENSIONES
-      # ===================================================================
-      - name: 📊 Generar dimensiones básicas
+      - name: 📊 Generar dimensiones
         run: |
-          echo "=== Generando dimensiones básicas ==="
+          echo "=== Generando dimensiones ==="
           python scripts/generar_dimensiones.py
       
-      - name: 🎯 Generar modelo dimensional completo
+      - name: 🎯 Generar modelo completo
         run: |
-          echo "=== Generando modelo dimensional completo ==="
+          echo "=== Generando modelo completo ==="
           python scripts/generar_modelo_completo.py
       
-      # ===================================================================
-      # FASE 4: VERIFICACIÓN
-      # ===================================================================
-      - name: ✅ Verificar archivos generados
-        run: |
-          echo ""
-          echo "==================================================================="
-          echo "📊 RESUMEN DE ARCHIVOS GENERADOS"
-          echo "==================================================================="
-          echo ""
-          
-          echo "📁 Dimensiones generadas:"
-          if [ -d "dimensiones" ]; then
-            ls -lh dimensiones/*.csv 2>/dev/null | awk '{print "   ✅", $9, "-", $5}' || echo "   ⚠️  No se generaron archivos CSV"
-          else
-            echo "   ❌ Carpeta dimensiones/ no existe"
-          fi
-          
-          echo ""
-          echo "📄 Fact tables:"
-          ls -lh fact_*.csv 2>/dev/null | awk '{print "   ✅", $9, "-", $5}' || echo "   ⚠️  No se generaron fact tables"
-          
-          echo ""
-          echo "📈 Estadísticas:"
-          if [ -f "fact_actividades_enriquecido.csv" ]; then
-            TOTAL_ROWS=$(wc -l < fact_actividades_enriquecido.csv)
-            echo "   • Total actividades: $((TOTAL_ROWS - 1))"
-          fi
-          
-          if [ -f "dimensiones/dim_barrios.csv" ]; then
-            TOTAL_BARRIOS=$(wc -l < dimensiones/dim_barrios.csv)
-            echo "   • Total barrios: $((TOTAL_BARRIOS - 1))"
-          fi
-          
-          echo ""
-          echo "==================================================================="
-      
-      # ===================================================================
-      # FASE 5: COMMIT Y PUSH
-      # ===================================================================
-      - name: 💾 Commit y push de cambios
+      - name: 💾 Commit y push
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          
-          # Agregar todos los archivos generados
           git add -A
           
-          # Verificar si hay cambios
           if git diff --quiet && git diff --staged --quiet; then
-            echo "✅ No hay cambios que commitear"
+            echo "✅ No hay cambios"
           else
-            echo "📝 Cambios detectados, creando commit..."
-            git commit -m "🤖 Actualización automática de datos - $(date +'%Y-%m-%d %H:%M:%S')"
-            
-            echo "📤 Subiendo cambios a GitHub..."
+            git commit -m "🤖 Actualización automática $(date +'%Y-%m-%d %H:%M')"
             git push
-            
-            echo "✅ Cambios subidos exitosamente"
           fi
-      
-      # ===================================================================
-      # FASE 6: REPORTE FINAL
-      # ===================================================================
-      - name: 📋 Generar reporte de ejecución
-        if: always()
-        run: |
-          cat > execution_report.txt << 'EOF'
-          ================================================================================
-          🤖 REPORTE DE EJECUCIÓN - PIPELINE ETL CONVIVE360
-          ================================================================================
-          
-          📅 Fecha: $(date +'%Y-%m-%d %H:%M:%S')
-          🔧 Workflow: Actualizar Datos Power BI
-          📦 Branch: main
-          
-          ────────────────────────────────────────────────────────────────────────────────
-          📊 ARCHIVOS GENERADOS
-          ────────────────────────────────────────────────────────────────────────────────
-          
-          EOF
-          
-          echo "📁 Dimensiones:" >> execution_report.txt
-          ls -lh dimensiones/*.csv 2>/dev/null >> execution_report.txt || echo "   ⚠️  No disponible" >> execution_report.txt
-          
-          echo "" >> execution_report.txt
-          echo "📄 Fact Tables:" >> execution_report.txt
-          ls -lh fact_*.csv 2>/dev/null >> execution_report.txt || echo "   ⚠️  No disponible" >> execution_report.txt
-          
-          echo "" >> execution_report.txt
-          echo "────────────────────────────────────────────────────────────────────────────────" >> execution_report.txt
-          echo "✅ Pipeline ejecutado exitosamente" >> execution_report.txt
-          echo "=================================================================================" >> execution_report.txt
-          
-          cat execution_report.txt
-      
-      - name: 📤 Subir reporte como artefacto
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: execution-report-${{ github.run_number }}
-          path: execution_report.txt
-          retention-days: 30

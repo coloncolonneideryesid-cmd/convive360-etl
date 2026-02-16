@@ -1,6 +1,7 @@
-ID_UPZ;UPZ;Codigo_UPZ;Nombre_UPZ;Zona_Principal;Zonas_Asociadas
-32;32 - San Blas;32;San Blas;Zona 1;Zona 1, Zona 2
-33;33 - Sosiego;33;Sosiego;Zona 6;Zona 6
-34;34 - 20 de Julio;34;20 de Julio;Zona 4;Zona 4
-50;50 - La Gloria;50;La Gloria;Zona 3;Zona 3, Zona 8
-51;51 - Los Libertadores;51;Los Libertadores;Zona 5;Zona 5, Zona 7
+﻿upz_id,upz
+1,
+2,34 - 20 de Julio
+3,33 - Sosiego
+4,51 - Los Libertadores
+5,50 - La Gloria
+6,32 - San Blas

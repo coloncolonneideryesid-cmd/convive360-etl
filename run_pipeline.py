@@ -1,188 +1,469 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Pipeline ETL Completo - Convive360
-Orquesta todas las fases del proceso
+Pipeline ETL para Convive360 - Alcaldía Local de San Cristóbal
+Extrae datos de Google Sheets, los transforma y genera archivos CSV para Power BI
 """
 
+import os
 import sys
-import subprocess
-from pathlib import Path
+import pandas as pd
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+import logging
 from datetime import datetime
+from typing import Dict, Optional
 
-BASE_DIR = Path(__file__).resolve().parent
+# ========================================
+# CONFIGURACIÓN
+# ========================================
 
-print("\n" + "="*80)
-print("🚀 INICIANDO PIPELINE ETL COMPLETO - CONVIVE360")
-print("="*80)
-print(f"📅 Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-print(f"📂 Directorio: {BASE_DIR}")
-print("="*80)
+# Configuración de logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('pipeline_log.txt'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
-def ejecutar_script(script_path, descripcion):
-    """Ejecuta un script y maneja errores"""
-    print(f"\n>>> {descripcion}...")
+logger = logging.getLogger(__name__)
+
+# Variables de entorno (se configuran en GitHub Secrets)
+SPREADSHEET_ID = os.getenv('SPREADSHEET_ID', '15DIXQnQfS9_gbYC4h3j5inIgEVEUJC79ceCc4uYv_ts')
+SHEET_NAME_1 = os.getenv('SHEET_NAME_1', 'Respuestas de formulario 1')
+SHEET_NAME_2 = os.getenv('SHEET_NAME_2', 'Respuestas de formulario 2')
+CREDENTIALS_FILE = 'credentials.json'
+
+# ========================================
+# MAPEO DE COLUMNAS
+# ========================================
+
+COLUMN_MAPPING = {
+    'Marca temporal': 'marca_temporal',
+    'Dirección de correo electrónico': 'correo',
+    '1. Esta actividad se enmarca en:': 'enmarca_en',
+    '2. Nombre de la actividad': 'nombre_actividad',
+    '3. Descripción de la actividad': 'descripcion',
+    '4. Responsables de la actividad': 'responsable',
+    '5. Con quien va articular': 'articulacion',
+    '6. Responsable de la actividad': 'responsable_actividad',
+    '5. Enfoque de la actividad': 'enfoque',
+    '6. Estrategia a impactar': 'estrategia',
+    '6.1. Líneas Estratégicas de Seguridad': 'linea_seguridad',
+    '6.2. Líneas Estratégicas de Convivencia': 'linea_convivencia',
+    '6.3. Líneas Estratégicas de Justicia': 'linea_justicia',
+    '8. UPZ a la Que Pertenece la Actividad': 'upz',
+    'BARRIOS DE LA UPZ 32 - San Blas': 'barrios_upz32',
+    'BARRIOS DE LA UPZ 33 - Sosiego': 'barrios_upz33',
+    'BARRIOS DE LA UPZ 34 - 20 de Julio': 'barrios_upz34',
+    'BARRIOS DE LA UPZ 51 - Los Libertadores': 'barrios_upz51',
+    'BARRIOS DE LA UPZ 50 - La Gloria': 'barrios_upz50',
+    '9. Zona a la que Pertenece la Actividad': 'zona',
+    '7. Dirección donde se realiza la actividad': 'direccion',
+    '10. Fecha de la actividad': 'fecha_actividad',
+    '11. Hora de inicio': 'hora_inicio',
+    '12. ¿Deseas recibir un correo de confirmación?': 'recibir_correo',
+    'Estado': 'estado',
+    'ID del evento': 'evento_id',
+    'Quien rechazó': 'quien_rechazo',
+    'Fecha de cancelación': 'fecha_cancelacion'
+}
+
+# ========================================
+# FUNCIONES DE AUTENTICACIÓN
+# ========================================
+
+def autenticar_google_sheets() -> object:
+    """
+    Autentica con Google Sheets API usando service account
+    
+    Returns:
+        service: Objeto de servicio de Google Sheets
+    """
     try:
-        resultado = subprocess.run(
-            [sys.executable, str(script_path)],
-            check=True,
-            capture_output=True,
-            text=True
+        if not os.path.exists(CREDENTIALS_FILE):
+            raise FileNotFoundError(f"No se encontró el archivo de credenciales: {CREDENTIALS_FILE}")
+        
+        credentials = service_account.Credentials.from_service_account_file(
+            CREDENTIALS_FILE,
+            scopes=[
+                'https://www.googleapis.com/auth/spreadsheets.readonly',
+                'https://www.googleapis.com/auth/drive.readonly'
+            ]
         )
-        print(f"✓ {descripcion} completado")
-        if resultado.stdout:
-            print(resultado.stdout)
-        return True
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Error en {descripcion}")
-        print(f"   {e.stderr}")
-        return False
+        
+        service = build('sheets', 'v4', credentials=credentials)
+        logger.info("✅ Autenticación exitosa con Google Sheets API")
+        return service
+        
     except Exception as e:
-        print(f"❌ Error inesperado en {descripcion}: {e}")
-        return False
+        logger.error(f"❌ Error en autenticación: {e}")
+        raise
 
-# =====================================================================
-# FASE 1: EXTRACCIÓN
-# =====================================================================
-print("\n" + "="*80)
-print("📥 FASE 1: EXTRACCIÓN DE DATOS")
-print("="*80)
+# ========================================
+# FUNCIONES DE EXTRACCIÓN
+# ========================================
 
-if not ejecutar_script(
-    BASE_DIR / "scripts" / "descargar_google_sheets.py",
-    "Descarga desde Google Sheets"
-):
-    sys.exit(1)
+def extraer_datos(service: object, sheet_name: str) -> pd.DataFrame:
+    """
+    Extrae datos de una hoja específica del Google Sheets
+    
+    Args:
+        service: Servicio autenticado de Google Sheets
+        sheet_name: Nombre de la hoja a extraer
+        
+    Returns:
+        DataFrame con los datos extraídos
+    """
+    try:
+        logger.info(f"📥 Extrayendo datos de: {sheet_name}")
+        
+        sheet = service.spreadsheets()
+        result = sheet.values().get(
+            spreadsheetId=SPREADSHEET_ID,
+            range=f"{sheet_name}!A:AB"
+        ).execute()
+        
+        values = result.get('values', [])
+        
+        if not values:
+            logger.warning(f"⚠️ No se encontraron datos en {sheet_name}")
+            return pd.DataFrame()
+        
+        # Convertir a DataFrame
+        df = pd.DataFrame(values[1:], columns=values[0])
+        
+        logger.info(f"✅ Extraídos {len(df)} registros de {sheet_name}")
+        return df
+        
+    except Exception as e:
+        logger.error(f"❌ Error al extraer datos de {sheet_name}: {e}")
+        raise
 
-# =====================================================================
-# FASE 2: LIMPIEZA Y TRANSFORMACIÓN
-# =====================================================================
-print("\n" + "="*80)
-print("🧹 FASE 2: LIMPIEZA Y TRANSFORMACIÓN")
-print("="*80)
+# ========================================
+# FUNCIONES DE TRANSFORMACIÓN
+# ========================================
 
-if not ejecutar_script(
-    BASE_DIR / "scripts" / "limpiar_datos.py",
-    "Limpieza de datos"
-):
-    sys.exit(1)
+def limpiar_datos(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Limpia y normaliza los datos extraídos
+    
+    Args:
+        df: DataFrame a limpiar
+        
+    Returns:
+        DataFrame limpio
+    """
+    try:
+        logger.info("🧹 Iniciando limpieza de datos")
+        
+        # Eliminar filas completamente vacías
+        df = df.dropna(how='all')
+        logger.info(f"  ✓ Filas vacías eliminadas")
+        
+        # Renombrar columnas según el mapeo
+        df = df.rename(columns=COLUMN_MAPPING)
+        logger.info(f"  ✓ Columnas renombradas")
+        
+        # Convertir columnas de fecha
+        if 'marca_temporal' in df.columns:
+            df['marca_temporal'] = pd.to_datetime(df['marca_temporal'], errors='coerce')
+        
+        if 'fecha_actividad' in df.columns:
+            df['fecha_actividad'] = pd.to_datetime(df['fecha_actividad'], errors='coerce')
+        
+        if 'fecha_cancelacion' in df.columns:
+            df['fecha_cancelacion'] = pd.to_datetime(df['fecha_cancelacion'], errors='coerce')
+        
+        logger.info(f"  ✓ Fechas convertidas")
+        
+        # Consolidar columna de barrio
+        df['barrio'] = ''
+        
+        if 'upz' in df.columns:
+            for idx, row in df.iterrows():
+                upz = str(row.get('upz', ''))
+                
+                if '32' in upz and 'barrios_upz32' in df.columns:
+                    df.at[idx, 'barrio'] = row.get('barrios_upz32', '')
+                elif '33' in upz and 'barrios_upz33' in df.columns:
+                    df.at[idx, 'barrio'] = row.get('barrios_upz33', '')
+                elif '34' in upz and 'barrios_upz34' in df.columns:
+                    df.at[idx, 'barrio'] = row.get('barrios_upz34', '')
+                elif '51' in upz and 'barrios_upz51' in df.columns:
+                    df.at[idx, 'barrio'] = row.get('barrios_upz51', '')
+                elif '50' in upz and 'barrios_upz50' in df.columns:
+                    df.at[idx, 'barrio'] = row.get('barrios_upz50', '')
+        
+        logger.info(f"  ✓ Barrios consolidados")
+        
+        # Eliminar duplicados
+        registros_antes = len(df)
+        df = df.drop_duplicates()
+        duplicados_eliminados = registros_antes - len(df)
+        
+        if duplicados_eliminados > 0:
+            logger.info(f"  ✓ {duplicados_eliminados} duplicados eliminados")
+        
+        logger.info(f"✅ Limpieza completada: {len(df)} registros limpios")
+        return df
+        
+    except Exception as e:
+        logger.error(f"❌ Error al limpiar datos: {e}")
+        raise
 
-if not ejecutar_script(
-    BASE_DIR / "scripts" / "validar_upz_zonas.py",
-    "Validación UPZ y Zonas"
-):
-    sys.exit(1)
+def crear_dimensiones(df: pd.DataFrame) -> Dict[str, pd.DataFrame]:
+    """
+    Crea tablas de dimensiones a partir del DataFrame principal
+    
+    Args:
+        df: DataFrame limpio
+        
+    Returns:
+        Diccionario con las dimensiones creadas
+    """
+    try:
+        logger.info("🔨 Creando tablas de dimensiones")
+        dimensiones = {}
+        
+        # Dimensión UPZ
+        if 'upz' in df.columns:
+            dim_upz = df[['upz']].dropna().drop_duplicates().reset_index(drop=True)
+            dim_upz.insert(0, 'upz_id', range(1, len(dim_upz) + 1))
+            dimensiones['dim_upz'] = dim_upz
+            logger.info(f"  ✓ dim_upz creada: {len(dim_upz)} registros")
+        
+        # Dimensión Zona
+        if 'zona' in df.columns:
+            dim_zona = df[['zona']].dropna().drop_duplicates().reset_index(drop=True)
+            dim_zona.insert(0, 'zona_id', range(1, len(dim_zona) + 1))
+            dimensiones['dim_zona'] = dim_zona
+            logger.info(f"  ✓ dim_zona creada: {len(dim_zona)} registros")
+        
+        # Dimensión Estrategia
+        if 'estrategia' in df.columns:
+            dim_estrategia = df[['estrategia']].dropna().drop_duplicates().reset_index(drop=True)
+            dim_estrategia.insert(0, 'estrategia_id', range(1, len(dim_estrategia) + 1))
+            dimensiones['dim_estrategia'] = dim_estrategia
+            logger.info(f"  ✓ dim_estrategia creada: {len(dim_estrategia)} registros")
+        
+        # Dimensión Enfoque
+        if 'enfoque' in df.columns:
+            dim_enfoque = df[['enfoque']].dropna().drop_duplicates().reset_index(drop=True)
+            dim_enfoque.insert(0, 'enfoque_id', range(1, len(dim_enfoque) + 1))
+            dimensiones['dim_enfoque'] = dim_enfoque
+            logger.info(f"  ✓ dim_enfoque creada: {len(dim_enfoque)} registros")
+        
+        # Dimensión Estado
+        if 'estado' in df.columns:
+            dim_estado = df[['estado']].dropna().drop_duplicates().reset_index(drop=True)
+            dim_estado.insert(0, 'estado_id', range(1, len(dim_estado) + 1))
+            dimensiones['dim_estado'] = dim_estado
+            logger.info(f"  ✓ dim_estado creada: {len(dim_estado)} registros")
+        
+        # Dimensión Barrio
+        if 'barrio' in df.columns:
+            dim_barrio = df[['barrio', 'upz']].dropna().drop_duplicates().reset_index(drop=True)
+            dim_barrio.insert(0, 'barrio_id', range(1, len(dim_barrio) + 1))
+            dimensiones['dim_barrio'] = dim_barrio
+            logger.info(f"  ✓ dim_barrio creada: {len(dim_barrio)} registros")
+        
+        logger.info(f"✅ {len(dimensiones)} dimensiones creadas")
+        return dimensiones
+        
+    except Exception as e:
+        logger.error(f"❌ Error al crear dimensiones: {e}")
+        raise
 
-if not ejecutar_script(
-    BASE_DIR / "scripts" / "deduplicar_actividades.py",
-    "Deduplicación de actividades"
-):
-    sys.exit(1)
+def crear_tabla_hechos(df: pd.DataFrame, dimensiones: Dict[str, pd.DataFrame]) -> pd.DataFrame:
+    """
+    Crea la tabla de hechos con referencias a las dimensiones
+    
+    Args:
+        df: DataFrame limpio
+        dimensiones: Diccionario con las dimensiones
+        
+    Returns:
+        DataFrame de tabla de hechos
+    """
+    try:
+        logger.info("📊 Creando tabla de hechos")
+        fact = df.copy()
+        
+        # Hacer joins con las dimensiones
+        if 'dim_upz' in dimensiones and 'upz' in fact.columns:
+            fact = fact.merge(
+                dimensiones['dim_upz'],
+                on='upz',
+                how='left'
+            )
+            logger.info("  ✓ Join con dim_upz")
+        
+        if 'dim_zona' in dimensiones and 'zona' in fact.columns:
+            fact = fact.merge(
+                dimensiones['dim_zona'],
+                on='zona',
+                how='left'
+            )
+            logger.info("  ✓ Join con dim_zona")
+        
+        if 'dim_estrategia' in dimensiones and 'estrategia' in fact.columns:
+            fact = fact.merge(
+                dimensiones['dim_estrategia'],
+                on='estrategia',
+                how='left'
+            )
+            logger.info("  ✓ Join con dim_estrategia")
+        
+        if 'dim_enfoque' in dimensiones and 'enfoque' in fact.columns:
+            fact = fact.merge(
+                dimensiones['dim_enfoque'],
+                on='enfoque',
+                how='left'
+            )
+            logger.info("  ✓ Join con dim_enfoque")
+        
+        if 'dim_estado' in dimensiones and 'estado' in fact.columns:
+            fact = fact.merge(
+                dimensiones['dim_estado'],
+                on='estado',
+                how='left'
+            )
+            logger.info("  ✓ Join con dim_estado")
+        
+        if 'dim_barrio' in dimensiones and 'barrio' in fact.columns:
+            fact = fact.merge(
+                dimensiones['dim_barrio'],
+                on=['barrio', 'upz'],
+                how='left'
+            )
+            logger.info("  ✓ Join con dim_barrio")
+        
+        logger.info(f"✅ Tabla de hechos creada: {len(fact)} registros")
+        return fact
+        
+    except Exception as e:
+        logger.error(f"❌ Error al crear tabla de hechos: {e}")
+        raise
 
-# =====================================================================
-# FASE 3: ENRIQUECIMIENTO CON BARRIOS
-# =====================================================================
-print("\n" + "="*80)
-print("📍 FASE 3: ENRIQUECIMIENTO CON BARRIOS")
-print("="*80)
+# ========================================
+# FUNCIONES DE CARGA
+# ========================================
 
-# Crear diccionario de barrios (solo primera vez o si no existe)
-dict_file = BASE_DIR / "scripts" / "diccionario_barrios_completo.json"
-if not dict_file.exists():
-    print("📚 Creando diccionario de barrios...")
-    if not ejecutar_script(
-        BASE_DIR / "scripts" / "crear_diccionario_barrios.py",
-        "Creación de diccionario de barrios"
-    ):
-        print("⚠️  Continuando sin diccionario completo...")
-else:
-    print("✓ Diccionario de barrios ya existe")
+def guardar_archivos(fact: pd.DataFrame, dimensiones: Dict[str, pd.DataFrame]) -> None:
+    """
+    Guarda los archivos CSV en disco
+    
+    Args:
+        fact: DataFrame de tabla de hechos
+        dimensiones: Diccionario con las dimensiones
+    """
+    try:
+        logger.info("💾 Guardando archivos CSV")
+        
+        # Guardar tabla de hechos
+        fact.to_csv('fact_actividades.csv', index=False, encoding='utf-8-sig')
+        logger.info("  ✓ fact_actividades.csv guardado")
+        
+        # Crear versión limpia
+        columnas_mantener = [col for col in fact.columns 
+                           if not col.endswith('_x') and not col.endswith('_y')]
+        fact_limpio = fact[columnas_mantener]
+        fact_limpio.to_csv('fact_actividades_limpio.csv', index=False, encoding='utf-8-sig')
+        logger.info("  ✓ fact_actividades_limpio.csv guardado")
+        
+        # Guardar dimensiones
+        os.makedirs('dimensiones', exist_ok=True)
+        
+        for nombre, df_dim in dimensiones.items():
+            filepath = f'dimensiones/{nombre}.csv'
+            df_dim.to_csv(filepath, index=False, encoding='utf-8-sig')
+            logger.info(f"  ✓ {filepath} guardado")
+        
+        logger.info("✅ Todos los archivos guardados correctamente")
+        
+    except Exception as e:
+        logger.error(f"❌ Error al guardar archivos: {e}")
+        raise
 
-# Enriquecer actividades con barrios
-if not ejecutar_script(
-    BASE_DIR / "scripts" / "enriquecer_con_barrios.py",
-    "Enriquecimiento con barrios"
-):
-    print("⚠️  Continuando sin enriquecimiento de barrios...")
+# ========================================
+# FUNCIÓN PRINCIPAL
+# ========================================
 
-# =====================================================================
-# FASE 4: GENERACIÓN DE DIMENSIONES
-# =====================================================================
-print("\n" + "="*80)
-print("📊 FASE 4: GENERACIÓN DE DIMENSIONES")
-print("="*80)
+def main():
+    """
+    Función principal del pipeline ETL
+    """
+    inicio = datetime.now()
+    
+    try:
+        logger.info("=" * 60)
+        logger.info("🚀 INICIANDO PIPELINE ETL CONVIVE360")
+        logger.info("=" * 60)
+        logger.info(f"Spreadsheet ID: {SPREADSHEET_ID}")
+        logger.info(f"Hoja 1: {SHEET_NAME_1}")
+        logger.info(f"Hoja 2: {SHEET_NAME_2}")
+        logger.info("")
+        
+        # 1. AUTENTICAR
+        service = autenticar_google_sheets()
+        
+        # 2. EXTRAER DATOS
+        df1 = extraer_datos(service, SHEET_NAME_1)
+        df2 = extraer_datos(service, SHEET_NAME_2)
+        
+        # 3. COMBINAR DATOS
+        logger.info("🔗 Combinando datos de ambas hojas")
+        df = pd.concat([df1, df2], ignore_index=True)
+        logger.info(f"✅ Datos combinados: {len(df)} registros totales")
+        logger.info("")
+        
+        # 4. LIMPIAR DATOS
+        df_limpio = limpiar_datos(df)
+        logger.info("")
+        
+        # 5. CREAR DIMENSIONES
+        dimensiones = crear_dimensiones(df_limpio)
+        logger.info("")
+        
+        # 6. CREAR TABLA DE HECHOS
+        fact = crear_tabla_hechos(df_limpio, dimensiones)
+        logger.info("")
+        
+        # 7. GUARDAR ARCHIVOS
+        guardar_archivos(fact, dimensiones)
+        logger.info("")
+        
+        # Resumen final
+        duracion = (datetime.now() - inicio).total_seconds()
+        logger.info("=" * 60)
+        logger.info("🎉 PIPELINE ETL COMPLETADO EXITOSAMENTE")
+        logger.info("=" * 60)
+        logger.info(f"⏱️  Duración: {duracion:.2f} segundos")
+        logger.info(f"📊 Registros procesados: {len(fact)}")
+        logger.info(f"📁 Archivos generados: {1 + len(dimensiones)}")
+        logger.info("=" * 60)
+        
+        return 0
+        
+    except Exception as e:
+        logger.error("=" * 60)
+        logger.error("💥 ERROR EN EL PIPELINE ETL")
+        logger.error("=" * 60)
+        logger.error(f"Error: {str(e)}")
+        logger.error("=" * 60)
+        
+        return 1
 
-if not ejecutar_script(
-    BASE_DIR / "scripts" / "generar_dim_fecha.py",
-    "Generación de dim_fecha"
-):
-    sys.exit(1)
+if __name__ == "__main__":
+    sys.exit(main())
+```
 
-if not ejecutar_script(
-    BASE_DIR / "scripts" / "generar_dimensiones.py",
-    "Generación de dimensiones restantes"
-):
-    sys.exit(1)
+### Paso 3: Guardar los cambios
 
-# =====================================================================
-# FASE 5: MODELO DIMENSIONAL COMPLETO
-# =====================================================================
-print("\n" + "="*80)
-print("🎯 FASE 5: MODELO DIMENSIONAL COMPLETO")
-print("="*80)
+1. Baja hasta el final de la página
 
-if not ejecutar_script(
-    BASE_DIR / "scripts" / "generar_modelo_completo.py",
-    "Generación de modelo dimensional completo"
-):
-    print("⚠️  Continuando sin modelo completo...")
-
-# =====================================================================
-# FASE 6: VERIFICACIÓN Y REPORTE
-# =====================================================================
-print("\n" + "="*80)
-print("✅ FASE 6: VERIFICACIÓN Y REPORTE")
-print("="*80)
-
-if not ejecutar_script(
-    BASE_DIR / "scripts" / "verificar_datos.py",
-    "Verificación de integridad"
-):
-    print("⚠️  Continuando sin verificación completa...")
-
-if not ejecutar_script(
-    BASE_DIR / "scripts" / "generar_reporte.py",
-    "Generación de reporte final"
-):
-    print("⚠️  Continuando sin reporte...")
-
-# =====================================================================
-# RESUMEN FINAL
-# =====================================================================
-print("\n" + "="*80)
-print("🎉 PIPELINE COMPLETADO CON ÉXITO")
-print("="*80)
-
-# Contar archivos generados
-dimensiones_dir = BASE_DIR / "dimensiones"
-if dimensiones_dir.exists():
-    archivos = list(dimensiones_dir.glob("*.csv"))
-    print(f"\n📊 Archivos generados en dimensiones/: {len(archivos)}")
-    for archivo in sorted(archivos):
-        print(f"   ✓ {archivo.name}")
-
-fact_file = BASE_DIR / "fact_actividades_limpio.csv"
-if fact_file.exists():
-    import pandas as pd
-    df = pd.read_csv(fact_file)
-    print(f"\n📄 fact_actividades_limpio.csv: {len(df)} registros")
-
-enriquecido_file = BASE_DIR / "fact_actividades_enriquecido.csv"
-if enriquecido_file.exists():
-    df_enr = pd.read_csv(enriquecido_file)
-    barrios_extraidos = df_enr['Barrio_Extraido'].notna().sum()
-    print(f"📄 fact_actividades_enriquecido.csv: {barrios_extraidos} con barrio ({barrios_extraidos/len(df_enr)*100:.1f}%)")
-
-print("\n" + "="*80)
-print(f"⏱️  Completado: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-print("="*80)
+2. En "Commit changes" escribe un mensaje como:
+```
+   Actualizar run_pipeline.py con nuevos enlaces

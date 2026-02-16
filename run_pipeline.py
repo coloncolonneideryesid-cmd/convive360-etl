@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Pipeline ETL para Convive360 - Alcaldía Local de San Cristóbal
-Extrae datos de Google Sheets, los transforma y genera archivos CSV para Power BI
-"""
-
 import os
 import sys
 import pandas as pd
@@ -458,12 +452,3 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-```
-
-### Paso 3: Guardar los cambios
-
-1. Baja hasta el final de la página
-
-2. En "Commit changes" escribe un mensaje como:
-```
-   Actualizar run_pipeline.py con nuevos enlaces

@@ -1042,3 +1042,60 @@ Pipeline ejecutado: 2025-11-22 23:30:39
 2026-02-17 20:44:54,987 - INFO - 📊 Registros procesados: 1242
 2026-02-17 20:44:54,987 - INFO - 📁 Archivos generados: 6
 2026-02-17 20:44:54,987 - INFO - ============================================================
+2026-02-17 21:41:16,898 - INFO - ============================================================
+2026-02-17 21:41:16,898 - INFO - 🚀 INICIANDO PIPELINE ETL CONVIVE360
+2026-02-17 21:41:16,898 - INFO - ============================================================
+2026-02-17 21:41:16,898 - INFO - Spreadsheet ID: 15DIXQnQfS9_gbYC4h3j5inIgEVEUJC79ceCc4uYv_ts
+2026-02-17 21:41:16,898 - INFO - Hoja 1: Respuestas de formulario 1
+2026-02-17 21:41:16,898 - INFO - Hoja 2: Respuestas de formulario 2
+2026-02-17 21:41:16,898 - INFO - 
+2026-02-17 21:41:16,900 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-02-17 21:41:16,902 - INFO - ✅ Autenticación exitosa con Google Sheets API
+2026-02-17 21:41:16,902 - INFO - 📥 Extrayendo datos de: Respuestas de formulario 1
+2026-02-17 21:41:17,622 - INFO - ✅ Extraídos 604 registros de Respuestas de formulario 1
+2026-02-17 21:41:17,622 - INFO - 📥 Extrayendo datos de: Respuestas de formulario 2
+2026-02-17 21:41:17,774 - INFO - ✅ Extraídos 646 registros de Respuestas de formulario 2
+2026-02-17 21:41:17,774 - INFO - 🔗 Combinando datos de ambas hojas
+2026-02-17 21:41:17,775 - INFO - ✅ Datos combinados: 1250 registros totales
+2026-02-17 21:41:17,776 - INFO - 
+2026-02-17 21:41:17,776 - INFO - 🧹 Iniciando limpieza de datos
+2026-02-17 21:41:17,778 - INFO -   ✓ Filas vacías eliminadas
+2026-02-17 21:41:17,779 - INFO -   ✓ Columnas renombradas
+2026-02-17 21:41:17,785 - INFO -   ✓ Fechas convertidas
+2026-02-17 21:41:17,849 - INFO -   ✓ Barrios consolidados
+2026-02-17 21:41:17,856 - INFO -   ✓ 8 duplicados eliminados
+2026-02-17 21:41:17,856 - INFO - ✅ Limpieza completada: 1242 registros limpios
+2026-02-17 21:41:17,856 - INFO - 
+2026-02-17 21:41:17,856 - INFO - 🔨 Creando tablas de dimensiones
+2026-02-17 21:41:17,858 - INFO -   ✓ dim_upz creada: 6 registros
+2026-02-17 21:41:17,859 - INFO -   ✓ dim_zona creada: 9 registros
+2026-02-17 21:41:17,861 - INFO -   ✓ dim_estrategia creada: 8 registros
+2026-02-17 21:41:17,862 - INFO -   ✓ dim_enfoque creada: 5 registros
+2026-02-17 21:41:17,864 - INFO -   ✓ dim_barrio creada: 11 registros
+2026-02-17 21:41:17,864 - INFO - ✅ 5 dimensiones creadas
+2026-02-17 21:41:17,864 - INFO - 
+2026-02-17 21:41:17,864 - INFO - 📊 Creando tabla de hechos
+2026-02-17 21:41:17,867 - INFO -   ✓ Join con dim_upz
+2026-02-17 21:41:17,868 - INFO -   ✓ Join con dim_zona
+2026-02-17 21:41:17,870 - INFO -   ✓ Join con dim_estrategia
+2026-02-17 21:41:17,872 - INFO -   ✓ Join con dim_enfoque
+2026-02-17 21:41:17,874 - INFO -   ✓ Join con dim_barrio
+2026-02-17 21:41:17,874 - INFO - ✅ Tabla de hechos creada: 1242 registros
+2026-02-17 21:41:17,874 - INFO - 
+2026-02-17 21:41:17,874 - INFO - 💾 Guardando archivos CSV
+2026-02-17 21:41:17,896 - INFO -   ✓ fact_actividades.csv guardado
+2026-02-17 21:41:17,915 - INFO -   ✓ fact_actividades_limpio.csv guardado
+2026-02-17 21:41:17,915 - INFO -   ✓ dimensiones/dim_upz.csv guardado
+2026-02-17 21:41:17,916 - INFO -   ✓ dimensiones/dim_zona.csv guardado
+2026-02-17 21:41:17,917 - INFO -   ✓ dimensiones/dim_estrategia.csv guardado
+2026-02-17 21:41:17,917 - INFO -   ✓ dimensiones/dim_enfoque.csv guardado
+2026-02-17 21:41:17,918 - INFO -   ✓ dimensiones/dim_barrio.csv guardado
+2026-02-17 21:41:17,918 - INFO - ✅ Todos los archivos guardados correctamente
+2026-02-17 21:41:17,918 - INFO - 
+2026-02-17 21:41:17,918 - INFO - ============================================================
+2026-02-17 21:41:17,918 - INFO - 🎉 PIPELINE ETL COMPLETADO EXITOSAMENTE
+2026-02-17 21:41:17,918 - INFO - ============================================================
+2026-02-17 21:41:17,918 - INFO - ⏱️  Duración: 1.02 segundos
+2026-02-17 21:41:17,918 - INFO - 📊 Registros procesados: 1242
+2026-02-17 21:41:17,918 - INFO - 📁 Archivos generados: 6
+2026-02-17 21:41:17,918 - INFO - ============================================================

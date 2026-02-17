@@ -415,3 +415,60 @@ Pipeline ejecutado: 2025-11-22 23:30:39
 2026-02-17 06:07:09,951 - INFO - 📊 Registros procesados: 1241
 2026-02-17 06:07:09,951 - INFO - 📁 Archivos generados: 6
 2026-02-17 06:07:09,951 - INFO - ============================================================
+2026-02-17 07:53:27,323 - INFO - ============================================================
+2026-02-17 07:53:27,324 - INFO - 🚀 INICIANDO PIPELINE ETL CONVIVE360
+2026-02-17 07:53:27,324 - INFO - ============================================================
+2026-02-17 07:53:27,324 - INFO - Spreadsheet ID: 15DIXQnQfS9_gbYC4h3j5inIgEVEUJC79ceCc4uYv_ts
+2026-02-17 07:53:27,324 - INFO - Hoja 1: Respuestas de formulario 1
+2026-02-17 07:53:27,324 - INFO - Hoja 2: Respuestas de formulario 2
+2026-02-17 07:53:27,324 - INFO - 
+2026-02-17 07:53:27,326 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-02-17 07:53:27,328 - INFO - ✅ Autenticación exitosa con Google Sheets API
+2026-02-17 07:53:27,328 - INFO - 📥 Extrayendo datos de: Respuestas de formulario 1
+2026-02-17 07:53:28,308 - INFO - ✅ Extraídos 603 registros de Respuestas de formulario 1
+2026-02-17 07:53:28,308 - INFO - 📥 Extrayendo datos de: Respuestas de formulario 2
+2026-02-17 07:53:28,543 - INFO - ✅ Extraídos 646 registros de Respuestas de formulario 2
+2026-02-17 07:53:28,543 - INFO - 🔗 Combinando datos de ambas hojas
+2026-02-17 07:53:28,545 - INFO - ✅ Datos combinados: 1249 registros totales
+2026-02-17 07:53:28,545 - INFO - 
+2026-02-17 07:53:28,545 - INFO - 🧹 Iniciando limpieza de datos
+2026-02-17 07:53:28,547 - INFO -   ✓ Filas vacías eliminadas
+2026-02-17 07:53:28,547 - INFO -   ✓ Columnas renombradas
+2026-02-17 07:53:28,554 - INFO -   ✓ Fechas convertidas
+2026-02-17 07:53:28,615 - INFO -   ✓ Barrios consolidados
+2026-02-17 07:53:28,622 - INFO -   ✓ 8 duplicados eliminados
+2026-02-17 07:53:28,622 - INFO - ✅ Limpieza completada: 1241 registros limpios
+2026-02-17 07:53:28,622 - INFO - 
+2026-02-17 07:53:28,623 - INFO - 🔨 Creando tablas de dimensiones
+2026-02-17 07:53:28,624 - INFO -   ✓ dim_upz creada: 6 registros
+2026-02-17 07:53:28,626 - INFO -   ✓ dim_zona creada: 9 registros
+2026-02-17 07:53:28,627 - INFO -   ✓ dim_estrategia creada: 8 registros
+2026-02-17 07:53:28,629 - INFO -   ✓ dim_enfoque creada: 5 registros
+2026-02-17 07:53:28,630 - INFO -   ✓ dim_barrio creada: 11 registros
+2026-02-17 07:53:28,631 - INFO - ✅ 5 dimensiones creadas
+2026-02-17 07:53:28,631 - INFO - 
+2026-02-17 07:53:28,631 - INFO - 📊 Creando tabla de hechos
+2026-02-17 07:53:28,633 - INFO -   ✓ Join con dim_upz
+2026-02-17 07:53:28,635 - INFO -   ✓ Join con dim_zona
+2026-02-17 07:53:28,636 - INFO -   ✓ Join con dim_estrategia
+2026-02-17 07:53:28,638 - INFO -   ✓ Join con dim_enfoque
+2026-02-17 07:53:28,640 - INFO -   ✓ Join con dim_barrio
+2026-02-17 07:53:28,640 - INFO - ✅ Tabla de hechos creada: 1241 registros
+2026-02-17 07:53:28,640 - INFO - 
+2026-02-17 07:53:28,640 - INFO - 💾 Guardando archivos CSV
+2026-02-17 07:53:28,669 - INFO -   ✓ fact_actividades.csv guardado
+2026-02-17 07:53:28,688 - INFO -   ✓ fact_actividades_limpio.csv guardado
+2026-02-17 07:53:28,689 - INFO -   ✓ dimensiones/dim_upz.csv guardado
+2026-02-17 07:53:28,689 - INFO -   ✓ dimensiones/dim_zona.csv guardado
+2026-02-17 07:53:28,690 - INFO -   ✓ dimensiones/dim_estrategia.csv guardado
+2026-02-17 07:53:28,690 - INFO -   ✓ dimensiones/dim_enfoque.csv guardado
+2026-02-17 07:53:28,691 - INFO -   ✓ dimensiones/dim_barrio.csv guardado
+2026-02-17 07:53:28,691 - INFO - ✅ Todos los archivos guardados correctamente
+2026-02-17 07:53:28,691 - INFO - 
+2026-02-17 07:53:28,691 - INFO - ============================================================
+2026-02-17 07:53:28,691 - INFO - 🎉 PIPELINE ETL COMPLETADO EXITOSAMENTE
+2026-02-17 07:53:28,691 - INFO - ============================================================
+2026-02-17 07:53:28,691 - INFO - ⏱️  Duración: 1.37 segundos
+2026-02-17 07:53:28,691 - INFO - 📊 Registros procesados: 1241
+2026-02-17 07:53:28,691 - INFO - 📁 Archivos generados: 6
+2026-02-17 07:53:28,692 - INFO - ============================================================

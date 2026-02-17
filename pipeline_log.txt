@@ -814,3 +814,60 @@ Pipeline ejecutado: 2025-11-22 23:30:39
 2026-02-17 14:53:17,075 - INFO - 📊 Registros procesados: 1241
 2026-02-17 14:53:17,075 - INFO - 📁 Archivos generados: 6
 2026-02-17 14:53:17,075 - INFO - ============================================================
+2026-02-17 15:58:42,049 - INFO - ============================================================
+2026-02-17 15:58:42,049 - INFO - 🚀 INICIANDO PIPELINE ETL CONVIVE360
+2026-02-17 15:58:42,049 - INFO - ============================================================
+2026-02-17 15:58:42,049 - INFO - Spreadsheet ID: 15DIXQnQfS9_gbYC4h3j5inIgEVEUJC79ceCc4uYv_ts
+2026-02-17 15:58:42,049 - INFO - Hoja 1: Respuestas de formulario 1
+2026-02-17 15:58:42,049 - INFO - Hoja 2: Respuestas de formulario 2
+2026-02-17 15:58:42,049 - INFO - 
+2026-02-17 15:58:42,051 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-02-17 15:58:42,053 - INFO - ✅ Autenticación exitosa con Google Sheets API
+2026-02-17 15:58:42,053 - INFO - 📥 Extrayendo datos de: Respuestas de formulario 1
+2026-02-17 15:58:43,269 - INFO - ✅ Extraídos 603 registros de Respuestas de formulario 1
+2026-02-17 15:58:43,270 - INFO - 📥 Extrayendo datos de: Respuestas de formulario 2
+2026-02-17 15:58:43,429 - INFO - ✅ Extraídos 646 registros de Respuestas de formulario 2
+2026-02-17 15:58:43,430 - INFO - 🔗 Combinando datos de ambas hojas
+2026-02-17 15:58:43,431 - INFO - ✅ Datos combinados: 1249 registros totales
+2026-02-17 15:58:43,431 - INFO - 
+2026-02-17 15:58:43,431 - INFO - 🧹 Iniciando limpieza de datos
+2026-02-17 15:58:43,434 - INFO -   ✓ Filas vacías eliminadas
+2026-02-17 15:58:43,434 - INFO -   ✓ Columnas renombradas
+2026-02-17 15:58:43,441 - INFO -   ✓ Fechas convertidas
+2026-02-17 15:58:43,481 - INFO -   ✓ Barrios consolidados
+2026-02-17 15:58:43,488 - INFO -   ✓ 8 duplicados eliminados
+2026-02-17 15:58:43,488 - INFO - ✅ Limpieza completada: 1241 registros limpios
+2026-02-17 15:58:43,488 - INFO - 
+2026-02-17 15:58:43,488 - INFO - 🔨 Creando tablas de dimensiones
+2026-02-17 15:58:43,490 - INFO -   ✓ dim_upz creada: 6 registros
+2026-02-17 15:58:43,491 - INFO -   ✓ dim_zona creada: 9 registros
+2026-02-17 15:58:43,493 - INFO -   ✓ dim_estrategia creada: 8 registros
+2026-02-17 15:58:43,494 - INFO -   ✓ dim_enfoque creada: 5 registros
+2026-02-17 15:58:43,496 - INFO -   ✓ dim_barrio creada: 11 registros
+2026-02-17 15:58:43,496 - INFO - ✅ 5 dimensiones creadas
+2026-02-17 15:58:43,496 - INFO - 
+2026-02-17 15:58:43,496 - INFO - 📊 Creando tabla de hechos
+2026-02-17 15:58:43,498 - INFO -   ✓ Join con dim_upz
+2026-02-17 15:58:43,500 - INFO -   ✓ Join con dim_zona
+2026-02-17 15:58:43,501 - INFO -   ✓ Join con dim_estrategia
+2026-02-17 15:58:43,503 - INFO -   ✓ Join con dim_enfoque
+2026-02-17 15:58:43,505 - INFO -   ✓ Join con dim_barrio
+2026-02-17 15:58:43,505 - INFO - ✅ Tabla de hechos creada: 1241 registros
+2026-02-17 15:58:43,505 - INFO - 
+2026-02-17 15:58:43,505 - INFO - 💾 Guardando archivos CSV
+2026-02-17 15:58:43,573 - INFO -   ✓ fact_actividades.csv guardado
+2026-02-17 15:58:43,593 - INFO -   ✓ fact_actividades_limpio.csv guardado
+2026-02-17 15:58:43,594 - INFO -   ✓ dimensiones/dim_upz.csv guardado
+2026-02-17 15:58:43,595 - INFO -   ✓ dimensiones/dim_zona.csv guardado
+2026-02-17 15:58:43,595 - INFO -   ✓ dimensiones/dim_estrategia.csv guardado
+2026-02-17 15:58:43,596 - INFO -   ✓ dimensiones/dim_enfoque.csv guardado
+2026-02-17 15:58:43,596 - INFO -   ✓ dimensiones/dim_barrio.csv guardado
+2026-02-17 15:58:43,596 - INFO - ✅ Todos los archivos guardados correctamente
+2026-02-17 15:58:43,597 - INFO - 
+2026-02-17 15:58:43,597 - INFO - ============================================================
+2026-02-17 15:58:43,597 - INFO - 🎉 PIPELINE ETL COMPLETADO EXITOSAMENTE
+2026-02-17 15:58:43,597 - INFO - ============================================================
+2026-02-17 15:58:43,597 - INFO - ⏱️  Duración: 1.55 segundos
+2026-02-17 15:58:43,597 - INFO - 📊 Registros procesados: 1241
+2026-02-17 15:58:43,597 - INFO - 📁 Archivos generados: 6
+2026-02-17 15:58:43,597 - INFO - ============================================================

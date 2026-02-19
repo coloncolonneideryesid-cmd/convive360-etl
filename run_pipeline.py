@@ -195,8 +195,9 @@ def limpiar_datos(df: pd.DataFrame) -> pd.DataFrame:
 
 def generar_id_actividad(row) -> str:
     """Genera un ID único para cada actividad usando hash MD5"""
-    campos = f"{row.get('Nombre_Actividad', '')}{row.get('Fecha_Actividad', '')}{row.get('Hora_Inicio', '')}{row.get('Direccion_Actividad', '')}"
-    return hashlib.md5(campos.encode()).hexdigest()[:12].upper()
+    # Incluir más campos para evitar duplicados
+    campos = f"{row.get('Marca_Temporal', '')}{row.get('Nombre_Actividad', '')}{row.get('Fecha_Actividad', '')}{row.get('Hora_Inicio', '')}{row.get('Direccion_Actividad', '')}{row.get('Email_Responsable', '')}"
+    return hashlib.md5(campos.encode()).hexdigest()[:16].upper()
 
 def crear_dimensiones(df: pd.DataFrame) -> Dict[str, pd.DataFrame]:
     """Crea tablas de dimensiones a partir del DataFrame principal"""

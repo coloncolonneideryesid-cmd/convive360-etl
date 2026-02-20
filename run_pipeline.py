@@ -41,31 +41,86 @@ CREDENTIALS_FILE = 'credentials.json'
 # MAPEO DE COLUMNAS
 # ========================================
 
+# Mapeo para AMBAS hojas (Respuestas de formulario 1 y 2)
 COLUMN_MAPPING = {
+    # Columnas comunes en ambas hojas
     'Marca temporal': 'Marca_Temporal',
     'Dirección de correo electrónico': 'Email_Responsable',
-    '1. Esta actividad se enmarca en:': 'Enmarca_En',
+    
+    # Nombre de actividad - AMBAS VARIANTES
     '2. Nombre de la actividad': 'Nombre_Actividad',
+    'Nombre de la Actividad': 'Nombre_Actividad',
+    
+    # Descripción - AMBAS VARIANTES
     '3. Descripción de la actividad': 'Descripcion_Actividad',
+    'Descripción de la Actividad': 'Descripcion_Actividad',
+    
+    # Responsables - AMBAS VARIANTES
     '4. Responsables de la actividad': 'Responsable_Principal',
+    'Responsables de la actividad': 'Responsable_Principal',
+    
+    # Articulación - AMBAS VARIANTES
     '5. Con quien va articular': 'Articulacion',
+    'Con quién va a articular': 'Articulacion',
+    
+    # Responsable de actividad - AMBAS VARIANTES
     '6. Responsable de la actividad': 'Responsable_Actividad',
+    '4. Responsable de la actividad*': 'Responsable_Actividad',
+    
+    # Enfoque - AMBAS VARIANTES
     '5. Enfoque de la actividad': 'Enfoque_Actividad',
+    'Enfoque de la actividad*': 'Enfoque_Actividad',
+    'Enfoque Estratégico': 'Enfoque_Estrategico',
+    
+    # Estrategia - AMBAS VARIANTES
     '6. Estrategia a impactar': 'Estrategia_Impactar',
+    'Estrategia de Impacto': 'Estrategia_Impactar',
+    
+    # Enmarca en (solo en hoja 1)
+    '1. Esta actividad se enmarca en:': 'Enmarca_En',
+    
+    # Líneas estratégicas - AMBAS VARIANTES
     '6.1. Líneas Estratégicas de Seguridad': 'Linea_Seguridad',
+    'Líneas Estratégicas de Seguridad': 'Linea_Seguridad',
+    
     '6.2. Líneas Estratégicas de Convivencia': 'Linea_Convivencia',
+    'Líneas Estratégicas de Convivencia': 'Linea_Convivencia',
+    
     '6.3. Líneas Estratégicas de Justicia': 'Linea_Justicia',
+    'Líneas Estratégicas de Justicia': 'Linea_Justicia',
+    
+    # UPZ - AMBAS VARIANTES
     '8. UPZ a la Que Pertenece la Actividad': 'UPZ',
+    'UPZ a la Que Pertenece la Actividad': 'UPZ',
+    
+    # Barrios por UPZ (solo en hoja 1)
     'BARRIOS DE LA UPZ 32 - San Blas': 'Barrios_UPZ32',
     'BARRIOS DE LA UPZ 33 - Sosiego': 'Barrios_UPZ33',
     'BARRIOS DE LA UPZ 34 - 20 de Julio': 'Barrios_UPZ34',
     'BARRIOS DE LA UPZ 51 - Los Libertadores': 'Barrios_UPZ51',
     'BARRIOS DE LA UPZ 50 - La Gloria': 'Barrios_UPZ50',
+    
+    # Zona - AMBAS VARIANTES
     '9. Zona a la que Pertenece la Actividad': 'Zona',
+    'Zona a la que Pertenece la Actividad': 'Zona',
+    
+    # Dirección - AMBAS VARIANTES
     '7. Dirección donde se realiza la actividad': 'Direccion_Actividad',
+    'Dirección donde se realiza la actividad': 'Direccion_Actividad',
+    
+    # Fecha - AMBAS VARIANTES
     '10. Fecha de la actividad': 'Fecha_Actividad',
+    'Fecha de Actividad': 'Fecha_Actividad',
+    
+    # Hora - AMBAS VARIANTES
     '11. Hora de inicio': 'Hora_Inicio',
+    'Hora de Inicio de Actividad': 'Hora_Inicio',
+    
+    # Recibir correo - AMBAS VARIANTES
     '12. ¿Deseas recibir un correo de confirmación?': 'Recibir_Correo',
+    '¿Deseas recibir un correo de confirmación?': 'Recibir_Correo',
+    
+    # Columnas generadas por App Script (comunes)
     'Estado': 'Estado',
     'ID del evento': 'ID_Evento',
     'Quien rechazó': 'Quien_Rechazo',

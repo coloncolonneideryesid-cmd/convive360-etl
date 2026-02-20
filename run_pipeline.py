@@ -335,13 +335,6 @@ def crear_dimensiones(df: pd.DataFrame) -> Dict[str, pd.DataFrame]:
         if col not in df.columns:
             logger.warning(f"  ⚠️ Columna '{col}' no encontrada para {nombre}")
             return
-        d = (
-            df[[col]]
-            .astype(str)
-            .str.strip()
-            .apply(lambda x: x)  # no-op para forzar evaluación
-        )
-        # Aplicar strip directamente al DataFrame
         d = df[[col]].copy()
         d[col] = d[col].astype(str).str.strip()
         d = d[d[col].notna() & (d[col] != '') & (d[col] != 'nan')]

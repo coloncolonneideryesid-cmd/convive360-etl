@@ -4141,3 +4141,69 @@ Pipeline ejecutado: 2025-11-22 23:30:39
 2026-02-20 13:11:28,761 - INFO -    • fact_actividades_enriquecido.csv ⭐
 2026-02-20 13:11:28,762 - INFO -    • 5 dimensiones
 2026-02-20 13:11:28,762 - INFO - ============================================================
+2026-02-20 14:44:48,858 - INFO - ============================================================
+2026-02-20 14:44:48,858 - INFO - 🚀 INICIANDO PIPELINE ETL CONVIVE360
+2026-02-20 14:44:48,858 - INFO - ============================================================
+2026-02-20 14:44:48,858 - INFO - Spreadsheet ID: 15DIXQnQfS9_gbYC4h3j5inIgEVEUJC79ceCc4uYv_ts
+2026-02-20 14:44:48,859 - INFO - Hoja 1: Respuestas de formulario 1
+2026-02-20 14:44:48,859 - INFO - Hoja 2: Respuestas de formulario 2
+2026-02-20 14:44:48,859 - INFO - 
+2026-02-20 14:44:48,860 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-02-20 14:44:48,862 - INFO - ✅ Autenticación exitosa con Google Sheets API
+2026-02-20 14:44:48,863 - INFO - 📥 Extrayendo datos de: Respuestas de formulario 1
+2026-02-20 14:44:53,492 - INFO - ✅ Extraídos 604 registros de Respuestas de formulario 1
+2026-02-20 14:44:53,492 - INFO - 📥 Extrayendo datos de: Respuestas de formulario 2
+2026-02-20 14:44:53,854 - INFO - ✅ Extraídos 646 registros de Respuestas de formulario 2
+2026-02-20 14:44:53,854 - INFO - 🔗 Combinando datos de ambas hojas
+2026-02-20 14:44:53,856 - INFO - ✅ Datos combinados: 1250 registros totales
+2026-02-20 14:44:53,856 - INFO - 
+2026-02-20 14:44:53,856 - INFO - 🧹 Iniciando limpieza de datos
+2026-02-20 14:44:53,859 - INFO -   ✓ Filas vacías eliminadas
+2026-02-20 14:44:53,860 - INFO -   ✓ Columnas renombradas
+2026-02-20 14:44:53,866 - INFO -   ✓ Fechas convertidas
+2026-02-20 14:44:53,916 - INFO -   ✓ Barrios consolidados
+2026-02-20 14:44:53,925 - INFO -   ✓ 8 duplicados eliminados
+2026-02-20 14:44:53,925 - INFO - ✅ Limpieza completada: 1242 registros limpios
+2026-02-20 14:44:53,925 - INFO - 
+2026-02-20 14:44:53,925 - INFO - 🔑 Generando ID_Actividad único
+2026-02-20 14:44:53,956 - INFO -   ✓ ID_Actividad generado para 1242 registros
+2026-02-20 14:44:53,956 - INFO - 
+2026-02-20 14:44:53,956 - INFO - 🔨 Creando tablas de dimensiones
+2026-02-20 14:44:53,958 - INFO -   ✓ dim_upz creada: 6 registros
+2026-02-20 14:44:53,959 - INFO -   ✓ dim_zona creada: 9 registros
+2026-02-20 14:44:53,961 - INFO -   ✓ dim_estrategia creada: 8 registros
+2026-02-20 14:44:53,962 - INFO -   ✓ dim_enfoque creada: 5 registros
+2026-02-20 14:44:53,964 - INFO -   ✓ dim_barrio creada: 11 registros
+2026-02-20 14:44:53,964 - INFO - ✅ 5 dimensiones creadas
+2026-02-20 14:44:53,964 - INFO - 
+2026-02-20 14:44:53,964 - INFO - 📊 Creando tabla de hechos
+2026-02-20 14:44:53,967 - INFO -   ✓ Join con dim_upz
+2026-02-20 14:44:53,969 - INFO -   ✓ Join con dim_zona
+2026-02-20 14:44:53,970 - INFO -   ✓ Join con dim_estrategia
+2026-02-20 14:44:53,972 - INFO -   ✓ Join con dim_enfoque
+2026-02-20 14:44:53,974 - INFO -   ✓ Join con dim_barrio
+2026-02-20 14:44:53,974 - INFO - ✅ Tabla de hechos creada: 1242 registros
+2026-02-20 14:44:53,974 - INFO - 
+2026-02-20 14:44:53,974 - INFO - 💾 Guardando archivos CSV
+2026-02-20 14:44:54,044 - INFO -   ✓ fact_actividades.csv guardado
+2026-02-20 14:44:54,064 - INFO -   ✓ fact_actividades_limpio.csv guardado
+2026-02-20 14:44:54,083 - INFO -   ✓ fact_actividades_enriquecido.csv guardado
+2026-02-20 14:44:54,101 - INFO -   ✓ dimensiones/fact_actividades_enriquecido.csv guardado
+2026-02-20 14:44:54,101 - INFO -   ✓ dimensiones/dim_upz.csv guardado
+2026-02-20 14:44:54,102 - INFO -   ✓ dimensiones/dim_zona.csv guardado
+2026-02-20 14:44:54,102 - INFO -   ✓ dimensiones/dim_estrategia.csv guardado
+2026-02-20 14:44:54,103 - INFO -   ✓ dimensiones/dim_enfoque.csv guardado
+2026-02-20 14:44:54,103 - INFO -   ✓ dimensiones/dim_barrio.csv guardado
+2026-02-20 14:44:54,103 - INFO - ✅ Todos los archivos guardados correctamente
+2026-02-20 14:44:54,104 - INFO - 
+2026-02-20 14:44:54,104 - INFO - ============================================================
+2026-02-20 14:44:54,104 - INFO - 🎉 PIPELINE ETL COMPLETADO EXITOSAMENTE
+2026-02-20 14:44:54,104 - INFO - ============================================================
+2026-02-20 14:44:54,104 - INFO - ⏱️  Duración: 5.25 segundos
+2026-02-20 14:44:54,104 - INFO - 📊 Registros procesados: 1242
+2026-02-20 14:44:54,104 - INFO - 📁 Archivos generados:
+2026-02-20 14:44:54,104 - INFO -    • fact_actividades.csv
+2026-02-20 14:44:54,104 - INFO -    • fact_actividades_limpio.csv
+2026-02-20 14:44:54,104 - INFO -    • fact_actividades_enriquecido.csv ⭐
+2026-02-20 14:44:54,104 - INFO -    • 5 dimensiones
+2026-02-20 14:44:54,104 - INFO - ============================================================

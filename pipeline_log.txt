@@ -4605,3 +4605,58 @@ Pipeline ejecutado: 2025-11-22 23:30:39
 2026-02-20 20:12:44,290 - INFO -    • fact_actividades_enriquecido.csv ⭐
 2026-02-20 20:12:44,290 - INFO -    • 5 dimensiones en dimensiones/
 2026-02-20 20:12:44,290 - INFO - ============================================================
+2026-02-20 20:20:57,758 - INFO - ============================================================
+2026-02-20 20:20:57,758 - INFO - 🚀 INICIANDO PIPELINE ETL CONVIVE360
+2026-02-20 20:20:57,758 - INFO - ============================================================
+2026-02-20 20:20:57,760 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-02-20 20:20:57,763 - INFO - ✅ Autenticación exitosa
+2026-02-20 20:20:57,763 - INFO - 📥 Extrayendo: Respuestas de formulario 1
+2026-02-20 20:20:58,641 - INFO - ✅ 604 registros de Respuestas de formulario 1
+2026-02-20 20:20:58,641 - INFO - 📥 Extrayendo: Respuestas de formulario 2
+2026-02-20 20:20:58,838 - INFO - ✅ 646 registros de Respuestas de formulario 2
+2026-02-20 20:20:58,838 - INFO - 🔀 Normalizando columnas por hoja
+2026-02-20 20:20:58,840 - INFO - 🧹 Limpiando hoja: Formulario_1
+2026-02-20 20:20:58,847 - INFO -   ✓ Fechas convertidas
+2026-02-20 20:20:58,880 - INFO -   ✓ Barrios consolidados
+2026-02-20 20:20:58,887 - INFO -   ✓ 1 duplicados eliminados
+2026-02-20 20:20:58,887 - INFO - ✅ Formulario_1: 603 registros limpios
+2026-02-20 20:20:58,887 - INFO - 🧹 Limpiando hoja: Formulario_2
+2026-02-20 20:20:58,894 - INFO -   ✓ Fechas convertidas
+2026-02-20 20:20:58,928 - INFO -   ✓ Barrios consolidados
+2026-02-20 20:20:58,934 - INFO - ✅ Formulario_2: 646 registros limpios
+2026-02-20 20:20:58,935 - INFO - 🔗 Combinando hojas
+2026-02-20 20:20:58,938 - INFO - ✅ Total: 1249 registros
+2026-02-20 20:20:58,938 - INFO - 🔑 Generando ID_Actividad
+2026-02-20 20:20:59,033 - INFO -   ✓ 1249 IDs únicos
+2026-02-20 20:20:59,033 - INFO - 🔨 Creando dimensiones
+2026-02-20 20:20:59,036 - INFO -   ✓ dim_upz: 5 registros
+2026-02-20 20:20:59,039 - INFO -   ✓ dim_zonas: 8 registros
+2026-02-20 20:20:59,041 - INFO -   ✓ dim_estrategias: 7 registros
+2026-02-20 20:20:59,043 - INFO -   ✓ dim_enfoques: 4 registros
+2026-02-20 20:20:59,045 - INFO -   ✓ dim_barrios: 5 registros
+2026-02-20 20:20:59,052 - INFO -   ✓ Dim_Lineas_Estrategicas: 2197 registros
+2026-02-20 20:20:59,052 - INFO - ✅ 6 dimensiones creadas
+2026-02-20 20:20:59,052 - INFO - 📊 Creando tabla de hechos
+2026-02-20 20:20:59,055 - INFO -   ✓ Join con dim_upz
+2026-02-20 20:20:59,056 - INFO -   ✓ Join con dim_zonas
+2026-02-20 20:20:59,058 - INFO -   ✓ Join con dim_estrategias
+2026-02-20 20:20:59,059 - INFO -   ✓ Join con dim_enfoques
+2026-02-20 20:20:59,061 - INFO -   ✓ Join con dim_barrios
+2026-02-20 20:20:59,062 - INFO - ✅ Tabla de hechos: 1249 registros, 43 columnas
+2026-02-20 20:20:59,062 - INFO - 💾 Guardando archivos
+2026-02-20 20:20:59,189 - INFO -   ✓ fact_actividades.csv
+2026-02-20 20:20:59,211 - INFO -   ✓ fact_actividades_enriquecido.csv
+2026-02-20 20:20:59,232 - INFO -   ✓ dimensiones/fact_actividades_enriquecido.csv
+2026-02-20 20:20:59,233 - INFO -   ✓ dimensiones/dim_upz.csv
+2026-02-20 20:20:59,233 - INFO -   ✓ dimensiones/dim_zonas.csv
+2026-02-20 20:20:59,234 - INFO -   ✓ dimensiones/dim_estrategias.csv
+2026-02-20 20:20:59,234 - INFO -   ✓ dimensiones/dim_enfoques.csv
+2026-02-20 20:20:59,235 - INFO -   ✓ dimensiones/dim_barrios.csv
+2026-02-20 20:20:59,240 - INFO -   ✓ dimensiones/Dim_Lineas_Estrategicas.csv
+2026-02-20 20:20:59,240 - INFO - ✅ Todos los archivos guardados
+2026-02-20 20:20:59,240 - INFO - ============================================================
+2026-02-20 20:20:59,240 - INFO - 🎉 PIPELINE COMPLETADO EXITOSAMENTE
+2026-02-20 20:20:59,240 - INFO - ⏱️  Duración    : 1.48 s
+2026-02-20 20:20:59,240 - INFO - 📊 Registros   : 1249
+2026-02-20 20:20:59,240 - INFO - 📁 Dimensiones : 6
+2026-02-20 20:20:59,240 - INFO - ============================================================

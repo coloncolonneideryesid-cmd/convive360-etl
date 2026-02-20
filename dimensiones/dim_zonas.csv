@@ -1,9 +1,9 @@
-ID_Zona;Zona;Nombre_Zona;Numero_Zona
-1;Zona 1;Zona 1;1
-2;Zona 2;Zona 2;2
-3;Zona 3;Zona 3;3
-4;Zona 4;Zona 4;4
-5;Zona 5;Zona 5;5
-6;Zona 6;Zona 6;6
-7;Zona 7;Zona 7;7
-8;Zona 8;Zona 8;8
+﻿zona_id;Zona_Enriquecida
+1;Zona 4
+2;Zona 6
+3;Zona 3
+4;Zona 5
+5;Zona 1
+6;Zona 2
+7;Zona 7
+8;Zona 8

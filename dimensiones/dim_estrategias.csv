@@ -1,4 +1,8 @@
-ID_Estrategia;Estrategia;Descripcion
-1;Seguridad;Actividades de Seguridad Ciudadana
-2;Convivencia;Actividades de Convivencia y Reconciliación
-3;Justicia;Actividades de Justicia y Acceso a Derechos
+﻿estrategia_id;Estrategia
+1;Seguridad, Convivencia
+2;Convivencia
+3;Seguridad, Convivencia, Justicia
+4;Seguridad
+5;Convivencia, Justicia
+6;Justicia
+7;Seguridad, Justicia

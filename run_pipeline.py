@@ -189,7 +189,15 @@ def extraer_datos(service: object, sheet_name: str) -> pd.DataFrame:
 # ========================================
 
 def limpiar_datos(df: pd.DataFrame) -> pd.DataFrame:
-    """Limpia y normaliza los datos extraídos"""
+    """
+    Limpia y normaliza los datos extraídos
+    
+    Args:
+        df: DataFrame a limpiar
+        
+    Returns:
+        DataFrame limpio
+    """
     try:
         logger.info("🧹 Iniciando limpieza de datos")
         
@@ -197,9 +205,59 @@ def limpiar_datos(df: pd.DataFrame) -> pd.DataFrame:
         df = df.dropna(how='all')
         logger.info(f"  ✓ Filas vacías eliminadas")
         
-        # Renombrar columnas según el mapeo
-        df = df.rename(columns=COLUMN_MAPPING)
+        # Renombrar columnas según el mapeo - MANEJANDO DUPLICADOS
+        # Crear un nuevo diccionario sin duplicados en los valores
+        columnas_renombradas = {}
+        for col in df.columns:
+            if col in COLUMN_MAPPING:
+                nuevo_nombre = COLUMN_MAPPING[col]
+                # Si ya existe esta columna renombrada, agregar sufijo
+                if nuevo_nombre in columnas_renombradas.values():
+                    # No renombrar duplicados - mantener nombre original por ahora
+                    columnas_renombradas[col] = col
+                else:
+                    columnas_renombradas[col] = nuevo_nombre
+            else:
+                # Mantener columnas que no están en el mapeo
+                columnas_renombradas[col] = col
+        
+        df = df.rename(columns=columnas_renombradas)
         logger.info(f"  ✓ Columnas renombradas")
+        
+        # CONSOLIDAR columnas duplicadas manualmente
+        # Si existen ambas variantes, combinar sus valores
+        columnas_a_consolidar = {
+            'Nombre_Actividad': ['2. Nombre de la actividad', 'Nombre de la Actividad'],
+            'Descripcion_Actividad': ['3. Descripción de la actividad', 'Descripción de la Actividad'],
+            'Responsable_Principal': ['4. Responsables de la actividad', 'Responsables de la actividad'],
+            'Articulacion': ['5. Con quien va articular', 'Con quién va a articular'],
+            'Responsable_Actividad': ['6. Responsable de la actividad', '4. Responsable de la actividad*'],
+            'Enfoque_Actividad': ['5. Enfoque de la actividad', 'Enfoque de la actividad*'],
+            'Estrategia_Impactar': ['6. Estrategia a impactar', 'Estrategia de Impacto'],
+            'UPZ': ['8. UPZ a la Que Pertenece la Actividad', 'UPZ a la Que Pertenece la Actividad'],
+            'Zona': ['9. Zona a la que Pertenece la Actividad', 'Zona a la que Pertenece la Actividad'],
+            'Direccion_Actividad': ['7. Dirección donde se realiza la actividad', 'Dirección donde se realiza la actividad'],
+            'Fecha_Actividad': ['10. Fecha de la actividad', 'Fecha de Actividad'],
+            'Hora_Inicio': ['11. Hora de inicio', 'Hora de Inicio de Actividad'],
+            'Recibir_Correo': ['12. ¿Deseas recibir un correo de confirmación?', '¿Deseas recibir un correo de confirmación?'],
+            'Linea_Convivencia': ['6.2. Líneas Estratégicas de Convivencia', 'Líneas Estratégicas de Convivencia'],
+            'Linea_Seguridad': ['6.1. Líneas Estratégicas de Seguridad', 'Líneas Estratégicas de Seguridad'],
+            'Linea_Justicia': ['6.3. Líneas Estratégicas de Justicia', 'Líneas Estratégicas de Justicia']
+        }
+        
+        for nombre_final, variantes in columnas_a_consolidar.items():
+            # Buscar cuál variante existe en el DataFrame
+            columnas_encontradas = [v for v in variantes if v in df.columns]
+            
+            if len(columnas_encontradas) > 1:
+                # Si hay múltiples variantes, combinarlas
+                df[nombre_final] = df[columnas_encontradas[0]].fillna(df[columnas_encontradas[1]])
+                # Eliminar las columnas originales
+                df = df.drop(columns=columnas_encontradas)
+                logger.info(f"  ✓ Consolidada columna {nombre_final}")
+            elif len(columnas_encontradas) == 1:
+                # Si solo hay una variante, renombrarla
+                df = df.rename(columns={columnas_encontradas[0]: nombre_final})
         
         # Convertir columnas de fecha
         if 'Marca_Temporal' in df.columns:

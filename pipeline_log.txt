@@ -8641,3 +8641,56 @@ Pipeline ejecutado: 2025-11-22 23:30:39
 2026-02-24 19:50:16,449 - INFO - 📁 Dimensiones  : 7
 2026-02-24 19:50:16,449 - INFO - 📋 Columnas fact: 49
 2026-02-24 19:50:16,449 - INFO - ============================================================
+2026-02-24 20:42:55,826 - INFO - ============================================================
+2026-02-24 20:42:55,826 - INFO - 🚀 INICIANDO PIPELINE ETL CONVIVE360 v4
+2026-02-24 20:42:55,826 - INFO - ============================================================
+2026-02-24 20:42:55,828 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-02-24 20:42:55,830 - INFO - ✅ Autenticación exitosa
+2026-02-24 20:42:55,830 - INFO - 📥 Extrayendo: Respuestas de formulario 1
+2026-02-24 20:42:57,318 - INFO - ✅ 611 registros de Respuestas de formulario 1
+2026-02-24 20:42:57,318 - INFO - 📥 Extrayendo: Respuestas de formulario 2
+2026-02-24 20:42:57,654 - INFO - ✅ 646 registros de Respuestas de formulario 2
+2026-02-24 20:42:57,654 - INFO -   F1: 611 | F2: 646 | Esperado: 1257
+2026-02-24 20:42:57,654 - INFO - 🔀 Normalizando columnas por hoja
+2026-02-24 20:42:57,657 - INFO - 🧹 Limpiando: Formulario_1 (611 registros)
+2026-02-24 20:42:57,677 - INFO -   ✓ Formulario_1: 611 registros limpios
+2026-02-24 20:42:57,677 - INFO - 🧹 Limpiando: Formulario_2 (646 registros)
+2026-02-24 20:42:57,688 - INFO -   ✓ Formulario_2: 646 registros limpios
+2026-02-24 20:42:57,688 - INFO - 🔗 Combinando hojas
+2026-02-24 20:42:57,692 - INFO -   ✓ Tras concat: 1257 registros
+2026-02-24 20:42:57,701 - INFO -   ✓ Columnas cruzadas rellenadas con valores por defecto
+2026-02-24 20:42:57,703 - INFO -   ✓ Sin duplicados reales — todos los registros conservados
+2026-02-24 20:42:57,703 - INFO -   ✓ Registros finales: 1257
+2026-02-24 20:42:57,775 - INFO -   ✓ Columnas enriquecidas generadas
+2026-02-24 20:42:57,776 - INFO - 🔑 Generando ID_Actividad
+2026-02-24 20:42:57,879 - INFO -   ✓ 1257 IDs únicos generados
+2026-02-24 20:42:57,879 - INFO - 🔨 Creando dimensiones
+2026-02-24 20:42:57,881 - INFO -   ✓ dim_upz: 5 valores únicos
+2026-02-24 20:42:57,883 - INFO -   ✓ dim_zonas: 8 valores únicos
+2026-02-24 20:42:57,886 - INFO -   ✓ dim_estrategias: 7 valores únicos
+2026-02-24 20:42:57,888 - INFO -   ✓ dim_enfoques: 5 valores únicos
+2026-02-24 20:42:57,890 - INFO -   ✓ dim_estados: 1 valores únicos
+2026-02-24 20:42:57,892 - INFO -   ✓ dim_barrios: 7 valores únicos
+2026-02-24 20:42:57,900 - INFO -   ✓ Dim_Lineas_Estrategicas: 2213 registros
+2026-02-24 20:42:57,900 - INFO - ✅ 7 dimensiones creadas
+2026-02-24 20:42:57,900 - INFO - 📊 Creando tabla de hechos
+2026-02-24 20:42:57,911 - INFO - ✅ Tabla de hechos: 1257 registros, 49 columnas
+2026-02-24 20:42:57,911 - INFO - 💾 Guardando archivos
+2026-02-24 20:42:57,977 - INFO -   ✓ fact_actividades.csv  (1257 registros)
+2026-02-24 20:42:58,000 - INFO -   ✓ fact_actividades_enriquecido.csv  (1257 registros)
+2026-02-24 20:42:58,023 - INFO -   ✓ dimensiones/fact_actividades_enriquecido.csv  (1257 registros)
+2026-02-24 20:42:58,023 - INFO -   ✓ dimensiones/dim_upz.csv  (5 registros)
+2026-02-24 20:42:58,024 - INFO -   ✓ dimensiones/dim_zonas.csv  (8 registros)
+2026-02-24 20:42:58,024 - INFO -   ✓ dimensiones/dim_estrategias.csv  (7 registros)
+2026-02-24 20:42:58,025 - INFO -   ✓ dimensiones/dim_enfoques.csv  (5 registros)
+2026-02-24 20:42:58,026 - INFO -   ✓ dimensiones/dim_estados.csv  (1 registros)
+2026-02-24 20:42:58,026 - INFO -   ✓ dimensiones/dim_barrios.csv  (7 registros)
+2026-02-24 20:42:58,031 - INFO -   ✓ dimensiones/Dim_Lineas_Estrategicas.csv  (2213 registros)
+2026-02-24 20:42:58,031 - INFO - ✅ Todos los archivos guardados
+2026-02-24 20:42:58,032 - INFO - ============================================================
+2026-02-24 20:42:58,032 - INFO - 🎉 PIPELINE COMPLETADO EXITOSAMENTE
+2026-02-24 20:42:58,032 - INFO - ⏱️  Duración     : 2.21 s
+2026-02-24 20:42:58,032 - INFO - 📊 Registros    : 1257
+2026-02-24 20:42:58,032 - INFO - 📁 Dimensiones  : 7
+2026-02-24 20:42:58,032 - INFO - 📋 Columnas fact: 49
+2026-02-24 20:42:58,032 - INFO - ============================================================

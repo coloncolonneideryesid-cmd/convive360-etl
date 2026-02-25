@@ -8906,3 +8906,56 @@ Pipeline ejecutado: 2025-11-22 23:30:39
 2026-02-25 02:40:41,548 - INFO - 📁 Dimensiones  : 7
 2026-02-25 02:40:41,548 - INFO - 📋 Columnas fact: 49
 2026-02-25 02:40:41,548 - INFO - ============================================================
+2026-02-25 04:57:58,516 - INFO - ============================================================
+2026-02-25 04:57:58,516 - INFO - 🚀 INICIANDO PIPELINE ETL CONVIVE360 v4
+2026-02-25 04:57:58,516 - INFO - ============================================================
+2026-02-25 04:57:58,518 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-02-25 04:57:58,520 - INFO - ✅ Autenticación exitosa
+2026-02-25 04:57:58,520 - INFO - 📥 Extrayendo: Respuestas de formulario 1
+2026-02-25 04:58:00,024 - INFO - ✅ 611 registros de Respuestas de formulario 1
+2026-02-25 04:58:00,024 - INFO - 📥 Extrayendo: Respuestas de formulario 2
+2026-02-25 04:58:00,384 - INFO - ✅ 646 registros de Respuestas de formulario 2
+2026-02-25 04:58:00,384 - INFO -   F1: 611 | F2: 646 | Esperado: 1257
+2026-02-25 04:58:00,384 - INFO - 🔀 Normalizando columnas por hoja
+2026-02-25 04:58:00,386 - INFO - 🧹 Limpiando: Formulario_1 (611 registros)
+2026-02-25 04:58:00,398 - INFO -   ✓ Formulario_1: 611 registros limpios
+2026-02-25 04:58:00,398 - INFO - 🧹 Limpiando: Formulario_2 (646 registros)
+2026-02-25 04:58:00,405 - INFO -   ✓ Formulario_2: 646 registros limpios
+2026-02-25 04:58:00,405 - INFO - 🔗 Combinando hojas
+2026-02-25 04:58:00,408 - INFO -   ✓ Tras concat: 1257 registros
+2026-02-25 04:58:00,414 - INFO -   ✓ Columnas cruzadas rellenadas con valores por defecto
+2026-02-25 04:58:00,416 - INFO -   ✓ Sin duplicados reales — todos los registros conservados
+2026-02-25 04:58:00,417 - INFO -   ✓ Registros finales: 1257
+2026-02-25 04:58:00,489 - INFO -   ✓ Columnas enriquecidas generadas
+2026-02-25 04:58:00,489 - INFO - 🔑 Generando ID_Actividad
+2026-02-25 04:58:00,594 - INFO -   ✓ 1257 IDs únicos generados
+2026-02-25 04:58:00,594 - INFO - 🔨 Creando dimensiones
+2026-02-25 04:58:00,597 - INFO -   ✓ dim_upz: 5 valores únicos
+2026-02-25 04:58:00,599 - INFO -   ✓ dim_zonas: 8 valores únicos
+2026-02-25 04:58:00,601 - INFO -   ✓ dim_estrategias: 7 valores únicos
+2026-02-25 04:58:00,603 - INFO -   ✓ dim_enfoques: 5 valores únicos
+2026-02-25 04:58:00,605 - INFO -   ✓ dim_estados: 1 valores únicos
+2026-02-25 04:58:00,608 - INFO -   ✓ dim_barrios: 7 valores únicos
+2026-02-25 04:58:00,616 - INFO -   ✓ Dim_Lineas_Estrategicas: 2213 registros
+2026-02-25 04:58:00,616 - INFO - ✅ 7 dimensiones creadas
+2026-02-25 04:58:00,616 - INFO - 📊 Creando tabla de hechos
+2026-02-25 04:58:00,628 - INFO - ✅ Tabla de hechos: 1257 registros, 49 columnas
+2026-02-25 04:58:00,628 - INFO - 💾 Guardando archivos
+2026-02-25 04:58:00,680 - INFO -   ✓ fact_actividades.csv  (1257 registros)
+2026-02-25 04:58:00,704 - INFO -   ✓ fact_actividades_enriquecido.csv  (1257 registros)
+2026-02-25 04:58:00,727 - INFO -   ✓ dimensiones/fact_actividades_enriquecido.csv  (1257 registros)
+2026-02-25 04:58:00,728 - INFO -   ✓ dimensiones/dim_upz.csv  (5 registros)
+2026-02-25 04:58:00,729 - INFO -   ✓ dimensiones/dim_zonas.csv  (8 registros)
+2026-02-25 04:58:00,730 - INFO -   ✓ dimensiones/dim_estrategias.csv  (7 registros)
+2026-02-25 04:58:00,730 - INFO -   ✓ dimensiones/dim_enfoques.csv  (5 registros)
+2026-02-25 04:58:00,731 - INFO -   ✓ dimensiones/dim_estados.csv  (1 registros)
+2026-02-25 04:58:00,731 - INFO -   ✓ dimensiones/dim_barrios.csv  (7 registros)
+2026-02-25 04:58:00,737 - INFO -   ✓ dimensiones/Dim_Lineas_Estrategicas.csv  (2213 registros)
+2026-02-25 04:58:00,737 - INFO - ✅ Todos los archivos guardados
+2026-02-25 04:58:00,737 - INFO - ============================================================
+2026-02-25 04:58:00,737 - INFO - 🎉 PIPELINE COMPLETADO EXITOSAMENTE
+2026-02-25 04:58:00,737 - INFO - ⏱️  Duración     : 2.22 s
+2026-02-25 04:58:00,737 - INFO - 📊 Registros    : 1257
+2026-02-25 04:58:00,737 - INFO - 📁 Dimensiones  : 7
+2026-02-25 04:58:00,737 - INFO - 📋 Columnas fact: 49
+2026-02-25 04:58:00,737 - INFO - ============================================================

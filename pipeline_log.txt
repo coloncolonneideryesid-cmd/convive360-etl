@@ -9542,3 +9542,56 @@ Pipeline ejecutado: 2025-11-22 23:30:39
 2026-02-25 20:41:52,480 - INFO - 📁 Dimensiones  : 7
 2026-02-25 20:41:52,481 - INFO - 📋 Columnas fact: 49
 2026-02-25 20:41:52,481 - INFO - ============================================================
+2026-02-25 21:39:54,192 - INFO - ============================================================
+2026-02-25 21:39:54,192 - INFO - 🚀 INICIANDO PIPELINE ETL CONVIVE360 v4
+2026-02-25 21:39:54,192 - INFO - ============================================================
+2026-02-25 21:39:54,194 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-02-25 21:39:54,197 - INFO - ✅ Autenticación exitosa
+2026-02-25 21:39:54,197 - INFO - 📥 Extrayendo: Respuestas de formulario 1
+2026-02-25 21:39:55,134 - INFO - ✅ 612 registros de Respuestas de formulario 1
+2026-02-25 21:39:55,134 - INFO - 📥 Extrayendo: Respuestas de formulario 2
+2026-02-25 21:39:55,287 - INFO - ✅ 646 registros de Respuestas de formulario 2
+2026-02-25 21:39:55,288 - INFO -   F1: 612 | F2: 646 | Esperado: 1258
+2026-02-25 21:39:55,288 - INFO - 🔀 Normalizando columnas por hoja
+2026-02-25 21:39:55,290 - INFO - 🧹 Limpiando: Formulario_1 (612 registros)
+2026-02-25 21:39:55,303 - INFO -   ✓ Formulario_1: 612 registros limpios
+2026-02-25 21:39:55,303 - INFO - 🧹 Limpiando: Formulario_2 (646 registros)
+2026-02-25 21:39:55,311 - INFO -   ✓ Formulario_2: 646 registros limpios
+2026-02-25 21:39:55,311 - INFO - 🔗 Combinando hojas
+2026-02-25 21:39:55,314 - INFO -   ✓ Tras concat: 1258 registros
+2026-02-25 21:39:55,319 - INFO -   ✓ Columnas cruzadas rellenadas con valores por defecto
+2026-02-25 21:39:55,323 - INFO -   ✓ Sin duplicados reales — todos los registros conservados
+2026-02-25 21:39:55,323 - INFO -   ✓ Registros finales: 1258
+2026-02-25 21:39:55,370 - INFO -   ✓ Columnas enriquecidas generadas
+2026-02-25 21:39:55,371 - INFO - 🔑 Generando ID_Actividad
+2026-02-25 21:39:55,441 - INFO -   ✓ 1258 IDs únicos generados
+2026-02-25 21:39:55,441 - INFO - 🔨 Creando dimensiones
+2026-02-25 21:39:55,444 - INFO -   ✓ dim_upz: 5 valores únicos
+2026-02-25 21:39:55,446 - INFO -   ✓ dim_zonas: 8 valores únicos
+2026-02-25 21:39:55,449 - INFO -   ✓ dim_estrategias: 7 valores únicos
+2026-02-25 21:39:55,451 - INFO -   ✓ dim_enfoques: 5 valores únicos
+2026-02-25 21:39:55,453 - INFO -   ✓ dim_estados: 1 valores únicos
+2026-02-25 21:39:55,456 - INFO -   ✓ dim_barrios: 7 valores únicos
+2026-02-25 21:39:55,463 - INFO -   ✓ Dim_Lineas_Estrategicas: 2215 registros
+2026-02-25 21:39:55,463 - INFO - ✅ 7 dimensiones creadas
+2026-02-25 21:39:55,463 - INFO - 📊 Creando tabla de hechos
+2026-02-25 21:39:55,475 - INFO - ✅ Tabla de hechos: 1258 registros, 49 columnas
+2026-02-25 21:39:55,475 - INFO - 💾 Guardando archivos
+2026-02-25 21:39:55,534 - INFO -   ✓ fact_actividades.csv  (1258 registros)
+2026-02-25 21:39:55,559 - INFO -   ✓ fact_actividades_enriquecido.csv  (1258 registros)
+2026-02-25 21:39:55,585 - INFO -   ✓ dimensiones/fact_actividades_enriquecido.csv  (1258 registros)
+2026-02-25 21:39:55,586 - INFO -   ✓ dimensiones/dim_upz.csv  (5 registros)
+2026-02-25 21:39:55,586 - INFO -   ✓ dimensiones/dim_zonas.csv  (8 registros)
+2026-02-25 21:39:55,587 - INFO -   ✓ dimensiones/dim_estrategias.csv  (7 registros)
+2026-02-25 21:39:55,587 - INFO -   ✓ dimensiones/dim_enfoques.csv  (5 registros)
+2026-02-25 21:39:55,588 - INFO -   ✓ dimensiones/dim_estados.csv  (1 registros)
+2026-02-25 21:39:55,588 - INFO -   ✓ dimensiones/dim_barrios.csv  (7 registros)
+2026-02-25 21:39:55,594 - INFO -   ✓ dimensiones/Dim_Lineas_Estrategicas.csv  (2215 registros)
+2026-02-25 21:39:55,594 - INFO - ✅ Todos los archivos guardados
+2026-02-25 21:39:55,594 - INFO - ============================================================
+2026-02-25 21:39:55,594 - INFO - 🎉 PIPELINE COMPLETADO EXITOSAMENTE
+2026-02-25 21:39:55,594 - INFO - ⏱️  Duración     : 1.40 s
+2026-02-25 21:39:55,595 - INFO - 📊 Registros    : 1258
+2026-02-25 21:39:55,595 - INFO - 📁 Dimensiones  : 7
+2026-02-25 21:39:55,595 - INFO - 📋 Columnas fact: 49
+2026-02-25 21:39:55,595 - INFO - ============================================================

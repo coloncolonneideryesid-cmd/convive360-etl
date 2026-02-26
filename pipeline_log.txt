@@ -9701,3 +9701,56 @@ Pipeline ejecutado: 2025-11-22 23:30:39
 2026-02-25 23:34:52,873 - INFO - 📁 Dimensiones  : 7
 2026-02-25 23:34:52,873 - INFO - 📋 Columnas fact: 49
 2026-02-25 23:34:52,873 - INFO - ============================================================
+2026-02-26 02:35:58,706 - INFO - ============================================================
+2026-02-26 02:35:58,706 - INFO - 🚀 INICIANDO PIPELINE ETL CONVIVE360 v4
+2026-02-26 02:35:58,706 - INFO - ============================================================
+2026-02-26 02:35:58,708 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-02-26 02:35:58,710 - INFO - ✅ Autenticación exitosa
+2026-02-26 02:35:58,710 - INFO - 📥 Extrayendo: Respuestas de formulario 1
+2026-02-26 02:35:59,507 - INFO - ✅ 614 registros de Respuestas de formulario 1
+2026-02-26 02:35:59,508 - INFO - 📥 Extrayendo: Respuestas de formulario 2
+2026-02-26 02:35:59,696 - INFO - ✅ 646 registros de Respuestas de formulario 2
+2026-02-26 02:35:59,696 - INFO -   F1: 614 | F2: 646 | Esperado: 1260
+2026-02-26 02:35:59,696 - INFO - 🔀 Normalizando columnas por hoja
+2026-02-26 02:35:59,699 - INFO - 🧹 Limpiando: Formulario_1 (614 registros)
+2026-02-26 02:35:59,711 - INFO -   ✓ Formulario_1: 614 registros limpios
+2026-02-26 02:35:59,711 - INFO - 🧹 Limpiando: Formulario_2 (646 registros)
+2026-02-26 02:35:59,718 - INFO -   ✓ Formulario_2: 646 registros limpios
+2026-02-26 02:35:59,718 - INFO - 🔗 Combinando hojas
+2026-02-26 02:35:59,721 - INFO -   ✓ Tras concat: 1260 registros
+2026-02-26 02:35:59,727 - INFO -   ✓ Columnas cruzadas rellenadas con valores por defecto
+2026-02-26 02:35:59,730 - INFO -   ✓ Sin duplicados reales — todos los registros conservados
+2026-02-26 02:35:59,730 - INFO -   ✓ Registros finales: 1260
+2026-02-26 02:35:59,803 - INFO -   ✓ Columnas enriquecidas generadas
+2026-02-26 02:35:59,803 - INFO - 🔑 Generando ID_Actividad
+2026-02-26 02:35:59,906 - INFO -   ✓ 1260 IDs únicos generados
+2026-02-26 02:35:59,907 - INFO - 🔨 Creando dimensiones
+2026-02-26 02:35:59,909 - INFO -   ✓ dim_upz: 5 valores únicos
+2026-02-26 02:35:59,912 - INFO -   ✓ dim_zonas: 8 valores únicos
+2026-02-26 02:35:59,914 - INFO -   ✓ dim_estrategias: 7 valores únicos
+2026-02-26 02:35:59,916 - INFO -   ✓ dim_enfoques: 5 valores únicos
+2026-02-26 02:35:59,918 - INFO -   ✓ dim_estados: 1 valores únicos
+2026-02-26 02:35:59,921 - INFO -   ✓ dim_barrios: 7 valores únicos
+2026-02-26 02:35:59,929 - INFO -   ✓ Dim_Lineas_Estrategicas: 2219 registros
+2026-02-26 02:35:59,929 - INFO - ✅ 7 dimensiones creadas
+2026-02-26 02:35:59,929 - INFO - 📊 Creando tabla de hechos
+2026-02-26 02:35:59,941 - INFO - ✅ Tabla de hechos: 1260 registros, 49 columnas
+2026-02-26 02:35:59,941 - INFO - 💾 Guardando archivos
+2026-02-26 02:36:00,031 - INFO -   ✓ fact_actividades.csv  (1260 registros)
+2026-02-26 02:36:00,056 - INFO -   ✓ fact_actividades_enriquecido.csv  (1260 registros)
+2026-02-26 02:36:00,081 - INFO -   ✓ dimensiones/fact_actividades_enriquecido.csv  (1260 registros)
+2026-02-26 02:36:00,082 - INFO -   ✓ dimensiones/dim_upz.csv  (5 registros)
+2026-02-26 02:36:00,083 - INFO -   ✓ dimensiones/dim_zonas.csv  (8 registros)
+2026-02-26 02:36:00,083 - INFO -   ✓ dimensiones/dim_estrategias.csv  (7 registros)
+2026-02-26 02:36:00,084 - INFO -   ✓ dimensiones/dim_enfoques.csv  (5 registros)
+2026-02-26 02:36:00,084 - INFO -   ✓ dimensiones/dim_estados.csv  (1 registros)
+2026-02-26 02:36:00,085 - INFO -   ✓ dimensiones/dim_barrios.csv  (7 registros)
+2026-02-26 02:36:00,091 - INFO -   ✓ dimensiones/Dim_Lineas_Estrategicas.csv  (2219 registros)
+2026-02-26 02:36:00,091 - INFO - ✅ Todos los archivos guardados
+2026-02-26 02:36:00,091 - INFO - ============================================================
+2026-02-26 02:36:00,091 - INFO - 🎉 PIPELINE COMPLETADO EXITOSAMENTE
+2026-02-26 02:36:00,091 - INFO - ⏱️  Duración     : 1.38 s
+2026-02-26 02:36:00,091 - INFO - 📊 Registros    : 1260
+2026-02-26 02:36:00,091 - INFO - 📁 Dimensiones  : 7
+2026-02-26 02:36:00,091 - INFO - 📋 Columnas fact: 49
+2026-02-26 02:36:00,091 - INFO - ============================================================

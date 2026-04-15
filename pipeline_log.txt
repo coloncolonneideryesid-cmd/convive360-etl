@@ -53055,3 +53055,56 @@ Pipeline ejecutado: 2025-11-22 23:30:39
 2026-04-15 22:55:29,316 - INFO - 📁 Dimensiones  : 7
 2026-04-15 22:55:29,316 - INFO - 📋 Columnas fact: 50
 2026-04-15 22:55:29,316 - INFO - ============================================================
+2026-04-15 23:50:47,093 - INFO - ============================================================
+2026-04-15 23:50:47,093 - INFO - 🚀 INICIANDO PIPELINE ETL CONVIVE360 v4
+2026-04-15 23:50:47,093 - INFO - ============================================================
+2026-04-15 23:50:47,095 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-04-15 23:50:47,097 - INFO - ✅ Autenticación exitosa
+2026-04-15 23:50:47,097 - INFO - 📥 Extrayendo: Respuestas de formulario 1
+2026-04-15 23:50:47,894 - INFO - ✅ 869 registros de Respuestas de formulario 1
+2026-04-15 23:50:47,894 - INFO - 📥 Extrayendo: Respuestas de formulario 2
+2026-04-15 23:50:48,208 - INFO - ✅ 646 registros de Respuestas de formulario 2
+2026-04-15 23:50:48,208 - INFO -   F1: 869 | F2: 646 | Esperado: 1515
+2026-04-15 23:50:48,208 - INFO - 🔀 Normalizando columnas por hoja
+2026-04-15 23:50:48,211 - INFO - 🧹 Limpiando: Formulario_1 (869 registros)
+2026-04-15 23:50:48,224 - INFO -   ✓ Formulario_1: 869 registros limpios
+2026-04-15 23:50:48,225 - INFO - 🧹 Limpiando: Formulario_2 (646 registros)
+2026-04-15 23:50:48,232 - INFO -   ✓ Formulario_2: 646 registros limpios
+2026-04-15 23:50:48,232 - INFO - 🔗 Combinando hojas
+2026-04-15 23:50:48,234 - INFO -   ✓ Tras concat: 1515 registros
+2026-04-15 23:50:48,240 - INFO -   ✓ Columnas cruzadas rellenadas con valores por defecto
+2026-04-15 23:50:48,243 - INFO -   ✓ Sin duplicados reales — todos los registros conservados
+2026-04-15 23:50:48,243 - INFO -   ✓ Registros finales: 1515
+2026-04-15 23:50:48,331 - INFO -   ✓ Columnas enriquecidas generadas
+2026-04-15 23:50:48,331 - INFO - 🔑 Generando ID_Actividad
+2026-04-15 23:50:48,457 - INFO -   ✓ 1515 IDs únicos generados
+2026-04-15 23:50:48,457 - INFO - 🔨 Creando dimensiones
+2026-04-15 23:50:48,460 - INFO -   ✓ dim_upz: 6 valores únicos
+2026-04-15 23:50:48,462 - INFO -   ✓ dim_zonas: 8 valores únicos
+2026-04-15 23:50:48,464 - INFO -   ✓ dim_estrategias: 8 valores únicos
+2026-04-15 23:50:48,467 - INFO -   ✓ dim_enfoques: 5 valores únicos
+2026-04-15 23:50:48,469 - INFO -   ✓ dim_estados: 1 valores únicos
+2026-04-15 23:50:48,472 - INFO -   ✓ dim_barrios: 20 valores únicos
+2026-04-15 23:50:48,479 - INFO -   ✓ Dim_Lineas_Estrategicas: 2723 registros
+2026-04-15 23:50:48,479 - INFO - ✅ 7 dimensiones creadas
+2026-04-15 23:50:48,480 - INFO - 📊 Creando tabla de hechos
+2026-04-15 23:50:48,492 - INFO - ✅ Tabla de hechos: 1515 registros, 50 columnas
+2026-04-15 23:50:48,492 - INFO - 💾 Guardando archivos
+2026-04-15 23:50:48,523 - INFO -   ✓ fact_actividades.csv  (1515 registros)
+2026-04-15 23:50:48,552 - INFO -   ✓ fact_actividades_enriquecido.csv  (1515 registros)
+2026-04-15 23:50:48,581 - INFO -   ✓ dimensiones/fact_actividades_enriquecido.csv  (1515 registros)
+2026-04-15 23:50:48,582 - INFO -   ✓ dimensiones/dim_upz.csv  (6 registros)
+2026-04-15 23:50:48,583 - INFO -   ✓ dimensiones/dim_zonas.csv  (8 registros)
+2026-04-15 23:50:48,583 - INFO -   ✓ dimensiones/dim_estrategias.csv  (8 registros)
+2026-04-15 23:50:48,584 - INFO -   ✓ dimensiones/dim_enfoques.csv  (5 registros)
+2026-04-15 23:50:48,584 - INFO -   ✓ dimensiones/dim_estados.csv  (1 registros)
+2026-04-15 23:50:48,585 - INFO -   ✓ dimensiones/dim_barrios.csv  (20 registros)
+2026-04-15 23:50:48,591 - INFO -   ✓ dimensiones/Dim_Lineas_Estrategicas.csv  (2723 registros)
+2026-04-15 23:50:48,591 - INFO - ✅ Todos los archivos guardados
+2026-04-15 23:50:48,591 - INFO - ============================================================
+2026-04-15 23:50:48,592 - INFO - 🎉 PIPELINE COMPLETADO EXITOSAMENTE
+2026-04-15 23:50:48,592 - INFO - ⏱️  Duración     : 1.50 s
+2026-04-15 23:50:48,592 - INFO - 📊 Registros    : 1515
+2026-04-15 23:50:48,592 - INFO - 📁 Dimensiones  : 7
+2026-04-15 23:50:48,592 - INFO - 📋 Columnas fact: 50
+2026-04-15 23:50:48,592 - INFO - ============================================================

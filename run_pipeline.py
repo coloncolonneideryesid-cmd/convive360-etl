@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
 Pipeline ETL para Convive360 - Alcaldía Local de San Cristóbal
-Versión CORREGIDA v4:
+Versión CORREGIDA v4.1:
+  - FIX: 'Area Solicitante' mapeada a Responsable_Principal
+  - FIX: Rango de extracción ampliado de A:AB a A:AD (30 columnas)
   - 0 registros perdidos: drop_duplicates solo por clave de negocio real
   - 0 celdas en blanco artificiales: columnas exclusivas de cada formulario
     se rellenan con 'N/A' o valor por defecto tras el concat
@@ -43,10 +45,9 @@ CSV_SEP = ';'
 CSV_ENC = 'utf-8-sig'
 
 # Clave de negocio para detectar duplicados REALES
-# (mismo formulario enviado dos veces accidentalmente)
 CLAVE_DUPLICADO = ['Marca_Temporal', 'Email_Responsable', 'Nombre_Actividad']
 
-# Columnas que SOLO existen en Formulario 1 → en F2 quedarán vacías tras concat
+# Columnas que SOLO existen en Formulario 1
 SOLO_FORMULARIO_1 = [
     'Enmarca_En',
     'Barrios_UPZ32',
@@ -56,10 +57,10 @@ SOLO_FORMULARIO_1 = [
     'Barrios_UPZ50',
     'Linea_Seguridad',
     'Linea_Justicia',
-    'Linea_Convivencia',  # en F1 tiene nombre distinto pero se mapea igual
+    'Linea_Convivencia',
 ]
 
-# Columnas que SOLO existen en Formulario 2 → en F1 quedarán vacías tras concat
+# Columnas que SOLO existen en Formulario 2
 SOLO_FORMULARIO_2 = [
     'Enfoque_Estrategico',
 ]
@@ -77,6 +78,10 @@ COLUMN_MAPPING = {
     'Descripción de la Actividad':                    'Descripcion_Actividad',
     '4. Responsables de la actividad':                'Responsable_Principal',
     'Responsables de la actividad':                   'Responsable_Principal',
+    # ── FIX: nueva columna insertada en abril 2026 ──────────────────────────
+    'Area Solicitante':                               'Responsable_Principal',
+    'Área Solicitante':                               'Responsable_Principal',
+    # ────────────────────────────────────────────────────────────────────────
     '5. Con quien va articular':                      'Articulacion',
     'Con quién va a articular':                       'Articulacion',
     '6. Responsable de la actividad':                 'Responsable_Actividad',
@@ -142,13 +147,13 @@ def extraer_datos(service: object, sheet_name: str) -> pd.DataFrame:
     logger.info(f"📥 Extrayendo: {sheet_name}")
     result = service.spreadsheets().values().get(
         spreadsheetId=SPREADSHEET_ID,
-        range=f"{sheet_name}!A:AB"
+        range=f"{sheet_name}!A:AD"      # ← FIX: era A:AB (28 cols), ahora A:AD (30 cols)
     ).execute()
     values = result.get('values', [])
     if not values:
         logger.warning(f"⚠️ Sin datos en {sheet_name}")
         return pd.DataFrame()
-    # Normalizar filas con menos columnas que el header (evita errores de longitud)
+    # Normalizar filas con menos columnas que el header
     header = values[0]
     rows = [row + [''] * (len(header) - len(row)) for row in values[1:]]
     df = pd.DataFrame(rows, columns=header)
@@ -163,9 +168,8 @@ def normalizar_columnas(df: pd.DataFrame) -> pd.DataFrame:
     """
     Renombra y consolida columnas en un DataFrame INDIVIDUAL antes del concat.
     Evita el error 'cannot assemble with duplicate keys'.
-    También elimina espacios extras en nombres de columnas (ej: última col de F2).
+    También elimina espacios extras en nombres de columnas.
     """
-    # Limpiar espacios en nombres de columnas
     df.columns = [c.strip() for c in df.columns]
 
     nombres_usados: Dict[str, list] = {}
@@ -196,21 +200,14 @@ def normalizar_columnas(df: pd.DataFrame) -> pd.DataFrame:
 # ========================================
 
 def limpiar_datos(df: pd.DataFrame, hoja_origen: str) -> pd.DataFrame:
-    """
-    Limpia una hoja individual ANTES del concat.
-    NO hace drop_duplicates aquí (se hace después del concat con clave real).
-    """
     logger.info(f"🧹 Limpiando: {hoja_origen} ({len(df)} registros)")
 
-    # Eliminar filas donde TODAS las columnas estén vacías
     df = df.replace('', pd.NA)
     df = df.dropna(how='all')
-    df = df.replace(pd.NA, '')  # Volver a string vacío para manejo consistente
+    df = df.replace(pd.NA, '')
 
-    # Etiqueta de origen
     df['Hoja_Origen'] = hoja_origen
 
-    # Fechas
     for col in ['Marca_Temporal', 'Fecha_Actividad', 'Fecha_Cancelacion']:
         if col in df.columns:
             df[col] = pd.to_datetime(df[col], dayfirst=True, errors='coerce')
@@ -220,47 +217,31 @@ def limpiar_datos(df: pd.DataFrame, hoja_origen: str) -> pd.DataFrame:
 
 
 def rellenar_columnas_cruzadas(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    FIX CELDAS EN BLANCO:
-    Tras el concat, las columnas exclusivas de cada formulario quedan NaN
-    en las filas del otro formulario. Las rellenamos con 'N/A' para que
-    Power BI no muestre celdas vacías.
-    
-    Formulario 1 tiene: Enmarca_En, Barrios_*, Linea_Seguridad, Linea_Justicia
-    Formulario 2 tiene: Enfoque_Estrategico, solo Linea_Convivencia
-    Ambos pueden no tener: Articulacion, Estado, ID_Evento, etc.
-    """
-    # Columnas que deben existir siempre con valor por defecto
     defaults = {
-        # Columnas opcionales de formulario 1
-        'Enmarca_En':        'No especificado',
-        'Barrios_UPZ32':     'N/A',
-        'Barrios_UPZ33':     'N/A',
-        'Barrios_UPZ34':     'N/A',
-        'Barrios_UPZ51':     'N/A',
-        'Barrios_UPZ50':     'N/A',
-        'Linea_Seguridad':   'No aplica',
-        'Linea_Justicia':    'No aplica',
-        'Linea_Convivencia': 'No aplica',
-        # Columnas opcionales de formulario 2
-        'Enfoque_Estrategico': 'No especificado',
-        # Columnas opcionales generales
-        'Articulacion':       'N/A',
-        'Estado':             'Pendiente',
-        'ID_Evento':          '',
-        'Quien_Rechazo':      '',
-        'Fecha_Cancelacion':  '',
-        'Recibir_Correo':     'No',
-        'Enfoque_Actividad':  'No especificado',
+        'Enmarca_En':            'No especificado',
+        'Barrios_UPZ32':         'N/A',
+        'Barrios_UPZ33':         'N/A',
+        'Barrios_UPZ34':         'N/A',
+        'Barrios_UPZ51':         'N/A',
+        'Barrios_UPZ50':         'N/A',
+        'Linea_Seguridad':       'No aplica',
+        'Linea_Justicia':        'No aplica',
+        'Linea_Convivencia':     'No aplica',
+        'Enfoque_Estrategico':   'No especificado',
+        'Articulacion':          'N/A',
+        'Estado':                'Pendiente',
+        'ID_Evento':             '',
+        'Quien_Rechazo':         '',
+        'Fecha_Cancelacion':     '',
+        'Recibir_Correo':        'No',
+        'Enfoque_Actividad':     'No especificado',
         'Responsable_Actividad': 'No especificado',
     }
 
     for col, default_val in defaults.items():
         if col in df.columns:
-            # Reemplazar NaN y string vacío con el valor por defecto
             df[col] = df[col].replace('', pd.NA).fillna(default_val)
         else:
-            # Si la columna no existe en absoluto, crearla con el default
             df[col] = default_val
 
     logger.info("  ✓ Columnas cruzadas rellenadas con valores por defecto")
@@ -268,11 +249,6 @@ def rellenar_columnas_cruzadas(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def enriquecer_datos(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Genera las columnas derivadas que usa el modelo Power BI:
-    UPZ_Enriquecida, Zona_Enriquecida, Estrategia, Barrio_Extraido.
-    """
-    # Columnas enriquecidas requeridas por Power BI
     df['UPZ_Enriquecida']  = df['UPZ'].astype(str).str.strip()  if 'UPZ'  in df.columns else 'Sin UPZ'
     df['Zona_Enriquecida'] = df['Zona'].astype(str).str.strip()  if 'Zona' in df.columns else 'Sin Zona'
     df['Estrategia'] = (
@@ -280,7 +256,6 @@ def enriquecer_datos(df: pd.DataFrame) -> pd.DataFrame:
         if 'Estrategia_Impactar' in df.columns else 'Sin estrategia'
     )
 
-    # Barrio consolidado desde columnas por UPZ
     df['Barrio_Extraido'] = 'Sin barrio'
     upz_barrio_map = {
         '32': 'Barrios_UPZ32',
@@ -307,12 +282,8 @@ def enriquecer_datos(df: pd.DataFrame) -> pd.DataFrame:
 # ========================================
 
 def generar_id_actividad(row, idx: int) -> str:
-    """
-    Hash MD5 con índice de fila incluido → unicidad absoluta garantizada.
-    Soluciona: 'ID_Actividad contiene un valor duplicado'
-    """
     campos = (
-        f"{idx}"                                    # índice garantiza unicidad
+        f"{idx}"
         f"|{row.get('Marca_Temporal', '')}"
         f"|{row.get('Nombre_Actividad', '')}"
         f"|{row.get('Fecha_Actividad', '')}"
@@ -343,24 +314,39 @@ def crear_dimensiones(df: pd.DataFrame) -> Dict[str, pd.DataFrame]:
         dimensiones[nombre] = d
         logger.info(f"  ✓ {nombre}: {len(d)} valores únicos")
 
-    dim_simple('UPZ_Enriquecida',  'upz_id',        'dim_upz')
-    dim_simple('Zona_Enriquecida', 'zona_id',        'dim_zonas')
-    dim_simple('Estrategia',       'estrategia_id',  'dim_estrategias')
-    dim_simple('Enfoque_Actividad','enfoque_id',     'dim_enfoques')
-    dim_simple('Estado',           'estado_id',      'dim_estados')
+    dim_simple('UPZ_Enriquecida',   'upz_id',       'dim_upz')
+    dim_simple('Zona_Enriquecida',  'zona_id',       'dim_zonas')
+    dim_simple('Estrategia',        'estrategia_id', 'dim_estrategias')
+    dim_simple('Enfoque_Actividad', 'enfoque_id',    'dim_enfoques')
+    dim_simple('Estado',            'estado_id',     'dim_estados')
+
+    # dim_areas → nueva dimensión para Responsable_Principal (áreas)
+    if 'Responsable_Principal' in df.columns:
+        d = df[['Responsable_Principal']].copy()
+        d['Responsable_Principal'] = d['Responsable_Principal'].astype(str).str.strip()
+        d = d[
+            d['Responsable_Principal'].notna() &
+            (d['Responsable_Principal'] != '') &
+            (d['Responsable_Principal'] != 'nan') &
+            (d['Responsable_Principal'] != 'No especificado')
+        ]
+        d = d.drop_duplicates().reset_index(drop=True)
+        d.insert(0, 'area_id', range(1, len(d) + 1))
+        dimensiones['dim_areas'] = d
+        logger.info(f"  ✓ dim_areas: {len(d)} valores únicos")
 
     # dim_barrios
     if 'Barrio_Extraido' in df.columns and 'UPZ_Enriquecida' in df.columns:
         d = df[['Barrio_Extraido', 'UPZ_Enriquecida']].copy()
-        d['Barrio_Extraido']  = d['Barrio_Extraido'].astype(str).str.strip()
-        d['UPZ_Enriquecida']  = d['UPZ_Enriquecida'].astype(str).str.strip()
+        d['Barrio_Extraido'] = d['Barrio_Extraido'].astype(str).str.strip()
+        d['UPZ_Enriquecida'] = d['UPZ_Enriquecida'].astype(str).str.strip()
         d = d[d['Barrio_Extraido'].notna() & (d['Barrio_Extraido'] != '') & (d['Barrio_Extraido'] != 'Sin barrio')]
         d = d.drop_duplicates().reset_index(drop=True)
         d.insert(0, 'barrio_id', range(1, len(d) + 1))
         dimensiones['dim_barrios'] = d
         logger.info(f"  ✓ dim_barrios: {len(d)} valores únicos")
 
-    # Dim_Lineas_Estrategicas → requerida por USERELATIONSHIP en DAX
+    # Dim_Lineas_Estrategicas
     lineas = []
     for col_linea, tipo in [
         ('Linea_Seguridad',   'Seguridad'),
@@ -398,11 +384,12 @@ def crear_tabla_hechos(df: pd.DataFrame, dimensiones: Dict[str, pd.DataFrame]) -
     fact = df.copy()
 
     joins = [
-        ('dim_upz',         'UPZ_Enriquecida',  'UPZ_Enriquecida'),
-        ('dim_zonas',       'Zona_Enriquecida',  'Zona_Enriquecida'),
-        ('dim_estrategias', 'Estrategia',         'Estrategia'),
-        ('dim_enfoques',    'Enfoque_Actividad',  'Enfoque_Actividad'),
-        ('dim_estados',     'Estado',             'Estado'),
+        ('dim_upz',         'UPZ_Enriquecida',       'UPZ_Enriquecida'),
+        ('dim_zonas',       'Zona_Enriquecida',       'Zona_Enriquecida'),
+        ('dim_estrategias', 'Estrategia',              'Estrategia'),
+        ('dim_enfoques',    'Enfoque_Actividad',       'Enfoque_Actividad'),
+        ('dim_estados',     'Estado',                  'Estado'),
+        ('dim_areas',       'Responsable_Principal',   'Responsable_Principal'),  # ← nuevo join
     ]
 
     for nombre_dim, col_fact, col_dim in joins:
@@ -421,7 +408,6 @@ def crear_tabla_hechos(df: pd.DataFrame, dimensiones: Dict[str, pd.DataFrame]) -
             how='left'
         )
 
-    # Limpiar columnas _x / _y generadas por los merges
     cols_limpias = [c for c in fact.columns if not c.endswith('_x') and not c.endswith('_y')]
     fact = fact[cols_limpias]
 
@@ -433,7 +419,6 @@ def crear_tabla_hechos(df: pd.DataFrame, dimensiones: Dict[str, pd.DataFrame]) -
 # ========================================
 
 def guardar_csv(df: pd.DataFrame, path: str) -> None:
-    """Todos los CSV con sep=';' y utf-8-sig para Power BI."""
     df.to_csv(path, index=False, encoding=CSV_ENC, sep=CSV_SEP)
     logger.info(f"  ✓ {path}  ({len(df)} registros)")
 
@@ -459,7 +444,7 @@ def main():
     inicio = datetime.now()
     try:
         logger.info("=" * 60)
-        logger.info("🚀 INICIANDO PIPELINE ETL CONVIVE360 v4")
+        logger.info("🚀 INICIANDO PIPELINE ETL CONVIVE360 v4.1")
         logger.info("=" * 60)
 
         # 1. Autenticar
@@ -470,7 +455,7 @@ def main():
         df2 = extraer_datos(service, SHEET_NAME_2)
         logger.info(f"  F1: {len(df1)} | F2: {len(df2)} | Esperado: {len(df1)+len(df2)}")
 
-        # 3. Normalizar columnas POR SEPARADO (evita duplicate keys en concat)
+        # 3. Normalizar columnas POR SEPARADO
         logger.info("🔀 Normalizando columnas por hoja")
         df1 = normalizar_columnas(df1)
         df2 = normalizar_columnas(df2)
@@ -485,11 +470,10 @@ def main():
         df = df.loc[:, ~df.columns.duplicated(keep='first')]
         logger.info(f"  ✓ Tras concat: {len(df)} registros")
 
-        # 6. FIX CELDAS EN BLANCO: rellenar columnas exclusivas de cada formulario
+        # 6. Rellenar columnas cruzadas
         df = rellenar_columnas_cruzadas(df)
 
-        # 7. Eliminar duplicados REALES (mismo formulario enviado dos veces)
-        #    Solo por clave de negocio, NO por todas las columnas
+        # 7. Eliminar duplicados REALES
         registros_antes = len(df)
         cols_dedup = [c for c in CLAVE_DUPLICADO if c in df.columns]
         if cols_dedup:
@@ -501,12 +485,12 @@ def main():
                 logger.info(f"  ✓ Sin duplicados reales — todos los registros conservados")
         logger.info(f"  ✓ Registros finales: {len(df)}")
 
-        # 8. Generar columnas enriquecidas
+        # 8. Enriquecer
         df = enriquecer_datos(df)
 
-        # 9. ID único garantizado
+        # 9. ID único
         logger.info("🔑 Generando ID_Actividad")
-        df = df.reset_index(drop=True)  # Índice limpio para el hash
+        df = df.reset_index(drop=True)
         df['ID_Actividad'] = [
             generar_id_actividad(row, idx)
             for idx, row in df.iterrows()
@@ -526,7 +510,6 @@ def main():
         # 12. Guardar
         guardar_archivos(fact, dimensiones)
 
-        # Resumen
         duracion = (datetime.now() - inicio).total_seconds()
         logger.info("=" * 60)
         logger.info("🎉 PIPELINE COMPLETADO EXITOSAMENTE")

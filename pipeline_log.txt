@@ -102740,3 +102740,58 @@ Pipeline ejecutado: 2025-11-22 23:30:39
 2026-07-21 04:17:49,747 - INFO - 📁 Dimensiones  : 8
 2026-07-21 04:17:49,747 - INFO - 📋 Columnas fact: 52
 2026-07-21 04:17:49,747 - INFO - ============================================================
+2026-07-21 07:34:31,450 - INFO - ============================================================
+2026-07-21 07:34:31,450 - INFO - 🚀 INICIANDO PIPELINE ETL CONVIVE360 v4.1
+2026-07-21 07:34:31,450 - INFO - ============================================================
+2026-07-21 07:34:31,451 - INFO - file_cache is only supported with oauth2client<4.0.0
+2026-07-21 07:34:31,453 - INFO - ✅ Autenticación exitosa
+2026-07-21 07:34:31,453 - INFO - 📥 Extrayendo: Respuestas de formulario 1
+2026-07-21 07:34:32,243 - INFO - ✅ 1439 registros de Respuestas de formulario 1
+2026-07-21 07:34:32,243 - INFO - 📥 Extrayendo: Respuestas de formulario 2
+2026-07-21 07:34:32,638 - INFO - ✅ 646 registros de Respuestas de formulario 2
+2026-07-21 07:34:32,638 - INFO -   F1: 1439 | F2: 646 | Esperado: 2085
+2026-07-21 07:34:32,638 - INFO - 🔀 Normalizando columnas por hoja
+2026-07-21 07:34:32,640 - INFO - 🧹 Limpiando: Formulario_1 (1439 registros)
+2026-07-21 07:34:32,650 - INFO -   ✓ Formulario_1: 1439 registros limpios
+2026-07-21 07:34:32,650 - INFO - 🧹 Limpiando: Formulario_2 (646 registros)
+2026-07-21 07:34:32,654 - INFO -   ✓ Formulario_2: 646 registros limpios
+2026-07-21 07:34:32,654 - INFO - 🔗 Combinando hojas
+2026-07-21 07:34:32,655 - INFO -   ✓ Tras concat: 2085 registros
+2026-07-21 07:34:32,658 - INFO -   ✓ Columnas cruzadas rellenadas con valores por defecto
+2026-07-21 07:34:32,660 - INFO -   ✓ Sin duplicados reales — todos los registros conservados
+2026-07-21 07:34:32,660 - INFO -   ✓ Registros finales: 2085
+2026-07-21 07:34:32,701 - INFO -   ✓ Columnas enriquecidas generadas
+2026-07-21 07:34:32,701 - INFO - 🔑 Generando ID_Actividad
+2026-07-21 07:34:32,757 - INFO -   ✓ 2085 IDs únicos generados
+2026-07-21 07:34:32,757 - INFO - 🔨 Creando dimensiones
+2026-07-21 07:34:32,758 - INFO -   ✓ dim_upz: 6 valores únicos
+2026-07-21 07:34:32,760 - INFO -   ✓ dim_zonas: 8 valores únicos
+2026-07-21 07:34:32,761 - INFO -   ✓ dim_estrategias: 9 valores únicos
+2026-07-21 07:34:32,762 - INFO -   ✓ dim_enfoques: 5 valores únicos
+2026-07-21 07:34:32,763 - INFO -   ✓ dim_estados: 1 valores únicos
+2026-07-21 07:34:32,764 - INFO -   ✓ dim_areas: 7 valores únicos
+2026-07-21 07:34:32,766 - INFO -   ✓ dim_barrios: 31 valores únicos
+2026-07-21 07:34:32,770 - INFO -   ✓ Dim_Lineas_Estrategicas: 3965 registros
+2026-07-21 07:34:32,770 - INFO - ✅ 8 dimensiones creadas
+2026-07-21 07:34:32,770 - INFO - 📊 Creando tabla de hechos
+2026-07-21 07:34:32,777 - INFO - ✅ Tabla de hechos: 2085 registros, 52 columnas
+2026-07-21 07:34:32,777 - INFO - 💾 Guardando archivos
+2026-07-21 07:34:32,821 - INFO -   ✓ fact_actividades.csv  (2085 registros)
+2026-07-21 07:34:32,844 - INFO -   ✓ fact_actividades_enriquecido.csv  (2085 registros)
+2026-07-21 07:34:32,905 - INFO -   ✓ dimensiones/fact_actividades_enriquecido.csv  (2085 registros)
+2026-07-21 07:34:32,906 - INFO -   ✓ dimensiones/dim_upz.csv  (6 registros)
+2026-07-21 07:34:32,906 - INFO -   ✓ dimensiones/dim_zonas.csv  (8 registros)
+2026-07-21 07:34:32,906 - INFO -   ✓ dimensiones/dim_estrategias.csv  (9 registros)
+2026-07-21 07:34:32,907 - INFO -   ✓ dimensiones/dim_enfoques.csv  (5 registros)
+2026-07-21 07:34:32,907 - INFO -   ✓ dimensiones/dim_estados.csv  (1 registros)
+2026-07-21 07:34:32,907 - INFO -   ✓ dimensiones/dim_areas.csv  (7 registros)
+2026-07-21 07:34:32,908 - INFO -   ✓ dimensiones/dim_barrios.csv  (31 registros)
+2026-07-21 07:34:32,913 - INFO -   ✓ dimensiones/Dim_Lineas_Estrategicas.csv  (3965 registros)
+2026-07-21 07:34:32,913 - INFO - ✅ Todos los archivos guardados
+2026-07-21 07:34:32,913 - INFO - ============================================================
+2026-07-21 07:34:32,913 - INFO - 🎉 PIPELINE COMPLETADO EXITOSAMENTE
+2026-07-21 07:34:32,913 - INFO - ⏱️  Duración     : 1.46 s
+2026-07-21 07:34:32,913 - INFO - 📊 Registros    : 2085
+2026-07-21 07:34:32,913 - INFO - 📁 Dimensiones  : 8
+2026-07-21 07:34:32,913 - INFO - 📋 Columnas fact: 52
+2026-07-21 07:34:32,913 - INFO - ============================================================
